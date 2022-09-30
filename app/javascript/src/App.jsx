@@ -7,6 +7,7 @@ import { initializeLogger } from "common/logger";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     initializeLogger();
     setAuthHeaders(setLoading);
