@@ -6,7 +6,7 @@ import { Button } from "@bigbinary/neetoui";
 import NavItem from "./NavItem";
 
 const NavBar = () => (
-  <nav className="shadow bg-white">
+  <nav className=" border-b-2 bg-white">
     <div className="max-w-7xl mx-auto px-2">
       <div className="flex h-16 justify-between">
         <div className="flex px-2">
