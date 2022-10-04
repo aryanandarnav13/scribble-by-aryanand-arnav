@@ -1,12 +1,11 @@
 import React from "react";
 
-import SideMenu from "components/Dashboard/Articles/";
-import NavBar from "components/NavBar";
+import Article from "./Articles";
 
 const Dashboard = () => (
-  <div>
-    <NavBar />
-    <SideMenu />
+  <div className="flex h-screen w-full">
+    <Article />
   </div>
 );
+
 export default Dashboard;
