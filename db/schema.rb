@@ -12,17 +12,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_04_223654) do
+ActiveRecord::Schema.define(version: 2022_10_05_163228) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "articles", force: :cascade do |t|
-    t.text "title", null: false
-    t.text "category", null: false
-    t.text "body", null: false
+    t.string "title", null: false
+    t.string "body", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "slug", null: false
+    t.string "author", default: "Oliver Smith"
+    t.string "status", default: "Draft"
+    t.bigint "category_id"
+    t.index ["category_id"], name: "index_articles_on_category_id"
+    t.index ["slug"], name: "index_articles_on_slug", unique: true
   end
 
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "slug", null: false
+    t.index ["slug"], name: "index_categories_on_slug", unique: true
+  end
+
+  add_foreign_key "articles", "categories"
 end

@@ -2,7 +2,9 @@
 
 Rails.application.routes.draw do
 
-  resources :articles, only: :index
+  resources :articles, only: :index, param: :slug
+  resources :categories, only: :index, param: :slug
+
   root "home#index"
   get "*path", to: "home#index", via: :all
 end
