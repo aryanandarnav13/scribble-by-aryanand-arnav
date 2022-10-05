@@ -8,7 +8,7 @@ import Table from "./Table";
 
 import NavBar from "../../NavBar";
 
-const Articles = () => {
+const Articles = ({ data }) => {
   const [searchArticle, setSearchArticle] = useState("");
   const { Menu, MenuItem } = ActionDropdown;
   const listItems = ["title", "description", "testing"];
@@ -48,7 +48,7 @@ const Articles = () => {
             }}
           />
           <div className="max-w-7xl px-2 font-bold">67 Articles</div>
-          <Table />
+          <Table articles={data} />
         </Container>
       </div>
     </div>
