@@ -1,23 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-import { Dropdown, Button } from "@bigbinary/neetoui";
+import { ActionDropdown, Button } from "@bigbinary/neetoui";
 import { Input, Textarea, Select } from "@bigbinary/neetoui/formik";
 import { Formik, Form as FormikForm } from "formik";
 
-import {
-  CATEGORIES,
-  FORM_INITIAL_VALUES,
-  VALIDATION_SCHEMA,
-} from "components/Dashboard/Articles/constants";
+import articlesApi from "apis/articles";
+import categoriesApi from "apis/categories";
+import { FORM_INITIAL_VALUES } from "components/Dashboard/Articles/constants";
 
 import NavBar from "../../../NavBar";
 
-const { Menu, MenuItem } = Dropdown;
-const listCategories = ["Publish", "Save Draft"];
-
 const NewArticle = () => {
-  const [dropdownLabel, setDropdownLabel] = useState("Save Draft");
   const [submitted, setSubmitted] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const { Menu, MenuItem } = ActionDropdown;
+  const [statusVar, setStatusVar] = useState("Draft");
+
+  const fetchCategories = async () => {
+    try {
+      const {
+        data: { categories },
+      } = await categoriesApi.list();
+      setCategories(categories);
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const handleSubmit = async values => {
+    try {
+      values = {
+        ...values,
+        category_id: values.category_id.value,
+        status: statusVar,
+      };
+      await articlesApi.create(values);
+    } catch (err) {
+      logger.error(err);
+    }
+  };
 
   return (
     <div>
@@ -27,8 +52,8 @@ const NewArticle = () => {
           initialValues={FORM_INITIAL_VALUES}
           validateOnBlur={submitted}
           validateOnChange={submitted}
-          validationSchema={VALIDATION_SCHEMA}
-          // onSubmit={handleSubmit}
+          // validationSchema={VALIDATION_SCHEMA}
+          onSubmit={handleSubmit}
         >
           {({ isSubmitting }) => (
             <FormikForm className="w-full">
@@ -46,9 +71,12 @@ const NewArticle = () => {
                   required
                   className="w-full flex-grow-0"
                   label="Category"
-                  name="category"
-                  options={CATEGORIES}
+                  name="category_id"
                   placeholder="Select a Category"
+                  options={categories.map(category => ({
+                    label: category.name,
+                    value: category.id,
+                  }))}
                 />
               </div>
               <Textarea
@@ -56,40 +84,39 @@ const NewArticle = () => {
                 className="mt-6 w-full flex-grow-0"
                 label="Article Body"
                 name="body"
-                placeholder="Enter Article"
+                placeholder="Enter Article Body"
                 rows={10}
               />
               <div className="mt-4 flex items-center">
                 <div className="flex">
-                  <Button
-                    className="mr-px"
-                    disabled={isSubmitting}
-                    label={dropdownLabel}
-                    loading={isSubmitting}
-                    size="medium"
-                    style="primary"
-                    type="submit"
-                    onClick={() => setSubmitted(true)}
-                  />
-                  <Dropdown
-                    className="mr-3"
-                    disabled={isSubmitting}
-                    type="submit"
-                    onClick={() => setSubmitted(true)}
+                  <ActionDropdown
+                    label={statusVar}
+                    buttonProps={{
+                      disabled: isSubmitting,
+                      loading: isSubmitting,
+                      type: "submit",
+                    }}
+                    onClick={() => {
+                      setSubmitted(true);
+                    }}
                   >
                     <Menu>
-                      {listCategories.map((category, idx) => (
-                        <MenuItem.Button
-                          key={idx}
-                          onClick={() => {
-                            setDropdownLabel(category);
-                          }}
-                        >
-                          {category}
-                        </MenuItem.Button>
-                      ))}
+                      <MenuItem.Button
+                        onClick={() => {
+                          setStatusVar("Draft");
+                        }}
+                      >
+                        Draft
+                      </MenuItem.Button>
+                      <MenuItem.Button
+                        onClick={() => {
+                          setStatusVar("Published");
+                        }}
+                      >
+                        Published
+                      </MenuItem.Button>
                     </Menu>
-                  </Dropdown>
+                  </ActionDropdown>
                 </div>
                 <Button
                   className="mx-3"

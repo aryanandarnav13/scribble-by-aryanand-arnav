@@ -37,7 +37,7 @@ const Articles = ({ data }) => {
                 <Button
                   icon="ri-add-line"
                   label="Add New Article"
-                  to="/article/create"
+                  to="/articles/create"
                 />
               </div>
             }

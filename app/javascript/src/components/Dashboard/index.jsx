@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import articlesApi from "apis/articles";
 import PageLoader from "components/PageLoader";
 
-import Article from "./Articles";
+import Articles from "./Articles";
 
 const Dashboard = () => {
   const [articles, setArticles] = useState([]);
@@ -36,7 +36,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <Article data={articles} />
+      <Articles data={articles} />
     </div>
   );
 };
