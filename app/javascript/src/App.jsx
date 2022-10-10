@@ -22,8 +22,8 @@ const App = () => {
   return (
     <Router>
       <Switch>
-        <Route exact component={Dashboard} path="/dashboard" />
-        <Route exact component={NewArticle} path="/article/create" />
+        <Route exact component={Dashboard} path="/" />
+        <Route exact component={NewArticle} path="/articles/create" />
       </Switch>
     </Router>
   );
