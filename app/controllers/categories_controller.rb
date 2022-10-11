@@ -10,15 +10,11 @@ class CategoriesController < ApplicationController
 
   def create
     category = Category.new(category_params)
-    category.save
-    render status: :ok, json: { notice: "Category was successfully created" }
+    category.save!
+    render status: :ok, json: { notice: "The category is successfully created" }
   end
 
   private
-
-    def load_category!
-      @category = Category.find_by!(slug: params[:slug])
-    end
 
     def category_params
       params.require(:category).permit(:name)
