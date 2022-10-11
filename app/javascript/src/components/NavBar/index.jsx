@@ -13,7 +13,7 @@ const NavBar = () => (
           <div className="flex">
             <NavItem name="Scribble" />
             <NavItem name="Articles" path="/" />
-            <NavItem name="Settings" path="/" />
+            <NavItem name="Settings" path="/Settings" />
           </div>
         </div>
         <div className="flex items-center justify-end gap-x-4">
@@ -21,7 +21,7 @@ const NavBar = () => (
             icon={ExternalLink}
             label="Preview"
             style="secondary"
-            to="/"
+            to="/Preview"
           />
         </div>
       </div>
