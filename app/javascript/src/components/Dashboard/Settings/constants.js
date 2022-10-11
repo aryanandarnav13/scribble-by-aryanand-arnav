@@ -1,4 +1,5 @@
 import General from "./General";
+import Redirection from "./Redirection";
 
 export const SETTINGS_NAVLINKS = [
   {
@@ -9,9 +10,11 @@ export const SETTINGS_NAVLINKS = [
     component: General,
   },
   {
-    key: "redirections",
-    label: "Redirections",
+    key: "redirection",
+    label: "Redirection",
     description: "Create & configure redirection rules",
+    path: "/settings?tab=redirection",
+    component: Redirection,
   },
   {
     key: "manageCategories",
