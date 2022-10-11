@@ -1,18 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { Table as NeetoUITable } from "@bigbinary/neetoui";
 
-import { buildArticleTableColumnData } from "./constants";
+import articlesApi from "apis/articles";
 
-const Table = ({ setSelectedArticleIds, articles = [] }) => (
-  <div className="notes-table-height w-full">
+import { buildArticleTableColumnData } from "./utils";
+
+const Table = ({ columnFilter }) => {
+  const [articles, setArticles] = useState([]);
+
+  const fetchArticles = async () => {
+    try {
+      const response = await articlesApi.list();
+      setArticles(response.data);
+    } catch (err) {
+      logger.error(err);
+    }
+  };
+  useEffect(() => {
+    fetchArticles();
+  }, []);
+
+  return (
     <NeetoUITable
-      allowRowClick
-      columnData={buildArticleTableColumnData()}
+      columnData={buildArticleTableColumnData(columnFilter, fetchArticles)}
+      defaultPageSize={20}
       rowData={articles}
-      onRowSelect={selectedRowKeys => setSelectedArticleIds(selectedRowKeys)}
+      onRowClick={() => {}}
+      onRowSelect={() => {}}
     />
-  </div>
-);
-
+  );
+};
 export default Table;

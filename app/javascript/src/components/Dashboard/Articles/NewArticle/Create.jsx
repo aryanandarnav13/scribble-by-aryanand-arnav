@@ -6,7 +6,10 @@ import { Formik, Form as FormikForm } from "formik";
 
 import articlesApi from "apis/articles";
 import categoriesApi from "apis/categories";
-import { FORM_INITIAL_VALUES } from "components/Dashboard/Articles/constants";
+import {
+  ARTICLE_VALIDATION_SCHEMA,
+  ARTICLE_INITIAL_VALUES,
+} from "components/Dashboard/Articles/constants";
 
 import NavBar from "../../../NavBar";
 
@@ -14,7 +17,7 @@ const NewArticle = () => {
   const [submitted, setSubmitted] = useState(false);
   const [categories, setCategories] = useState([]);
   const { Menu, MenuItem } = ActionDropdown;
-  const [statusVar, setStatusVar] = useState("Draft");
+  const [articleStatus, setArticleStatus] = useState("Draft");
 
   const fetchCategories = async () => {
     try {
@@ -36,7 +39,7 @@ const NewArticle = () => {
       values = {
         ...values,
         category_id: values.category_id.value,
-        status: statusVar,
+        status: articleStatus,
       };
       await articlesApi.create(values);
     } catch (err) {
@@ -49,10 +52,10 @@ const NewArticle = () => {
       <NavBar />
       <div className="h-1/2 mx-auto mt-8 w-1/2">
         <Formik
-          initialValues={FORM_INITIAL_VALUES}
+          initialValues={ARTICLE_INITIAL_VALUES}
           validateOnBlur={submitted}
           validateOnChange={submitted}
-          // validationSchema={VALIDATION_SCHEMA}
+          validationSchema={ARTICLE_VALIDATION_SCHEMA}
           onSubmit={handleSubmit}
         >
           {({ isSubmitting }) => (
@@ -90,7 +93,7 @@ const NewArticle = () => {
               <div className="mt-4 flex items-center">
                 <div className="flex">
                   <ActionDropdown
-                    label={statusVar}
+                    label={articleStatus}
                     buttonProps={{
                       disabled: isSubmitting,
                       loading: isSubmitting,
@@ -103,17 +106,17 @@ const NewArticle = () => {
                     <Menu>
                       <MenuItem.Button
                         onClick={() => {
-                          setStatusVar("Draft");
+                          setArticleStatus("Draft");
                         }}
                       >
                         Draft
                       </MenuItem.Button>
                       <MenuItem.Button
                         onClick={() => {
-                          setStatusVar("Published");
+                          setArticleStatus("Publish");
                         }}
                       >
-                        Published
+                        Publish
                       </MenuItem.Button>
                     </Menu>
                   </ActionDropdown>

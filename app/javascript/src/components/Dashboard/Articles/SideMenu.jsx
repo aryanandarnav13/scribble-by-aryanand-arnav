@@ -1,11 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-import { Search, Plus } from "@bigbinary/neeto-icons";
+import { Search, Plus, Close } from "@bigbinary/neeto-icons";
 import { Typography } from "@bigbinary/neetoui";
 import { MenuBar } from "@bigbinary/neetoui/layouts";
 
+import categoriesApi from "apis/categories";
+
+import Create from "./NewCategory/Create";
+
 const SideMenu = () => {
-  const [isSearchOrAddCollapsed, setIsSearchOrAddCollapsed] = useState(true);
+  const [isSearchCollapsed, setIsSearchCollapsed] = useState(true);
+  const [isAddCategoryCollapsed, setIsAddCategoryCollapsed] = useState(true);
+
+  const [categories, setCategories] = useState([]);
+
+  const fetchCategories = async () => {
+    try {
+      const {
+        data: { categories },
+      } = await categoriesApi.list();
+      setCategories(categories);
+      setIsAddCategoryCollapsed(
+        isAddCategoryCollapsed => !isAddCategoryCollapsed
+      );
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   return (
     <MenuBar showMenu title="Articles">
@@ -17,15 +42,13 @@ const SideMenu = () => {
           {
             icon: Search,
             onClick: () =>
-              setIsSearchOrAddCollapsed(
-                isSearchOrAddCollapsed => !isSearchOrAddCollapsed
-              ),
+              setIsSearchCollapsed(isSearchCollapsed => !isSearchCollapsed),
           },
           {
-            icon: Plus,
+            icon: isAddCategoryCollapsed ? Close : Plus,
             onClick: () =>
-              setIsSearchOrAddCollapsed(
-                isSearchOrAddCollapsed => !isSearchOrAddCollapsed
+              setIsAddCategoryCollapsed(
+                isAddCategoryCollapsed => !isAddCategoryCollapsed
               ),
           },
         ]}
@@ -40,13 +63,15 @@ const SideMenu = () => {
         </Typography>
       </MenuBar.SubTitle>
       <MenuBar.Search
-        collapse={isSearchOrAddCollapsed}
-        onCollapse={() => setIsSearchOrAddCollapsed(true)}
+        collapse={isSearchCollapsed}
+        onCollapse={() => setIsSearchCollapsed(true)}
       />
-      <MenuBar.Block count={0} label="Getting Started" />
-      <MenuBar.Block count={0} label="Apps and Integration" />
-      <MenuBar.Block count={0} label="Security and Privacy" />
-      <MenuBar.Block count={0} label="Misc" />
+      {isAddCategoryCollapsed && (
+        <Create fetchCategoriesList={fetchCategories} />
+      )}
+      {categories.map(({ name, id }) => (
+        <MenuBar.Block count={0} key={id} label={name} />
+      ))}
     </MenuBar>
   );
 };

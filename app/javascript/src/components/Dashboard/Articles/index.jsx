@@ -1,17 +1,24 @@
 import React, { useState } from "react";
 
-import { ActionDropdown, Button } from "@bigbinary/neetoui";
+import { ActionDropdown, Button, Checkbox } from "@bigbinary/neetoui";
 import { Container, Header } from "@bigbinary/neetoui/layouts";
 
+import { filterItems, camelize } from "./constants";
 import SideMenu from "./SideMenu";
 import Table from "./Table";
 
 import NavBar from "../../NavBar";
 
-const Articles = ({ data }) => {
+const Articles = () => {
   const [searchArticle, setSearchArticle] = useState("");
   const { Menu, MenuItem } = ActionDropdown;
-  const listItems = ["title", "description", "testing"];
+  const [columnFilter, setColumnFilter] = useState(filterItems);
+  const handleColumnCheck = e => {
+    setColumnFilter({
+      ...columnFilter,
+      [e.target.name]: e.target.checked,
+    });
+  };
 
   return (
     <div>
@@ -29,8 +36,16 @@ const Articles = ({ data }) => {
                   label="Columns"
                 >
                   <Menu>
-                    {listItems.map((item, idx) => (
-                      <MenuItem.Button key={idx}>{item}</MenuItem.Button>
+                    {Object.keys(columnFilter).map((column, idx) => (
+                      <MenuItem.Button key={idx}>
+                        <Checkbox
+                          checked={columnFilter[column]}
+                          id={idx}
+                          label={camelize(column)}
+                          name={column}
+                          onChange={handleColumnCheck}
+                        />
+                      </MenuItem.Button>
                     ))}
                   </Menu>
                 </ActionDropdown>
@@ -44,11 +59,11 @@ const Articles = ({ data }) => {
             searchProps={{
               value: searchArticle,
               onChange: e => setSearchArticle(e.target.value),
-              placeholder: "Search article title",
+              placeholder: "Search Article Title",
             }}
           />
           <div className="max-w-7xl px-2 font-bold">67 Articles</div>
-          <Table articles={data} />
+          <Table columnFilter={columnFilter} />
         </Container>
       </div>
     </div>
