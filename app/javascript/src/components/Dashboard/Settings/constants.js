@@ -1,4 +1,5 @@
 import General from "./General";
+import ManageCategories from "./ManageCategories";
 import Redirection from "./Redirection";
 
 export const SETTINGS_NAVLINKS = [
@@ -20,5 +21,7 @@ export const SETTINGS_NAVLINKS = [
     key: "manageCategories",
     label: "Manage Categories",
     description: "Edit & Reorder KB Structure",
+    path: "/settings?tab=manageCategories",
+    component: ManageCategories,
   },
 ];

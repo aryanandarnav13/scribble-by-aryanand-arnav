@@ -12,7 +12,7 @@ const Table = ({ columnFilter }) => {
   const fetchArticles = async () => {
     try {
       const response = await articlesApi.list();
-      setArticles(response.data);
+      setArticles(response.data.articles);
     } catch (err) {
       logger.error(err);
     }
