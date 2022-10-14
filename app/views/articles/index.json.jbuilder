@@ -1,6 +1,7 @@
 json.articles @articles do |article|
   json.id article.id
   json.title article.title
+  json.body article.body
   json.category article.category_id ? article.Category.name : ""
   json.status article.status
   json.slug article.slug

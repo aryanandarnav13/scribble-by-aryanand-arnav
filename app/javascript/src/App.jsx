@@ -7,6 +7,7 @@ import { initializeLogger } from "common/logger";
 import Dashboard from "components/Dashboard";
 import NewArticle from "components/Dashboard/Articles/NewArticle/Create";
 import EditArticle from "components/Dashboard/Articles/NewArticle/Edit";
+import EUI from "components/Dashboard/EUI";
 import Settings from "components/Dashboard/Settings";
 
 const App = () => {
@@ -28,6 +29,7 @@ const App = () => {
         <Route exact component={NewArticle} path="/articles/create" />
         <Route exact component={EditArticle} path="/articles/:slug/edit" />
         <Route exact component={Settings} path="/settings" />
+        <Route exact component={EUI} path="/preview" />
       </Switch>
     </Router>
   );
