@@ -9,6 +9,7 @@ import categoriesApi from "apis/categories";
 const List = ({ categories, fetchCategories }) => {
   const [categoryId, setCategoryId] = useState(0);
   const [categoryName, setCategoryName] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
     fetchCategories();
@@ -29,8 +30,38 @@ const List = ({ categories, fetchCategories }) => {
     }
   };
 
+  const updateCategoryPosition = async ({ id, position }) => {
+    try {
+      await categoriesApi.update({
+        id,
+        payload: {
+          position,
+        },
+      });
+      await fetchCategories();
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
+  const handleDragStart = item => {
+    setSelectedCategory(item.draggableId);
+  };
+
+  const handleOnDragEnd = item => {
+    setSelectedCategory("");
+    if (item.source.index === item.destination.index) return;
+
+    if (!item.destination) return;
+
+    updateCategoryPosition({
+      id: item.draggableId,
+      position: item.destination.index + 1,
+    });
+  };
+
   return (
-    <DragDropContext>
+    <DragDropContext onDragEnd={handleOnDragEnd} onDragStart={handleDragStart}>
       <Droppable droppableId="categoriesList">
         {provided => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
@@ -45,6 +76,11 @@ const List = ({ categories, fetchCategories }) => {
                     ref={provided.innerRef}
                     {...provided.dragHandleProps}
                     {...provided.draggableProps}
+                    className={
+                      selectedCategory === category.id
+                        ? "bg-gray-50"
+                        : "white border-t"
+                    }
                   >
                     {categoryId === category.id ? (
                       <div className="bg-gray-50 flex items-center  justify-between py-3 px-1">

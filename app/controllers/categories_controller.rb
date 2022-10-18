@@ -5,7 +5,7 @@ class CategoriesController < ApplicationController
   before_action :load_categories!, only: %i[show update destroy]
 
   def index
-    categories = Category.all
+    categories = Category.all.order("position ASC")
     render status: :ok, json: { categories: categories }
   end
 
@@ -38,6 +38,6 @@ class CategoriesController < ApplicationController
     end
 
     def category_params
-      params.require(:category).permit(:id, :name)
+      params.require(:category).permit(:id, :name, :position)
     end
 end
