@@ -10,10 +10,10 @@ import categoriesApi from "apis/categories";
 const EuiBody = () => {
   const [categories, setCategories] = useState([]);
   const [articles, setArticles] = useState([]);
-  const [articleName, setArticleName] = useState("Article");
-  const [articleCategory, setArticleCategory] = useState("Category");
-  const [articlePublishDate, setArticlePublishDate] = useState("Publish Date");
-  const [articleBody, setArticleBody] = useState("Article Description");
+  const [articleName, setArticleName] = useState("");
+  const [articleCategory, setArticleCategory] = useState("");
+  const [articlePublishDate, setArticlePublishDate] = useState("");
+  const [articleBody, setArticleBody] = useState("");
 
   const fetchCategoriesAndArticles = async () => {
     try {
@@ -38,9 +38,9 @@ const EuiBody = () => {
   return (
     <div className="flex">
       <MenuBar showMenu>
-        <Accordion>
+        <Accordion defaultActiveKey={0}>
           {categories.map((category, idx) => (
-            <Accordion.Item key={idx} title={category.name}>
+            <Accordion.Item isOpen key={idx} title={category.name}>
               {articles.map(
                 (article, index) =>
                   article.status === "Publish" &&
