@@ -6,7 +6,13 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import categoriesApi from "apis/categories";
 
-const List = ({ categories, fetchCategories }) => {
+const List = ({
+  articles,
+  categories,
+  fetchCategories,
+  setShowAlert,
+  setCategoryToDelete,
+}) => {
   const [categoryId, setCategoryId] = useState(0);
   const [categoryName, setCategoryName] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -58,6 +64,30 @@ const List = ({ categories, fetchCategories }) => {
       id: item.draggableId,
       position: item.destination.index + 1,
     });
+  };
+
+  const destroyCategory = async category => {
+    if (
+      articles?.filter(item => item.category === category?.name).length === 0
+    ) {
+      const message = confirm(
+        "This category has no article. Are you sure you want to delete this category? This change cannot be undone."
+      );
+      if (message) {
+        try {
+          await categoriesApi.destroy(category.id, {
+            id: category.id,
+            new_category_id: "none",
+          });
+          await fetchCategories();
+        } catch (error) {
+          logger.error(error);
+        }
+      }
+    } else {
+      setShowAlert(true);
+      setCategoryToDelete(category);
+    }
   };
 
   return (
@@ -129,9 +159,9 @@ const List = ({ categories, fetchCategories }) => {
                           <Button
                             icon={Delete}
                             style="text"
-                            // onClick={() => {
-                            //   destroyCategory(category);
-                            // }}
+                            onClick={() => {
+                              destroyCategory(category);
+                            }}
                           />
                           <Button
                             className="ml-2"

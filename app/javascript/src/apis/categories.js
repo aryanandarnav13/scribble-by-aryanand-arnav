@@ -14,7 +14,10 @@ const update = ({ id, payload }) =>
     category: payload,
   });
 
-const destroy = id => axios.delete(`/categories/${id}`);
+// const destroy = id => axios.delete(`/categories/${id}`);
+const destroy = (id, payload) =>
+  axios.delete(`/categories/${id}`, { data: { category: payload } });
+
 const sort = ({ id, payload }) => axios.put(`/categories/${id}/sort`, payload);
 
 const categoriesApi = {

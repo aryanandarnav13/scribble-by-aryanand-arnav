@@ -49,7 +49,7 @@ const EditArticle = () => {
 
   const handleEdit = async values => {
     const { title, body } = values;
-    const category_id = values.category.value;
+    const category_id = values.category_id.value;
     const payload = {
       title,
       body,
