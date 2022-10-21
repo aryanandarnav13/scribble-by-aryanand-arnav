@@ -21,7 +21,7 @@ const NavBar = () => (
             icon={ExternalLink}
             label="Preview"
             style="secondary"
-            to="/Preview"
+            to="/preview"
           />
         </div>
       </div>

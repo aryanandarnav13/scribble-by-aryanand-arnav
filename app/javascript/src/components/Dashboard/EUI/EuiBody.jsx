@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from "react";
 
 import { Accordion } from "@bigbinary/neetoui";
-import { MenuBar, Header, Container } from "@bigbinary/neetoui/layouts";
-import { Link } from "react-router-dom";
+import { MenuBar } from "@bigbinary/neetoui/layouts";
+import { NavLink, Switch, Route, useRouteMatch } from "react-router-dom";
 
 import articlesApi from "apis/articles";
 import categoriesApi from "apis/categories";
 
+import Show from "./Show";
+
 const EuiBody = () => {
   const [categories, setCategories] = useState([]);
   const [articles, setArticles] = useState([]);
-  const [articleName, setArticleName] = useState("");
-  const [articleCategory, setArticleCategory] = useState("");
-  const [articlePublishDate, setArticlePublishDate] = useState("");
-  const [articleBody, setArticleBody] = useState("");
+  const { url, path } = useRouteMatch();
 
   const fetchCategoriesAndArticles = async () => {
     try {
@@ -23,7 +22,6 @@ const EuiBody = () => {
       const {
         data: { articles },
       } = await articlesApi.list();
-
       setCategories(categories);
       setArticles(articles);
     } catch (error) {
@@ -45,34 +43,33 @@ const EuiBody = () => {
                 (article, index) =>
                   article.status === "Publish" &&
                   article.category === category.name && (
-                    <Link
+                    <NavLink
+                      activeClassName="text-indigo-500"
                       className="block h-8 hover:text-blue-600"
                       key={index}
-                      onClick={() => {
-                        setArticleName(article.title),
-                          setArticleBody(article.body),
-                          setArticleCategory(article.category),
-                          setArticlePublishDate(article.date);
-                      }}
+                      to={`${url}/${article.slug}`}
                     >
                       {article.title}
-                    </Link>
+                    </NavLink>
                   )
               )}
             </Accordion.Item>
           ))}
         </Accordion>
       </MenuBar>
-      <Container>
-        <Header title={articleName} />
-        <div className="flex">
-          <div className="max-w-7xl mb-8 bg-blue-200 px-2 text-indigo-600">
-            {articleCategory}
-          </div>
-          <div className="ml-5 text-gray-500">{articlePublishDate}</div>
-        </div>
-        <div className="max-w-7xl px-2 ">{articleBody}</div>
-      </Container>
+      <Switch>
+        {articles.map((article, index) => (
+          <Route key={index} path={`${path}/${article.slug}`}>
+            <Show
+              articleTitle={article.title}
+              body={article.body}
+              categoryTitle={article.category}
+              publishedDate={article.date}
+            />
+          </Route>
+        ))}
+        {/* <Redirect exact from="/public" to={`public/${defaultPath}`} /> */}
+      </Switch>
     </div>
   );
 };

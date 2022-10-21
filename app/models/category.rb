@@ -3,8 +3,8 @@
 class Category < ApplicationRecord
   has_many :articles, class_name: "Article", foreign_key: "id"
   validates :name, presence: true
-
   before_create :assign_position
+  # acts_as_list
 
   def assign_position
     max_position = Category.maximum(:position)

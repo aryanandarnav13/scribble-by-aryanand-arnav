@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const show = () => axios.get("/site");
-const update = payload => axios.put("/site", payload);
+const show = () => axios.get("/websites");
+const update = payload => axios.put("/websites", payload);
 
 const websiteApi = {
   show,

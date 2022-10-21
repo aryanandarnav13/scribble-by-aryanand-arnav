@@ -53,11 +53,11 @@ const App = () => {
             render={() => <Redirect to={item.topath} />}
           />
         ))}
+        <Route component={EUI} path="/preview" />
         <Route exact component={Dashboard} path="/" />
         <Route exact component={NewArticle} path="/articles/create" />
         <Route exact component={EditArticle} path="/articles/:slug/edit" />
         <Route exact component={Settings} path="/settings" />
-        <Route exact component={EUI} path="/preview" />
       </Switch>
     </Router>
   );
