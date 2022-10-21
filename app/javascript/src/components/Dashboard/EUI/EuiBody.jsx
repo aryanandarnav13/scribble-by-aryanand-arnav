@@ -13,6 +13,7 @@ const EuiBody = () => {
   const [categories, setCategories] = useState([]);
   const [articles, setArticles] = useState([]);
   const { url, path } = useRouteMatch();
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const fetchCategoriesAndArticles = async () => {
     try {
@@ -24,6 +25,11 @@ const EuiBody = () => {
       } = await articlesApi.list();
       setCategories(categories);
       setArticles(articles);
+      articles.forEach((article, index) => {
+        if (article.slug === window.location.pathname.split("/")[2]) {
+          setActiveIndex(index);
+        }
+      });
     } catch (error) {
       logger.error(error);
     }
@@ -36,7 +42,7 @@ const EuiBody = () => {
   return (
     <div className="flex">
       <MenuBar showMenu>
-        <Accordion defaultActiveKey={0}>
+        <Accordion defaultActiveKey={activeIndex}>
           {categories.map((category, idx) => (
             <Accordion.Item isOpen key={idx} title={category.name}>
               {articles.map(

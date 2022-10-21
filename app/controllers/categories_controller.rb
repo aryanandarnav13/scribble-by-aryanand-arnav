@@ -5,7 +5,6 @@ class CategoriesController < ApplicationController
   before_action :load_categories!, only: %i[show update destroy]
 
   def index
-    # categories = Category.all.order("position ASC")
     @categories = Category.all.order("position ASC")
     render status: :ok, json: { categories: @categories }
   end
