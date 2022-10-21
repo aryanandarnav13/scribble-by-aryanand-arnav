@@ -5,22 +5,40 @@ import { Input } from "@bigbinary/neetoui/formik";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
 
+import authApi from "apis/auth";
+import { setAuthHeaders } from "apis/axios";
+
 import EuiNavBar from "./EuiNavBar";
 import Vector from "./Vector.png";
 
-export const EuiPasswordComponent = () => {
+export const Login = ({ siteName }) => {
+  const handleSubmit = async values => {
+    try {
+      const response = await authApi.login({
+        login: { password: values.password },
+      });
+      sessionStorage.setItem("authToken", response.data.authentication_token);
+      setAuthHeaders();
+      window.location.href = "/preview";
+    } catch (error) {
+      logger.error(error);
+    }
+  };
   const schema = yup.object().shape({
     password: yup.string().required("Password Can't be blank"),
   });
 
   return (
     <div>
-      <EuiNavBar />
+      <EuiNavBar siteName={siteName} />
       <Formik
         initialValues={{ password: "" }}
         validateOnBlur={false}
         validateOnChange={false}
         validationSchema={schema}
+        onSubmit={values => {
+          handleSubmit(values);
+        }}
       >
         {({ values }) => (
           <Form>
@@ -28,10 +46,10 @@ export const EuiPasswordComponent = () => {
               <div className="mt-40 text-left">
                 <img className="mx-auto mb-6" src={Vector} />
                 <Typography style="h2">
-                  Spinkart is password protected!
+                  {siteName} is password protected!
                 </Typography>
                 <Typography className="text-left text-gray-600">
-                  Enter the password to gain access to Spinkart.
+                  Enter the password to gain access to {siteName}.
                 </Typography>
                 <Input
                   className="w-400 mt-6"

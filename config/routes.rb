@@ -6,6 +6,8 @@ Rails.application.routes.draw do
     resources :articles, except: %i[new edit], param: :slug, defaults: { format: "json" }
     resources :categories, except: %i[new edit], param: :id, defaults: { format: "json" }
     resources :redirections, except: %i[new edit], defaults: { format: "json" }
+    resources :websites, only: %i[show update], defaults: { format: "json" }
+    resource :session, only: %i[create], defaults: { format: "json" }
   end
 
   root "home#index"

@@ -3,10 +3,10 @@ import React from "react";
 import EuiBody from "./EuiBody";
 import EuiNavBar from "./EuiNavBar";
 
-const EUI = () => (
+const Eui = ({ siteName }) => (
   <div>
-    <EuiNavBar />
-    <EuiBody />
+    <EuiNavBar siteName={siteName} />
+    <EuiBody siteName={siteName} />
   </div>
 );
-export default EUI;
+export default Eui;

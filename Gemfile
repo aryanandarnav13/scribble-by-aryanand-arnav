@@ -58,3 +58,5 @@ gem "react-rails"
 gem "responders"
 
 gem "acts_as_list"
+
+gem "bcrypt", "~> 3.1.13"

@@ -9,11 +9,12 @@ import websiteApi from "apis/websites";
 
 import { PasswordForm } from "./PasswordForm";
 
-const General = ({ name }) => {
+const General = () => {
   const [passwordValidation, setPasswordValidation] = useState({
     minChar: false,
     letterAndNumber: false,
   });
+
   const handlePassword = e => {
     const passWord = e.target.value;
     const minChar = passWord.length >= 6;
@@ -24,7 +25,7 @@ const General = ({ name }) => {
     try {
       const pass = values.isPassword ? values.password : null;
       await websiteApi.update({
-        site: {
+        payload: {
           name: values.name,
           password: pass,
         },

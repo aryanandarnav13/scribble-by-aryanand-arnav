@@ -6,6 +6,21 @@ class ApplicationController < ActionController::Base
   rescue_from ActiveRecord::RecordNotUnique, with: :handle_record_not_unique
   rescue_from ActionController::ParameterMissing, with: :handle_api_error
 
+  def authenticate_user_using_x_auth_token
+    auth_token = request.headers["X-Auth-Token"].presence
+    website = Website.first
+    if website.password_digest?
+      unless website && auth_token &&
+        ActiveSupport::SecurityUtils.secure_compare(
+          website.authentication_token, auth_token
+        )
+        render status: :unauthorized, json: {
+          error: "could_not_auth"
+        }
+      end
+    end
+  end
+
   private
 
     def handle_validation_error(exception)

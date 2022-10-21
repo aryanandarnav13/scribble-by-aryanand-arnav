@@ -1,28 +1,29 @@
 # frozen_string_literal: true
 
 class WebsitesController < ApplicationController
-  before_action :load_site, only: %i[ update show ]
+  before_action :load_website, only: %i[ update show ]
 
   def show
+    render
   end
 
   def update
-    if @site.update(site_params)
+    if @website.update(website_params)
       render status: :ok, json: {
-        notice: t("successfully_updated", entity: "Site Details")
+        notice: "successfully_updated", entity: "Website Details"
       }
     else
-      render status: :unprocessable_entity, json: { error: @site.errors.full_messages }
+      render status: :unprocessable_entity, json: { error: @website.errors.full_messages }
     end
   end
 
   private
 
-    def site_params
-      params.require(:site).permit(:name, :password)
+    def website_params
+      params.require(:website).permit(:name, :password)
     end
 
-    def load_site
-      @site = Site.first
+    def load_website
+      @website = Website.first
     end
 end
