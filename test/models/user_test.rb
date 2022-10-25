@@ -2,8 +2,8 @@
 
 require "test_helper"
 
-class ArticleTest < ActiveSupport::TestCase
+class UserTest < ActiveSupport::TestCase
   def setup
-    @article = build(:article)
+    @user = build(:user)
   end
 end

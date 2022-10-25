@@ -13,7 +13,7 @@ const EuiBody = () => {
   const [categories, setCategories] = useState([]);
   const [articles, setArticles] = useState([]);
   const { url, path } = useRouteMatch();
-  const [activeIndex, setActiveIndex] = useState(0);
+  // const [activeIndex, setActiveIndex] = useState(0);
 
   const fetchCategoriesAndArticles = async () => {
     try {
@@ -25,11 +25,14 @@ const EuiBody = () => {
       } = await articlesApi.list();
       setCategories(categories);
       setArticles(articles);
-      articles.forEach((article, index) => {
-        if (article.slug === window.location.pathname.split("/")[2]) {
-          setActiveIndex(index);
-        }
-      });
+      // articles.forEach((article, index) => {
+      //   console.log(index);
+      //   if (article.slug === window.location.pathname.split("/")[2]) {
+      //     setActiveIndex(index);
+      //   }
+      // });
+      // setActiveIndex(window.location.pathname.split("/")[3]);
+      // console.log(activeIndex);
     } catch (error) {
       logger.error(error);
     }
@@ -42,7 +45,7 @@ const EuiBody = () => {
   return (
     <div className="flex">
       <MenuBar showMenu>
-        <Accordion defaultActiveKey={activeIndex}>
+        <Accordion defaultActiveKey={window.location.pathname.split("/")[3]}>
           {categories.map((category, idx) => (
             <Accordion.Item isOpen key={idx} title={category.name}>
               {articles.map(
@@ -53,7 +56,7 @@ const EuiBody = () => {
                       activeClassName="text-indigo-500"
                       className="block h-8 hover:text-blue-600"
                       key={index}
-                      to={`${url}/${article.slug}`}
+                      to={`${url}/${article.slug}/${index}`}
                     >
                       {article.title}
                     </NavLink>
@@ -65,7 +68,7 @@ const EuiBody = () => {
       </MenuBar>
       <Switch>
         {articles.map((article, index) => (
-          <Route key={index} path={`${path}/${article.slug}`}>
+          <Route key={index} path={`${path}/${article.slug}/${index}`}>
             <Show
               articleTitle={article.title}
               body={article.body}
@@ -74,7 +77,6 @@ const EuiBody = () => {
             />
           </Route>
         ))}
-        {/* <Redirect exact from="/public" to={`public/${defaultPath}`} /> */}
       </Switch>
     </div>
   );

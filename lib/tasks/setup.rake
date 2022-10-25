@@ -14,9 +14,9 @@ end
 
 def create_sample_data!
   puts 'Seeding with sample data...'
-  Webite.create!(
+  Website.create!(
     name:'Spinkart',
-    password: 'welcome'
+    password: 'welcome1'
   )
   User.create!(name:'Oliver Smith', email:'oliver@example')
 end
