@@ -3,7 +3,10 @@
 require "test_helper"
 
 class WebsiteTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  def setup
+    @website = Website.new(
+      name: "Spinklet",
+      password_digest: "welcome1"
+                    )
+  end
 end
