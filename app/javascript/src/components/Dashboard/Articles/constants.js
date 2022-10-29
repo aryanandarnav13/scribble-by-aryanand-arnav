@@ -16,7 +16,7 @@ export const ARTICLE_INITIAL_VALUES = {
   body: "",
 };
 
-export const CATEGORY_INITIAL_VALUES = { name: "" };
+export const CATEGORY_INITIAL_VALUES = { name: "", user_id: null };
 
 export const filterItems = {
   title: true,
@@ -27,9 +27,12 @@ export const filterItems = {
 };
 
 export const ARTICLE_VALIDATION_SCHEMA = yup.object().shape({
-  title: yup.string().required("Title is required"),
+  title: yup
+    .string()
+    .required("Title is required")
+    .matches(/^[\w\-\s]+$/, "Title must contain only alphanumeric characters"),
   body: yup.string().required("Body is required"),
-  category_id: yup.object().required("Required").nullable(),
+  category: yup.object().required("Required").nullable(),
 });
 
 export const CATEGORY_VALIDATION_SCHEMA = yup.object().shape({

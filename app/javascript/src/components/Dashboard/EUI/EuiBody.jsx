@@ -1,51 +1,49 @@
 import React, { useState, useEffect } from "react";
 
-import { Accordion } from "@bigbinary/neetoui";
-import { MenuBar } from "@bigbinary/neetoui/layouts";
-import { NavLink, Switch, Route, useRouteMatch } from "react-router-dom";
-
-import articlesApi from "apis/articles";
-import categoriesApi from "apis/categories";
+import { Accordion, PageLoader } from "neetoui";
+import { MenuBar } from "neetoui/layouts";
+import {
+  NavLink,
+  Switch,
+  Route,
+  useRouteMatch,
+  useHistory,
+} from "react-router-dom";
 
 import Show from "./Show";
 
-const EuiBody = () => {
-  const [categories, setCategories] = useState([]);
-  const [articles, setArticles] = useState([]);
+const EuiBody = ({ articles, categories }) => {
   const { url, path } = useRouteMatch();
-  // const [activeIndex, setActiveIndex] = useState(0);
+  const [selectedCategoryPosition, setSelectedCategoryPosition] = useState(0);
+  const [loading, setLoading] = useState(true);
 
-  const fetchCategoriesAndArticles = async () => {
-    try {
-      const {
-        data: { categories },
-      } = await categoriesApi.list();
-      const {
-        data: { articles },
-      } = await articlesApi.list();
-      setCategories(categories);
-      setArticles(articles);
-      // articles.forEach((article, index) => {
-      //   console.log(index);
-      //   if (article.slug === window.location.pathname.split("/")[2]) {
-      //     setActiveIndex(index);
-      //   }
-      // });
-      // setActiveIndex(window.location.pathname.split("/")[3]);
-      // console.log(activeIndex);
-    } catch (error) {
-      logger.error(error);
+  const history = useHistory();
+  const slug = window.location.pathname.split("/")[2];
+  const handleActiveCategory = () => {
+    const activeArticle = articles.find(article => article.slug === slug);
+    if (activeArticle) {
+      const activeCategory = categories.find(
+        category => category.name === activeArticle.category
+      );
+      setSelectedCategoryPosition(activeCategory.position);
+    } else if (articles && articles.length > 0) {
+      history.push(`${url}/${articles[0].slug}`);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
-    fetchCategoriesAndArticles();
-  }, []);
+    handleActiveCategory();
+  });
+
+  if (loading) {
+    return <PageLoader />;
+  }
 
   return (
     <div className="flex">
       <MenuBar showMenu>
-        <Accordion defaultActiveKey={window.location.pathname.split("/")[3]}>
+        <Accordion defaultActiveKey={selectedCategoryPosition - 1}>
           {categories.map((category, idx) => (
             <Accordion.Item isOpen key={idx} title={category.name}>
               {articles.map(
@@ -56,7 +54,7 @@ const EuiBody = () => {
                       activeClassName="text-indigo-500"
                       className="block h-8 hover:text-blue-600"
                       key={index}
-                      to={`${url}/${article.slug}/${index}`}
+                      to={`${url}/${article.slug}`}
                     >
                       {article.title}
                     </NavLink>
@@ -68,7 +66,7 @@ const EuiBody = () => {
       </MenuBar>
       <Switch>
         {articles.map((article, index) => (
-          <Route key={index} path={`${path}/${article.slug}/${index}`}>
+          <Route key={index} path={`${path}/${article.slug}`}>
             <Show
               articleTitle={article.title}
               body={article.body}

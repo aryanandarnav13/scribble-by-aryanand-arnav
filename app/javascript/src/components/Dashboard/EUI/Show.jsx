@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Typography } from "@bigbinary/neetoui";
+import { Typography } from "neetoui";
 
 const Show = ({ articleTitle, categoryTitle, publishedDate, body }) => {
   const bodyParagraphs = body.split("\n");

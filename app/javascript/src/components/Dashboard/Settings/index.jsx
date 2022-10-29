@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { MenuBar } from "@bigbinary/neetoui/layouts";
+import { MenuBar } from "neetoui/layouts";
 import queryString from "query-string";
 
 import { SETTINGS_NAVLINKS } from "./constants";

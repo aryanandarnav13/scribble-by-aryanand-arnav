@@ -1,8 +1,9 @@
 import React from "react";
 
-import { Typography, Button } from "@bigbinary/neetoui";
-import { Input } from "@bigbinary/neetoui/formik";
 import { Formik, Form } from "formik";
+import { Typography, Button } from "neetoui";
+import { Input } from "neetoui/formik";
+import { setToLocalStorage } from "src/utils/storage";
 import * as yup from "yup";
 
 import authApi from "apis/auth";
@@ -17,7 +18,9 @@ export const Login = ({ siteName }) => {
       const response = await authApi.login({
         login: { password: values.password },
       });
-      sessionStorage.setItem("authToken", response.data.authentication_token);
+      setToLocalStorage({
+        authToken: response.data.authentication_token,
+      });
       setAuthHeaders();
       window.location.href = "/preview";
     } catch (error) {

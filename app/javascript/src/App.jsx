@@ -7,8 +7,9 @@ import {
   Redirect,
   BrowserRouter as Router,
 } from "react-router-dom";
+import { getFromLocalStorage } from "src/utils/storage";
 
-import { setAuthHeaders } from "apis/axios";
+import { setAuthHeaders, registerIntercepts } from "apis/axios";
 import redirectionApi from "apis/redirections";
 import websiteApi from "apis/websites";
 import { initializeLogger } from "common/logger";
@@ -22,8 +23,9 @@ import PrivateRoute from "./components/Common/PrivateRoute";
 import { Login } from "./components/Dashboard/EUI/Login";
 
 const App = () => {
-  const authToken = sessionStorage.getItem("authToken");
-  const isLoggedIn = !either(isNil, isEmpty)(authToken) && authToken !== "null";
+  const authToken = getFromLocalStorage("authToken");
+  const isLoggedIn = !either(isNil, isEmpty)(authToken);
+
   const [loading, setLoading] = useState(true);
   const [hasPassword, setHasPassword] = useState(true);
   const [siteName, setSiteName] = useState("");
@@ -57,6 +59,7 @@ const App = () => {
   };
 
   useEffect(() => {
+    registerIntercepts();
     fetchRedirections();
     initializeLogger();
     setAuthHeaders(setLoading);
@@ -82,11 +85,6 @@ const App = () => {
         <Route exact component={NewArticle} path="/articles/create" />
         <Route exact component={EditArticle} path="/articles/:slug/edit" />
         <Route exact component={Settings} path="/settings" />
-        {/* <Route
-          exact
-          component={() => <Settings siteName={siteName} />}
-          path="/settings"
-        /> */}
         <Route
           exact
           component={() => <Login siteName={siteName} />}

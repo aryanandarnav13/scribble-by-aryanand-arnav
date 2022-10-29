@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from "react";
 
-import { ActionDropdown, Button } from "@bigbinary/neetoui";
-import { Input, Textarea, Select } from "@bigbinary/neetoui/formik";
 import { Formik, Form as FormikForm } from "formik";
+import { ActionDropdown, Button } from "neetoui";
+import { Input, Textarea, Select } from "neetoui/formik";
 import { useHistory, useParams } from "react-router-dom";
 
 import articlesApi from "apis/articles";
 import categoriesApi from "apis/categories";
+import userApi from "apis/users";
 import { ARTICLE_VALIDATION_SCHEMA } from "components/Dashboard/Articles/constants";
 
 import NavBar from "../../../NavBar";
 
 const EditArticle = () => {
   const [submitted, setSubmitted] = useState(false);
+  const [users, setUsers] = useState([]);
   const [categories, setCategories] = useState([]);
   const { Menu, MenuItem } = ActionDropdown;
   const [articleStatus, setArticleStatus] = useState("Draft");
@@ -47,14 +49,30 @@ const EditArticle = () => {
     fetchArticleDetails();
   }, [slug]);
 
+  const fetchUsers = async () => {
+    try {
+      const {
+        data: { users },
+      } = await userApi.list();
+      setUsers(users);
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
   const handleEdit = async values => {
     const { title, body } = values;
-    const category_id = values.category_id.value;
+    const category_id = values.category.value;
     const payload = {
       title,
       body,
       category_id,
       status: articleStatus,
+      user_id: users[0].id,
     };
     setSubmitted(true);
     try {
@@ -93,7 +111,7 @@ const EditArticle = () => {
                   required
                   className="w-full flex-grow-0"
                   label="Category"
-                  name="category_id"
+                  name="category"
                   placeholder="Select a Category"
                   options={categories.map(category => ({
                     label: category.name,
@@ -145,6 +163,7 @@ const EditArticle = () => {
                   label="Cancel"
                   size="medium"
                   style="text"
+                  to="/"
                   type="reset"
                 />
               </div>

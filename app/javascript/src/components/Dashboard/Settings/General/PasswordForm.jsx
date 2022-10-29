@@ -1,7 +1,7 @@
 import React from "react";
 
-import { Check, Close } from "@bigbinary/neeto-icons";
-import { Typography, Input } from "@bigbinary/neetoui";
+import { Check, Close } from "neetoicons";
+import { Typography, Input } from "neetoui";
 
 export const PasswordForm = ({
   password,
@@ -11,17 +11,19 @@ export const PasswordForm = ({
   errors,
 }) => (
   <div>
-    <Input
-      className="mt-5"
-      error={errors.password}
-      label="Password"
-      type="password"
-      value={password}
-      onChange={e => {
-        handlePassword(e);
-        setFieldValue("password", e.target.value);
-      }}
-    />
+    <div className="flex gap-3 px-1">
+      <Input
+        className="mt-5"
+        error={errors.password}
+        label="Password"
+        type="password"
+        value={password}
+        onChange={e => {
+          handlePassword(e);
+          setFieldValue("password", e.target.value);
+        }}
+      />
+    </div>
     <Typography className="flex py-3" style="body3">
       {passwordValidation.minChar ? (
         <Check color="#008000" size={18} />

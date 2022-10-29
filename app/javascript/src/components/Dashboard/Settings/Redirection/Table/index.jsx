@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-import { Plus } from "@bigbinary/neeto-icons";
-import { Typography, Button } from "@bigbinary/neetoui";
+import { Plus } from "neetoicons";
+import { Typography, Button } from "neetoui";
 
 import Row from "./Row";
 

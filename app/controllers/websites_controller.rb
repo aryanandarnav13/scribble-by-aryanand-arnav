@@ -4,14 +4,11 @@ class WebsitesController < ApplicationController
   before_action :load_website, only: %i[ update show ]
 
   def show
-    render
   end
 
   def update
     if @website.update(website_params)
-      render status: :ok, json: {
-        notice: "successfully_updated", entity: "Website Details"
-      }
+      render status: :ok, json: { notice: "This website is successfully updated" }
     else
       render status: :unprocessable_entity, json: { error: @website.errors.full_messages }
     end

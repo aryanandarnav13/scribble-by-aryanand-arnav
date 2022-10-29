@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 
-import { Reorder, Delete, Edit, Check, Close } from "@bigbinary/neeto-icons";
-import { Typography, Button, Input } from "@bigbinary/neetoui";
+import { Reorder, Delete, Edit, Check, Close } from "neetoicons";
+import { Typography, Button, Input } from "neetoui";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import categoriesApi from "apis/categories";
+import userApi from "apis/users";
 
 const List = ({
   articles,
@@ -16,9 +17,25 @@ const List = ({
   const [categoryId, setCategoryId] = useState(0);
   const [categoryName, setCategoryName] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     fetchCategories();
+  }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const {
+        data: { users },
+      } = await userApi.list();
+      setUsers(users);
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
   }, []);
 
   const updateCategory = async () => {
@@ -27,6 +44,7 @@ const List = ({
         id: categoryId,
         payload: {
           name: categoryName,
+          user_id: users[0].id,
         },
       });
       setCategoryId(0);

@@ -4,10 +4,10 @@ class Article < ApplicationRecord
   enum status: { Draft: "Draft", Publish: "Publish" }
   validates :title, presence: true
   validates :body, presence: true
-  validates :author, presence: true
   validates :status, presence: true
   validates :slug, uniqueness: true
-  belongs_to :Category, class_name: "Category", foreign_key: "category_id"
+  belongs_to :category
+  belongs_to :user
   before_create :set_slug
 
   private
@@ -25,7 +25,7 @@ class Article < ApplicationRecord
 
     def slug_not_changed
       if slug_changed? && self.persisted?
-        errors.add(:slug, t("Article.slug.immutable"))
+        errors.add(:slug, "Article.slug.immutable")
       end
     end
 end
