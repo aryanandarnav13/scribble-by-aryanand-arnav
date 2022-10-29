@@ -7,7 +7,10 @@ default: &default
 development:
   <<: *default
   database: scribble_by_aryanand_arnav_development
+  username: scribble_by_aryanand_arnav
+  password: <%= ENV['SCRIBBLE_BY_ARYANAND_ARNAV_DATABASE_PASSWORD'] %>
 
 test:
   <<: *default
-  database: scribble_by_aryanand_arnav_test
+  user: postgres
+  database: scribble_by_aryanand_arnav_test<%= ENV['CIRCLE_NODE_INDEX'] %>
