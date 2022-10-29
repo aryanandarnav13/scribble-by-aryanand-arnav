@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-import { Plus, Check, Close, Info } from "@bigbinary/neeto-icons";
-import { Input, Button, Typography, Modal, Select } from "@bigbinary/neetoui";
+import { Plus, Check, Close, Info } from "neetoicons";
+import { Input, Button, Typography, Modal, Select } from "neetoui";
 
 import articlesApi from "apis/articles";
 import categoriesApi from "apis/categories";

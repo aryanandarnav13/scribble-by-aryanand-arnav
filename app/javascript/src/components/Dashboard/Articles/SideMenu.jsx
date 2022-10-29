@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
 
-import { Search, Plus, Close } from "@bigbinary/neeto-icons";
-import { Typography } from "@bigbinary/neetoui";
-import { MenuBar } from "@bigbinary/neetoui/layouts";
+import { Search, Plus, Close } from "neetoicons";
+import { Typography } from "neetoui";
+import { MenuBar } from "neetoui/layouts";
 
 import articlesApi from "apis/articles";
 import categoriesApi from "apis/categories";
 
 import Create from "./NewCategory/Create";
 
-const SideMenu = () => {
+const SideMenu = ({ articleFilterConstraint, setArticleFilterConstraint }) => {
   const [isSearchCollapsed, setIsSearchCollapsed] = useState(true);
   const [isAddCategoryCollapsed, setIsAddCategoryCollapsed] = useState(true);
   const [draftCount, setDraftCount] = useState(0);
   const [publishCount, setPublishCount] = useState(0);
-
+  const [searchCategory, setSearchCategory] = useState("");
   const [categories, setCategories] = useState([]);
 
   const fetchCategories = async () => {
@@ -37,15 +37,53 @@ const SideMenu = () => {
     }
   };
 
+  const handleStatus = status => {
+    setArticleFilterConstraint({
+      ...articleFilterConstraint,
+      status,
+    });
+  };
+
+  const handleCategories = category => {
+    if (articleFilterConstraint.category.includes(category)) {
+      setArticleFilterConstraint({
+        ...articleFilterConstraint,
+        category: articleFilterConstraint.category.filter(
+          item => item !== category
+        ),
+      });
+    } else {
+      setArticleFilterConstraint({
+        ...articleFilterConstraint,
+        category: [...articleFilterConstraint.category, category],
+      });
+    }
+  };
+
   useEffect(() => {
     fetchCategories();
   }, []);
 
   return (
     <MenuBar showMenu title="Articles">
-      <MenuBar.Block active count={draftCount + publishCount} label="All" />
-      <MenuBar.Block count={draftCount} label="Draft" />
-      <MenuBar.Block count={publishCount} label="Published" />
+      <MenuBar.Block
+        active={articleFilterConstraint.status === "All"}
+        count={draftCount + publishCount}
+        label="All"
+        onClick={() => handleStatus("All")}
+      />
+      <MenuBar.Block
+        active={articleFilterConstraint.status === "Draft"}
+        count={draftCount}
+        label="Draft"
+        onClick={() => handleStatus("Draft")}
+      />
+      <MenuBar.Block
+        active={articleFilterConstraint.status === "Publish"}
+        count={publishCount}
+        label="Published"
+        onClick={() => handleStatus("Publish")}
+      />
       <MenuBar.SubTitle
         iconProps={[
           {
@@ -73,14 +111,28 @@ const SideMenu = () => {
       </MenuBar.SubTitle>
       <MenuBar.Search
         collapse={isSearchCollapsed}
+        value={searchCategory}
+        onChange={e => setSearchCategory(e.target.value)}
         onCollapse={() => setIsSearchCollapsed(true)}
       />
       {isAddCategoryCollapsed && (
         <Create fetchCategoriesList={fetchCategories} />
       )}
-      {categories.map(({ name, id }) => (
-        <MenuBar.Block count={0} key={id} label={name} />
-      ))}
+      {categories
+        .filter(category =>
+          category.name
+            .toLowerCase()
+            .includes(searchCategory.toLocaleLowerCase())
+        )
+        .map(category => (
+          <MenuBar.Block
+            active={articleFilterConstraint.category.includes(category.name)}
+            count={category.count}
+            key={category.id}
+            label={category.name}
+            onClick={() => handleCategories(category.name)}
+          />
+        ))}
     </MenuBar>
   );
 };

@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-import { ActionDropdown, Button, Checkbox } from "@bigbinary/neetoui";
-import { Container, Header } from "@bigbinary/neetoui/layouts";
+import { ActionDropdown, Button, Checkbox } from "neetoui";
+import { Container, Header } from "neetoui/layouts";
+
+import articlesApi from "apis/articles";
 
 import { filterItems, camelize } from "./constants";
 import SideMenu from "./SideMenu";
@@ -13,18 +15,44 @@ const Articles = () => {
   const [searchArticle, setSearchArticle] = useState("");
   const { Menu, MenuItem } = ActionDropdown;
   const [columnFilter, setColumnFilter] = useState(filterItems);
+  const [draftCount, setDraftCount] = useState(0);
+  const [publishCount, setPublishCount] = useState(0);
+  const [articleFilterConstraint, setArticleFilterConstraint] = useState({
+    status: "All",
+    category: [],
+  });
+
   const handleColumnCheck = e => {
     setColumnFilter({
       ...columnFilter,
       [e.target.name]: e.target.checked,
     });
   };
+  const fetchCategories = async () => {
+    try {
+      const {
+        data: { draft, publish },
+      } = await articlesApi.list();
+
+      setDraftCount(draft);
+      setPublishCount(publish);
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   return (
     <div>
       <NavBar />
       <div className="flex">
-        <SideMenu />
+        <SideMenu
+          articleFilterConstraint={articleFilterConstraint}
+          setArticleFilterConstraint={setArticleFilterConstraint}
+        />
         <Container>
           <Header
             title=""
@@ -62,8 +90,14 @@ const Articles = () => {
               placeholder: "Search Article Title",
             }}
           />
-          <div className="max-w-7xl px-2 font-bold">67 Articles</div>
-          <Table columnFilter={columnFilter} />
+          <div className="max-w-7xl px-2 font-bold">
+            {draftCount + publishCount} Articles
+          </div>
+          <Table
+            articleFilterConstraint={articleFilterConstraint}
+            columnFilter={columnFilter}
+            searchArticle={searchArticle}
+          />
         </Container>
       </div>
     </div>

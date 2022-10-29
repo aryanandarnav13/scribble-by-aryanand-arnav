@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-import { Button, Typography } from "@bigbinary/neetoui";
-import { Input, Checkbox } from "@bigbinary/neetoui/formik";
 import { Formik, Form } from "formik";
+import { Button, Typography } from "neetoui";
+import { Input, Checkbox } from "neetoui/formik";
 import * as yup from "yup";
 
 import websiteApi from "apis/websites";
@@ -10,30 +10,45 @@ import websiteApi from "apis/websites";
 import { PasswordForm } from "./PasswordForm";
 
 const General = () => {
+  const [websiteName, setWebsiteName] = useState("");
   const [passwordValidation, setPasswordValidation] = useState({
     minChar: false,
     letterAndNumber: false,
   });
-
   const handlePassword = e => {
     const passWord = e.target.value;
     const minChar = passWord.length >= 6;
     const letterAndNumber = !!/(?=.*?[0-9])(?=.*?[A-Za-z]).+/.test(passWord);
     setPasswordValidation({ minChar, letterAndNumber });
   };
-  const handleSubmit = async values => {
+
+  const fetchSiteDetails = async () => {
     try {
-      const pass = values.isPassword ? values.password : null;
-      await websiteApi.update({
-        payload: {
-          name: values.name,
-          password: pass,
-        },
-      });
+      const response = await websiteApi.show();
+      setWebsiteName(response.data.website.name);
     } catch (error) {
       logger.error(error);
     }
   };
+
+  useEffect(() => {
+    fetchSiteDetails();
+  }, []);
+  const handleSubmit = async values => {
+    try {
+      const pass = values.isPassword ? values.password : null;
+      await websiteApi.update({
+        website: {
+          name: values.name,
+          password: pass,
+        },
+      });
+      window.location.href = "/";
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
   const schema = yup.object().shape({
     name: yup.string().required("Please Enter a Site name"),
     password: yup
@@ -52,7 +67,8 @@ const General = () => {
   return (
     <div className="w-400  mx-auto">
       <Formik
-        initialValues={{ name, password: "", isPassword: false }}
+        enableReinitialize
+        initialValues={{ name: websiteName, password: "", isPassword: false }}
         validateOnBlur={false}
         validationSchema={schema}
         onSubmit={values => handleSubmit(values)}
@@ -66,11 +82,9 @@ const General = () => {
               </Typography>
               <Input
                 className="mt-5"
-                error={errors.name}
                 label="Site Name"
                 name="name"
-                placeholder="Enter Site Name."
-                value={values.name}
+                placeholder="Enter Site Name"
               />
               <Typography className="text-gray-500" style="body3">
                 Customize the site name which is used to show the site name in
@@ -82,7 +96,6 @@ const General = () => {
             <Checkbox
               label="Password Protection Knowledge base"
               name="isPassword"
-              value={values.isPassword}
               style={{
                 color: "#6366F1",
                 borderRadius: "5px",

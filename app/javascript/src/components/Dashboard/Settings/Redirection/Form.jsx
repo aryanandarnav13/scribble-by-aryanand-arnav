@@ -1,7 +1,7 @@
 import React from "react";
 
-import { Check } from "@bigbinary/neeto-icons";
-import { Input, Button } from "@bigbinary/neetoui";
+import { Check } from "neetoicons";
+import { Input, Button } from "neetoui";
 
 export const Form = ({
   handleCheck,

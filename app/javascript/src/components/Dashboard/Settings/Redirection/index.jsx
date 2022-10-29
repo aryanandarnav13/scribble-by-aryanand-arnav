@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { Typography } from "@bigbinary/neetoui";
+import { Typography } from "neetoui";
 
 import redirectionApi from "apis/redirections";
 

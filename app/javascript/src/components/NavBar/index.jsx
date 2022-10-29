@@ -1,32 +1,44 @@
 import React from "react";
 
 import { ExternalLink } from "@bigbinary/neeto-icons";
-import { Button } from "@bigbinary/neetoui";
-
-import NavItem from "./NavItem";
+import { Button, Typography } from "@bigbinary/neetoui";
+import { Header } from "@bigbinary/neetoui/layouts";
+import { NavLink } from "react-router-dom";
 
 const NavBar = () => (
-  <nav className=" border-b-2 bg-white">
-    <div className="max-w-7xl mx-auto px-2">
-      <div className="flex h-16 justify-between">
-        <div className="flex px-2">
-          <div className="flex">
-            <NavItem name="Scribble" />
-            <NavItem name="Articles" path="/" />
-            <NavItem name="Settings" path="/Settings" />
-          </div>
+  <div className="border-b-2 py-0 px-5">
+    <Header
+      actionBlock={
+        <Button
+          icon={ExternalLink}
+          label="Preview"
+          style="secondary"
+          to="/preview"
+        />
+      }
+      title={
+        <div className="flex text-xl">
+          <Typography className="px-2 " style="h4">
+            Scribble
+          </Typography>
+          <NavLink
+            exact
+            activeClassName="text-indigo-700 px-2"
+            className="px-2 text-base text-gray-400"
+            to="/"
+          >
+            Articles
+          </NavLink>
+          <NavLink
+            activeClassName="text-indigo-700 px-2"
+            className="px-2 text-base text-gray-400"
+            to="/Settings"
+          >
+            Settings
+          </NavLink>
         </div>
-        <div className="flex items-center justify-end gap-x-4">
-          <Button
-            icon={ExternalLink}
-            label="Preview"
-            style="secondary"
-            to="/preview"
-          />
-        </div>
-      </div>
-    </div>
-  </nav>
+      }
+    />
+  </div>
 );
-
 export default NavBar;

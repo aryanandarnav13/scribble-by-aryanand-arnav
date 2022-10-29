@@ -6,7 +6,6 @@ class CategoriesController < ApplicationController
 
   def index
     @categories = Category.all.order("position ASC")
-    render status: :ok, json: { categories: @categories }
   end
 
   def create
@@ -42,6 +41,6 @@ class CategoriesController < ApplicationController
     end
 
     def category_params
-      params.require(:category).permit(:id, :name, :position, :new_category_id)
+      params.require(:category).permit(:id, :name, :position, :new_category_id, :user_id)
     end
 end

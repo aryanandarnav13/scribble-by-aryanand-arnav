@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 
-import { ActionDropdown, Button } from "@bigbinary/neetoui";
-import { Input, Textarea, Select } from "@bigbinary/neetoui/formik";
 import { Formik, Form as FormikForm } from "formik";
+import { ActionDropdown, Button } from "neetoui";
+import { Input, Textarea, Select } from "neetoui/formik";
 
 import articlesApi from "apis/articles";
 import categoriesApi from "apis/categories";
+import userApi from "apis/users";
 import {
   ARTICLE_VALIDATION_SCHEMA,
   ARTICLE_INITIAL_VALUES,
@@ -16,6 +17,7 @@ import NavBar from "../../../NavBar";
 const NewArticle = () => {
   const [submitted, setSubmitted] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [users, setUsers] = useState([]);
   const { Menu, MenuItem } = ActionDropdown;
   const [articleStatus, setArticleStatus] = useState("Draft");
 
@@ -34,12 +36,28 @@ const NewArticle = () => {
     fetchCategories();
   }, []);
 
+  const fetchUsers = async () => {
+    try {
+      const {
+        data: { users },
+      } = await userApi.list();
+      setUsers(users);
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
   const handleSubmit = async values => {
     try {
       values = {
         ...values,
-        category_id: values.category_id.value,
+        category_id: values.category.value,
         status: articleStatus,
+        user_id: users[0].id,
       };
       await articlesApi.create(values);
     } catch (err) {
@@ -74,7 +92,7 @@ const NewArticle = () => {
                   required
                   className="w-full flex-grow-0"
                   label="Category"
-                  name="category_id"
+                  name="category"
                   placeholder="Select a Category"
                   options={categories.map(category => ({
                     label: category.name,
@@ -126,6 +144,7 @@ const NewArticle = () => {
                   label="Cancel"
                   size="medium"
                   style="text"
+                  to="/"
                   type="reset"
                 />
               </div>

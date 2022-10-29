@@ -1,7 +1,7 @@
 import React from "react";
 
-import { Edit, Delete } from "@bigbinary/neeto-icons";
-import { Button } from "@bigbinary/neetoui";
+import { Edit, Delete } from "neetoicons";
+import { Button } from "neetoui";
 
 import articlesApi from "apis/articles";
 
