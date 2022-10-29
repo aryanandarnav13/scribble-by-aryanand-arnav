@@ -1,0 +1,13 @@
+default: &default
+  adapter: postgresql
+  host: 127.0.0.1
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: scribble_by_aryanand_arnav_development
+
+test:
+  <<: *default
+  database: scribble_by_aryanand_arnav_test
