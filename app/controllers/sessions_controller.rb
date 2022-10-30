@@ -1,19 +1,32 @@
+# # frozen_string_literal: true
+
+# class SessionsController < ApplicationController
+#   def create
+#     unless current_website.authenticate(login_params[:password])
+#       respond_with_error("Incorrect credentials, try again.", :unauthorized)
+#     end
+#   end
+
+#   private
+
+#     def login_params
+#       params.require(:session).permit(:password)
+#     end
+# end
+
 # frozen_string_literal: true
 
 class SessionsController < ApplicationController
   def create
-    puts(login_params)
-    unless current_website.authenticate(login_params[:password])
-      puts("Not authenticated")
-      respond_with_error("Incorrect credentials, try again.", :unauthorized)
+    @website = Website.first
+    unless @website.authenticate(login_params[:password])
+      render status: :unauthorized, json: { error: "incorrect_credentials" }
     end
   end
 
   private
 
     def login_params
-      puts("++++++++++++++++++++++++++++++")
-      puts(params)
-      params.require(:session).permit(:password)
+      params.require(:login).permit(:password)
     end
 end
