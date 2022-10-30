@@ -31,6 +31,7 @@
 
 en:
   successfully_created: "%{entity} was successfully created!"
+  successfully_updated: "%{entity} was successfully updated!"
   article:
     slug:
       immutable: "is immutable!"

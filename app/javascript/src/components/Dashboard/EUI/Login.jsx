@@ -15,9 +15,7 @@ import Vector from "./Vector.png";
 export const Login = ({ siteName }) => {
   const handleSubmit = async values => {
     try {
-      const response = await authApi.login({
-        login: { password: values.password },
-      });
+      const response = await authApi.login({ password: values.password });
       setToLocalStorage({
         authToken: response.data.authentication_token,
       });

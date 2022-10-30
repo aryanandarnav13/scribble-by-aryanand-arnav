@@ -7,6 +7,7 @@ import {
   Redirect,
   BrowserRouter as Router,
 } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import { getFromLocalStorage } from "src/utils/storage";
 
 import { setAuthHeaders, registerIntercepts } from "apis/axios";
@@ -34,11 +35,9 @@ const App = () => {
   const fetchSiteDetails = async () => {
     try {
       setLoading(true);
-      const response = await websiteApi.show();
-      setSiteName(response.data.website.name);
-      if (!response.data.website.has_password) {
-        setHasPassword(false);
-      }
+      const response = await websiteApi.get();
+      setSiteName(response.data.website_name);
+      setHasPassword(response.data.password_enabled);
     } catch (error) {
       logger.error(error);
     } finally {
@@ -59,10 +58,10 @@ const App = () => {
   };
 
   useEffect(() => {
+    setAuthHeaders(setLoading);
     registerIntercepts();
     fetchRedirections();
     initializeLogger();
-    setAuthHeaders(setLoading);
     fetchSiteDetails();
   }, []);
 
@@ -72,6 +71,7 @@ const App = () => {
 
   return (
     <Router>
+      <ToastContainer />
       <Switch>
         {redirectionItems.map((item, idx) => (
           <Route

@@ -22,14 +22,14 @@ class WebsitesControllerTest < ActionDispatch::IntegrationTest
 
   def test_should_update_website
     @website.save!
-    put website_url, params: { name: "Spinkart", password: "welcome1" }, as: :json
+    put website_url, params: { name: "Spinkart", password: "welcome1", password_enabled: true }, as: :json
     assert_response :success
     assert_equal response.parsed_body["notice"], "This website is successfully updated"
   end
 
   def test_shouldnt_update_website_without_name
     @website.save!
-    put website_url, params: { name: "", password: "welcome1" }, as: :json
+    put website_url, params: { name: "", password: "welcome1", password_enabled: true }, as: :json
     assert_response :unprocessable_entity
   end
 end

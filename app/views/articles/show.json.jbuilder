@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-# frozen_string_literal: truejson.title @article.title
+# frozen_string_literal: true
+
+json.title @article.title
 
 json.category do
   json.label @article.category_id ? @article.category.name : ""

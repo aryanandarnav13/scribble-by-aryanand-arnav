@@ -30,7 +30,10 @@ export const ARTICLE_VALIDATION_SCHEMA = yup.object().shape({
   title: yup
     .string()
     .required("Title is required")
-    .matches(/^[\w\-\s]+$/, "Title must contain only alphanumeric characters"),
+    .matches(
+      /^[a-zA-Z0-9\s]+$/,
+      "Title must contain only alphanumeric characters"
+    ),
   body: yup.string().required("Body is required"),
   category: yup.object().required("Required").nullable(),
 });

@@ -19,7 +19,6 @@ class CategoriesController < ApplicationController
 
   def update
     @category.update!(category_params)
-    render status: :ok, json: { notice: "This category is successfully updated" }
   end
 
   def destroy
@@ -31,7 +30,7 @@ class CategoriesController < ApplicationController
     end
     @category = Category.find_by!(id: params[:id])
     @category.destroy!
-    render status: :ok, json: { notice: "This category is successfully deleted" }
+    render status: :ok, json: { notice: "The category is successfully deleted" }
   end
 
   private
