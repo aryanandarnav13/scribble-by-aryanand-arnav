@@ -8,7 +8,7 @@ class Redirection < ApplicationRecord
   private
 
     def check_both_input_is_not_same
-      errors.add(:base, "redirection.same_value") if frompath == topath
+      errors.add(:base, "Same Redirection") if frompath == topath
     end
 
     def check_cyclic_redirection_does_not_exist

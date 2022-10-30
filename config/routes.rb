@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     resources :categories, except: %i[new edit], param: :id, defaults: { format: "json" }
     resources :redirections, except: %i[new edit], defaults: { format: "json" }
     resources :websites, except: %i[new edit], param: :id, defaults: { format: "json" }
-    resource :session, only: %i[create]
+    resource :session, only: %i[create], defaults: { format: "json" }
     resources :users, only: %i[create index], defaults: { format: "json" }
   end
 

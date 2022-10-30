@@ -23,7 +23,7 @@ class CategoriesController < ApplicationController
 
   def destroy
     if category_params[:new_category_id] === nil
-      new_category = Category.create!({ name: "General" })
+      new_category = Category.create!({ name: "General", user_id: User.first.id })
       Article.where(category_id: params[:id]).update_all(category_id: new_category.id)
     elsif category_params[:new_category_id] != "none"
       Article.where(category_id: params[:id]).update_all(category_id: category_params[:new_category_id])

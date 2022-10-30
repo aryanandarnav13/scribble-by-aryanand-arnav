@@ -26,7 +26,6 @@ import { Login } from "./components/Dashboard/EUI/Login";
 const App = () => {
   const authToken = getFromLocalStorage("authToken");
   const isLoggedIn = !either(isNil, isEmpty)(authToken);
-
   const [loading, setLoading] = useState(true);
   const [hasPassword, setHasPassword] = useState(true);
   const [siteName, setSiteName] = useState("");
