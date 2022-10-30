@@ -10,6 +10,7 @@ import websiteApi from "apis/websites";
 import { PasswordForm } from "./PasswordForm";
 
 const General = () => {
+  const [passwordEnabled, setPasswordEnabled] = useState(false);
   const [websiteName, setWebsiteName] = useState("");
   const [passwordValidation, setPasswordValidation] = useState({
     minChar: false,
@@ -24,8 +25,9 @@ const General = () => {
 
   const fetchSiteDetails = async () => {
     try {
-      const response = await websiteApi.show();
-      setWebsiteName(response.data.website.name);
+      const response = await websiteApi.get();
+      setWebsiteName(response.data.website_name);
+      setPasswordEnabled(response.data.password_enabled);
     } catch (error) {
       logger.error(error);
     }
@@ -34,16 +36,17 @@ const General = () => {
   useEffect(() => {
     fetchSiteDetails();
   }, []);
+
   const handleSubmit = async values => {
     try {
-      const pass = values.isPassword ? values.password : null;
+      const pass = values.password_enabled ? values.password : null;
       await websiteApi.update({
-        website: {
+        payload: {
           name: values.name,
           password: pass,
+          password_enabled: values.password_enabled,
         },
       });
-      window.location.href = "/";
     } catch (error) {
       logger.error(error);
     }
@@ -58,7 +61,7 @@ const General = () => {
         /(?=.*?[0-9])(?=.*?[A-Za-z]).+/,
         "Requires atleast 1 number and letter"
       )
-      .when("isPassword", {
+      .when("passwordEnabled", {
         is: true,
         then: yup.string().required("Please enter  password"),
       }),
@@ -68,9 +71,13 @@ const General = () => {
     <div className="w-400  mx-auto">
       <Formik
         enableReinitialize
-        initialValues={{ name: websiteName, password: "", isPassword: false }}
         validateOnBlur={false}
         validationSchema={schema}
+        initialValues={{
+          name: websiteName,
+          password: "",
+          password_enabled: passwordEnabled,
+        }}
         onSubmit={values => handleSubmit(values)}
       >
         {({ errors, values, setFieldValue }) => (
@@ -94,15 +101,19 @@ const General = () => {
               </Typography>
             </div>
             <Checkbox
+              checked={passwordEnabled}
               label="Password Protection Knowledge base"
-              name="isPassword"
+              name="password_enabled"
               style={{
                 color: "#6366F1",
                 borderRadius: "5px",
               }}
+              onChange={() => {
+                setPasswordEnabled(prevPasswordEnabled => !prevPasswordEnabled);
+              }}
             />
             <div>
-              {values.isPassword && (
+              {passwordEnabled && (
                 <PasswordForm
                   errors={errors}
                   handlePassword={handlePassword}
@@ -118,7 +129,13 @@ const General = () => {
                 label="Save Changes"
                 type="submit"
               />
-              <Button className="ml-6" label="Cancel" style="text" to="/" />
+              <Button
+                className="ml-6"
+                label="Cancel"
+                style="text"
+                to="/"
+                onClick={() => setPasswordEnabled(false)}
+              />
             </div>
           </Form>
         )}

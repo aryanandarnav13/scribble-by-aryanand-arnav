@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Toastr } from "neetoui";
-import { getFromLocalStorage } from "src/utils/storage";
+import { setToLocalStorage, getFromLocalStorage } from "src/utils/storage";
 
 const DEFAULT_ERROR_NOTIFICATION = "Something went wrong!";
 
@@ -33,6 +33,9 @@ const handleSuccessResponse = response => {
 };
 
 const handleErrorResponse = axiosErrorObject => {
+  if (axiosErrorObject.response?.status === 401) {
+    setToLocalStorage({ authToken: null });
+  }
   Toastr.error(
     axiosErrorObject.response?.data?.error || DEFAULT_ERROR_NOTIFICATION
   );

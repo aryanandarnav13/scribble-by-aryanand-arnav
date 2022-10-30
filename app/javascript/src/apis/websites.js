@@ -1,11 +1,12 @@
 import axios from "axios";
 
-const show = () => axios.get("/website");
-const update = payload => axios.put("/website", payload);
+const get = () => axios.get("/websites");
 
-const siteApi = {
-  show,
+const update = ({ id, payload }) =>
+  axios.put(`/websites/${id}`, { website: payload });
+
+const websiteApi = {
+  get,
   update,
 };
-
-export default siteApi;
+export default websiteApi;

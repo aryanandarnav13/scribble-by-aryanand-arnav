@@ -19,19 +19,18 @@ class CategoriesController < ApplicationController
 
   def update
     @category.update!(category_params)
-    render status: :ok, json: { notice: "This category is successfully updated" }
   end
 
   def destroy
     if category_params[:new_category_id] === nil
-      new_category = Category.create!({ name: "General" })
+      new_category = Category.create!({ name: "General", user_id: User.first.id })
       Article.where(category_id: params[:id]).update_all(category_id: new_category.id)
     elsif category_params[:new_category_id] != "none"
       Article.where(category_id: params[:id]).update_all(category_id: category_params[:new_category_id])
     end
     @category = Category.find_by!(id: params[:id])
     @category.destroy!
-    render status: :ok, json: { notice: "This category is successfully deleted" }
+    render status: :ok, json: { notice: "The category is successfully deleted" }
   end
 
   private
