@@ -27,10 +27,6 @@ const Create = ({ fetchCategoriesList }) => {
     }
   };
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
   const handleSubmit = async values => {
     try {
       values = {
@@ -44,6 +40,10 @@ const Create = ({ fetchCategoriesList }) => {
     fetchCategoriesList();
     setSubmitted(true);
   };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   return (
     <Formik
