@@ -25,9 +25,6 @@ const ManageCategories = () => {
       logger.error(err);
     }
   };
-  useEffect(() => {
-    fetchArticles();
-  }, []);
 
   const fetchCategories = async () => {
     try {
@@ -39,6 +36,7 @@ const ManageCategories = () => {
   };
 
   useEffect(() => {
+    fetchArticles();
     fetchCategories();
   }, []);
 

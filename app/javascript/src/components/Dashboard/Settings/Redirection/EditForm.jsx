@@ -16,10 +16,6 @@ const EditForm = ({ id, setIsEdit, fetchRedirectionsDetails }) => {
     }
   };
 
-  useEffect(() => {
-    fetchRedirection();
-  }, []);
-
   const handleUpdate = async () => {
     try {
       await redirectionApi.update({ id, payload: redirection });
@@ -29,6 +25,10 @@ const EditForm = ({ id, setIsEdit, fetchRedirectionsDetails }) => {
       logger.error(error);
     }
   };
+
+  useEffect(() => {
+    fetchRedirection();
+  }, []);
 
   return (
     <Form

@@ -33,10 +33,6 @@ const General = () => {
     }
   };
 
-  useEffect(() => {
-    fetchSiteDetails();
-  }, []);
-
   const handleSubmit = async values => {
     try {
       const pass = values.password_enabled ? values.password : null;
@@ -66,6 +62,10 @@ const General = () => {
         then: yup.string().required("Please enter  password"),
       }),
   });
+
+  useEffect(() => {
+    fetchSiteDetails();
+  }, []);
 
   return (
     <div className="w-400  mx-auto">

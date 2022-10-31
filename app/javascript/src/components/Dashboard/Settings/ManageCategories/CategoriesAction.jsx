@@ -19,10 +19,6 @@ const List = ({
   const [selectedCategory, setSelectedCategory] = useState("");
   const [users, setUsers] = useState([]);
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
   const fetchUsers = async () => {
     try {
       const {
@@ -33,10 +29,6 @@ const List = ({
       logger.error(error);
     }
   };
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
 
   const updateCategory = async () => {
     try {
@@ -107,6 +99,11 @@ const List = ({
       setCategoryToDelete(category);
     }
   };
+
+  useEffect(() => {
+    fetchCategories();
+    fetchUsers();
+  }, []);
 
   return (
     <DragDropContext onDragEnd={handleOnDragEnd} onDragStart={handleDragStart}>
