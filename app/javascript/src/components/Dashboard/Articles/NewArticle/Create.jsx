@@ -32,10 +32,6 @@ const NewArticle = () => {
     }
   };
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
   const fetchUsers = async () => {
     try {
       const {
@@ -46,10 +42,6 @@ const NewArticle = () => {
       logger.error(error);
     }
   };
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
 
   const handleSubmit = async values => {
     try {
@@ -64,6 +56,11 @@ const NewArticle = () => {
       logger.error(err);
     }
   };
+
+  useEffect(() => {
+    fetchCategories();
+    fetchUsers();
+  }, []);
 
   return (
     <div>

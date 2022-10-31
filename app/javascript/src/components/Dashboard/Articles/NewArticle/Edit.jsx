@@ -34,10 +34,6 @@ const EditArticle = () => {
   };
 
   useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  useEffect(() => {
     const fetchArticleDetails = async () => {
       try {
         const response = await articlesApi.show(slug);
@@ -60,10 +56,6 @@ const EditArticle = () => {
     }
   };
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
   const handleEdit = async values => {
     const { title, body } = values;
     const category_id = values.category.value;
@@ -82,6 +74,11 @@ const EditArticle = () => {
       logger.error(error);
     }
   };
+
+  useEffect(() => {
+    fetchCategories();
+    fetchUsers();
+  }, []);
 
   return (
     <div>
