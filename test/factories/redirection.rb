@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :redirection do
-    topath { Faker::Lorem.characters[0..15] }
-    frompath { Faker::Lorem.characters[0..15] }
+    topath { "/#{ Faker::Lorem.characters[0..15] }" }
+    frompath { "/#{ Faker::Lorem.characters[0..15] }" }
   end
 end

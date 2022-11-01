@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from "react";
 
 import { either, isEmpty, isNil } from "ramda";
-import {
-  Route,
-  Switch,
-  Redirect,
-  BrowserRouter as Router,
-} from "react-router-dom";
+import { Route, Switch, BrowserRouter as Router } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { getFromLocalStorage } from "src/utils/storage";
 
 import { setAuthHeaders, registerIntercepts } from "apis/axios";
-import redirectionApi from "apis/redirections";
 import websiteApi from "apis/websites";
 import { initializeLogger } from "common/logger";
 import Dashboard from "components/Dashboard";
@@ -29,7 +23,6 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [hasPassword, setHasPassword] = useState(true);
   const [siteName, setSiteName] = useState("");
-  const [redirectionItems, setRedirectionItems] = useState([]);
 
   const fetchSiteDetails = async () => {
     try {
@@ -44,22 +37,9 @@ const App = () => {
     }
   };
 
-  const fetchRedirections = async () => {
-    try {
-      const {
-        data: { redirections },
-      } = await redirectionApi.list();
-
-      setRedirectionItems(redirections);
-    } catch (err) {
-      logger.error(err);
-    }
-  };
-
   useEffect(() => {
     setAuthHeaders(setLoading);
     registerIntercepts();
-    fetchRedirections();
     initializeLogger();
     fetchSiteDetails();
   }, []);
@@ -72,14 +52,6 @@ const App = () => {
     <Router>
       <ToastContainer />
       <Switch>
-        {redirectionItems.map((item, idx) => (
-          <Route
-            exact
-            key={idx}
-            path={item.frompath}
-            render={() => <Redirect to={item.topath} />}
-          />
-        ))}
         <Route exact component={Dashboard} path="/" />
         <Route exact component={NewArticle} path="/articles/create" />
         <Route exact component={EditArticle} path="/articles/:slug/edit" />

@@ -38,13 +38,15 @@ const Row = ({ redirection, fetchRedirectionsDetails }) => {
         className="whitespace-no-wrap mr-3 flex overflow-x-auto p-3 text-left"
         style={{ maxWidth: "300px", minWidth: "300px" }}
       >
-        {window.location.hostname}/{window.location.port}/{redirection.frompath}
+        {window.location.hostname}/{window.location.port}
+        {redirection.frompath}
       </td>
       <td
         className=" overflow-x-auto"
         style={{ maxWidth: "280px", minWidth: "280px" }}
       >
-        {window.location.hostname}/{window.location.port}/{redirection.topath}
+        {window.location.hostname}/{window.location.port}
+        {redirection.topath}
       </td>
       <td className="pr-2">
         <Button

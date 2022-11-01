@@ -23,7 +23,7 @@ class RedirectionsControllerTest < ActionDispatch::IntegrationTest
     post redirections_path, params: { redirection: { frompath: "test1", topath: "test2" } }, headers: headers
     assert_response :success
     response_json = response.parsed_body
-    assert_equal response_json["notice"], "The redirection is successfully created"
+    assert_equal response_json["notice"], "Redirection was successfully created."
   end
 
   def test_should_update_redirection
@@ -37,13 +37,13 @@ class RedirectionsControllerTest < ActionDispatch::IntegrationTest
     put redirection_path(@redirection.id), params: redirection_params, headers: headers
     assert_response :success
     @redirection.reload
-    assert_equal @redirection.topath, new_topath
+    assert_equal @redirection.topath, "/#{new_topath}"
   end
 
   def test_should_delete_redirection
     delete redirection_path(@redirection.id), headers: headers
     assert_response :success
     response_json = response.parsed_body
-    assert_equal response_json["notice"], "This redirection is successfully deleted"
+    assert_equal response_json["notice"], "Redirection was successfully deleted."
   end
 end
