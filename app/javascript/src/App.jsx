@@ -28,7 +28,7 @@ const App = () => {
     try {
       setLoading(true);
       const response = await websiteApi.get();
-      setSiteName(response.data.website_name);
+      setSiteName(response.data.name);
       setHasPassword(response.data.password_enabled);
     } catch (error) {
       logger.error(error);

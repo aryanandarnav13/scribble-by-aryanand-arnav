@@ -80,19 +80,14 @@ const List = ({
     if (
       articles?.filter(item => item.category === category?.name).length === 0
     ) {
-      const message = confirm(
-        "This category has no article. Are you sure you want to delete this category? This change cannot be undone."
-      );
-      if (message) {
-        try {
-          await categoriesApi.destroy(category.id, {
-            id: category.id,
-            new_category_id: "none",
-          });
-          await fetchCategories();
-        } catch (error) {
-          logger.error(error);
-        }
+      try {
+        await categoriesApi.destroy(category.id, {
+          id: category.id,
+          new_category_id: "none",
+        });
+        await fetchCategories();
+      } catch (error) {
+        logger.error(error);
       }
     } else {
       setShowAlert(true);

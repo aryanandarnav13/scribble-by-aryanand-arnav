@@ -18,24 +18,10 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
           title: "test article", body: "This is a test article body",
           user_id: @user.id, category_id: @category.id, status: "Publish"
         }
-      },
-      headers: headers
+      }, as: :json, headers: headers
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["notice"], t("successfully_created", entity: "Article")
-  end
-
-  def test_user_shouldnt_create_article_without_title
-    post articles_url,
-      params: {
-        article:
-        {
-          body: "This is a test article body",
-          user_id: @user.id, category_id: @category.id, status: "Publish"
-        }
-      },
-      headers: headers
-    assert_response :unprocessable_entity
   end
 
   def test_user_can_update_any_article
@@ -47,7 +33,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
               body: "This is a test article body"
             }
     }
-    put article_path(@article.slug), params: article_params, headers: headers
+    put article_path(@article.slug), params: article_params, headers: headers, as: :json
     assert_response :success
     @article.reload
     assert_equal @article.title, new_title
@@ -60,14 +46,14 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_user_can_destroy_article
-    delete article_path(@article.slug), headers: headers
+    delete article_path(@article.slug), headers: headers, as: :json
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["notice"], t("successfully_deleted", entity: "Article")
   end
 
   def test_user_can_get_all_articles
-    get articles_path, headers: headers
+    get articles_path, headers: headers, as: :json
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["articles"].count, 1

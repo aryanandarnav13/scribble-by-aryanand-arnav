@@ -30,7 +30,7 @@ class CategoriesController < ApplicationController
     end
     @category = Category.find_by!(id: params[:id])
     @category.destroy!
-    respond_with_success(t("successfully_created", entity: "Category"))
+    respond_with_success(t("successfully_deleted", entity: "Category"))
   end
 
   private

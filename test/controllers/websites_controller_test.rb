@@ -23,7 +23,7 @@ class WebsitesControllerTest < ActionDispatch::IntegrationTest
           password_enabled: true
         }
       },
-      headers: headers
+      headers: headers, as: :json
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["notice"], t("successfully_updated", entity: "Website")
@@ -34,7 +34,7 @@ class WebsitesControllerTest < ActionDispatch::IntegrationTest
     new_password = "#{@website.password}-(updated)"
     website_params = { website: { name: new_name, password: new_password, password_enabled: true } }
 
-    put website_path(@website.id), params: website_params, headers: headers
+    put website_path(@website.id), params: website_params, headers: headers, as: :json
     assert_response :success
     @website.reload
     assert_equal @website.name, new_name
