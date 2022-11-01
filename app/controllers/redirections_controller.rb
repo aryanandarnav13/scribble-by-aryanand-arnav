@@ -9,22 +9,21 @@ class RedirectionsController < ApplicationController
   end
 
   def create
-    redirection = Redirection.new(redirection_params)
-    redirection.save!
-    render status: :ok, json: { notice: "The redirection is successfully created" }
+    Redirection.create!(frompath: "/#{redirection_params[:frompath]}", topath: "/#{redirection_params[:topath]}")
+    respond_with_success(t("successfully_created", entity: "Redirection"))
   end
 
   def show
   end
 
   def update
-    @redirection.update!(redirection_params)
-    render status: :ok, json: { notice: "This redirection is successfully updated" }
+    @redirection.update!(frompath: "/#{redirection_params[:frompath]}", topath: "/#{redirection_params[:topath]}")
+    respond_with_success(t("successfully_updated", entity: "Redirection"))
   end
 
   def destroy
     @redirection.destroy!
-    render status: :ok, json: { notice: "This redirection is successfully deleted" }
+    respond_with_success(t("successfully_deleted", entity: "Redirection"))
   end
 
   private
