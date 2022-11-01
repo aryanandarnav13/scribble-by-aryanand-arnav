@@ -9,7 +9,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_should_list_all_users
-    get users_path, headers: headers
+    get users_path, headers: headers, as: :json
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["users"].length, User.count

@@ -2,7 +2,6 @@
 
 class SessionsController < ApplicationController
   def create
-    @current_site = current_website
     unless current_website.authenticate(login_params[:password])
       respond_with_error("Incorrect credentials", :unauthorized)
     end
