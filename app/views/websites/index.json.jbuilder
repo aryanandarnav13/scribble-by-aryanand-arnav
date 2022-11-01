@@ -2,6 +2,6 @@
 
 json.website
   json.extract! @_current_website,
-    :id,
-    :name,
-    :password_enabled
+  :id,
+  :name,
+  :password_enabled
