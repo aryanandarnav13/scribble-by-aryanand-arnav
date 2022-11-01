@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-json.extract! @current_site,
+json.extract! @_current_website,
   :id,
   :name,
   :authentication_token

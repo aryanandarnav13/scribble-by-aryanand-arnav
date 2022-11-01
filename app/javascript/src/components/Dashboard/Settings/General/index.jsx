@@ -10,6 +10,7 @@ import websiteApi from "apis/websites";
 import { PasswordForm } from "./PasswordForm";
 
 const General = () => {
+  const [isPasswordInputDisabled, setIsPasswordInputDisabled] = useState(true);
   const [passwordEnabled, setPasswordEnabled] = useState(false);
   const [websiteName, setWebsiteName] = useState("");
   const [passwordValidation, setPasswordValidation] = useState({
@@ -26,7 +27,7 @@ const General = () => {
   const fetchSiteDetails = async () => {
     try {
       const response = await websiteApi.get();
-      setWebsiteName(response.data.website_name);
+      setWebsiteName(response.data.name);
       setPasswordEnabled(response.data.password_enabled);
     } catch (error) {
       logger.error(error);
@@ -43,6 +44,7 @@ const General = () => {
           password_enabled: values.password_enabled,
         },
       });
+      localStorage.setItem("authToken", JSON.stringify(null));
     } catch (error) {
       logger.error(error);
     }
@@ -117,9 +119,11 @@ const General = () => {
                 <PasswordForm
                   errors={errors}
                   handlePassword={handlePassword}
+                  isPasswordInputDisabled={isPasswordInputDisabled}
                   password={values.password}
                   passwordValidation={passwordValidation}
                   setFieldValue={setFieldValue}
+                  setIsPasswordInputDisabled={setIsPasswordInputDisabled}
                 />
               )}
             </div>
@@ -128,13 +132,16 @@ const General = () => {
                 className="bg-indigo-500 "
                 label="Save Changes"
                 type="submit"
+                disabled={
+                  isPasswordInputDisabled === passwordEnabled &&
+                  !(Formik.isValid && Formik.dirty)
+                }
               />
               <Button
                 className="ml-6"
                 label="Cancel"
                 style="text"
-                to="/"
-                onClick={() => setPasswordEnabled(false)}
+                type="reset"
               />
             </div>
           </Form>

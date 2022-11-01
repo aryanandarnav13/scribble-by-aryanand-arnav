@@ -2,11 +2,6 @@
 
 class WebsitesController < ApplicationController
   def index
-    respond_with_json(
-      {
-        website_name: current_website.name,
-        password_enabled: current_website.password_enabled?
-      })
   end
 
   def update

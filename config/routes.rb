@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-
   constraints(lambda { |req| req.format == :json }) do
-    resources :articles, except: %i[new edit], param: :slug, defaults: { format: "json" }
-    resources :categories, except: %i[new edit], param: :id, defaults: { format: "json" }
-    resources :redirections, except: %i[new edit], defaults: { format: "json" }
-    resources :websites, except: %i[new edit], param: :id, defaults: { format: "json" }
-    resource :session, only: %i[create], defaults: { format: "json" }
-    resources :users, only: %i[create index], defaults: { format: "json" }
+    resources :articles, except: %i[new edit], param: :slug
+    resources :categories, except: %i[new edit]
+    resources :redirections, except: %i[new edit]
+    resources :websites, except: %i[new edit]
+    resource :session, only: %i[create]
+    resources :users, only: %i[create index]
   end
 
   root "home#index"

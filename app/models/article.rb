@@ -22,10 +22,4 @@ class Article < ApplicationRecord
         itr += 1
       end
     end
-
-    def slug_not_changed
-      if slug_changed? && self.persisted?
-        errors.add(:slug, "Article.slug.immutable")
-      end
-    end
 end
