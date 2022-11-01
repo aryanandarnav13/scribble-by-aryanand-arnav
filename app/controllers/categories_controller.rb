@@ -11,7 +11,7 @@ class CategoriesController < ApplicationController
   def create
     category = Category.new(category_params)
     category.save!
-    render status: :ok, json: { notice: "The category is successfully created" }
+    respond_with_success(t("successfully_created", entity: "Category"))
   end
 
   def show
@@ -30,7 +30,7 @@ class CategoriesController < ApplicationController
     end
     @category = Category.find_by!(id: params[:id])
     @category.destroy!
-    render status: :ok, json: { notice: "The category is successfully deleted" }
+    respond_with_success(t("successfully_created", entity: "Category"))
   end
 
   private
