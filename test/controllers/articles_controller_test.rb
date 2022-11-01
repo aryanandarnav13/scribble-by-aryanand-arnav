@@ -22,7 +22,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
       headers: headers
     assert_response :success
     response_json = response.parsed_body
-    assert_equal response_json["notice"], "The article is successfully created"
+    assert_equal response_json["notice"], t("successfully_created", entity: "Article")
   end
 
   def test_user_shouldnt_create_article_without_title
@@ -55,12 +55,15 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
     assert_equal @article.user_id, @user.id
     assert_equal @article.status, "Publish"
     assert_equal @article.body, "This is a test article body"
+    response_json = response.parsed_body
+    assert_equal response_json["notice"], t("successfully_updated", entity: "Article")
   end
 
   def test_user_can_destroy_article
     delete article_path(@article.slug), headers: headers
     assert_response :success
-    assert_equal Article.count, 0
+    response_json = response.parsed_body
+    assert_equal response_json["notice"], t("successfully_deleted", entity: "Article")
   end
 
   def test_user_can_get_all_articles
