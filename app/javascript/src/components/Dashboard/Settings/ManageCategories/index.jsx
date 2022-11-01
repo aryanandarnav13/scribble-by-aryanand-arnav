@@ -5,6 +5,7 @@ import { Input, Button, Typography, Modal, Select } from "neetoui";
 
 import articlesApi from "apis/articles";
 import categoriesApi from "apis/categories";
+import userApi from "apis/users";
 
 import CategoriesAction from "./CategoriesAction";
 
@@ -16,6 +17,7 @@ const ManageCategories = () => {
   const [categoryToDelete, setCategoryToDelete] = useState(null);
   const [categoryToUpdateTo, setCategoryToUpdateTo] = useState(null);
   const [articles, setArticles] = useState([]);
+  const [users, setUsers] = useState([]);
 
   const fetchArticles = async () => {
     try {
@@ -35,14 +37,20 @@ const ManageCategories = () => {
     }
   };
 
-  useEffect(() => {
-    fetchArticles();
-    fetchCategories();
-  }, []);
+  const fetchUsers = async () => {
+    try {
+      const {
+        data: { users },
+      } = await userApi.list();
+      setUsers(users);
+    } catch (error) {
+      logger.error(error);
+    }
+  };
 
   const createNewCategory = async () => {
     try {
-      await categoriesApi.create({ name: newCategory.trim() });
+      await categoriesApi.create({ name: newCategory, user_id: users[0].id });
       setAddNew(false);
       setNewCategory("");
       fetchCategories();
@@ -71,6 +79,16 @@ const ManageCategories = () => {
           placeholder="Enter Category Name"
           value={newCategory}
           onChange={e => setNewCategory(e.target.value)}
+          onKeyDown={e => {
+            if (e.key === "Enter") {
+              createNewCategory();
+            }
+
+            if (e.key === "Escape") {
+              setAddNew(open => !open);
+              setNewCategory("");
+            }
+          }}
         />
         <div className="ml-5">
           <Button icon={Check} style="primary" onClick={createNewCategory} />
@@ -126,6 +144,12 @@ const ManageCategories = () => {
       }
     }
   };
+
+  useEffect(() => {
+    fetchArticles();
+    fetchCategories();
+    fetchUsers();
+  }, []);
 
   return (
     <>
