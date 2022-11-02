@@ -7,5 +7,3 @@ json.categories @categories do | category |
     :position
   json.articles category.articles
 end
-
-
