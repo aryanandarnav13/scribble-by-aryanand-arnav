@@ -6,6 +6,7 @@ class CategoriesController < ApplicationController
 
   def index
     @categories = Category.all.order("position ASC")
+    # @categories = current_user.categories.order("position ASC")
   end
 
   def create
