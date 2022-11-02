@@ -6,6 +6,7 @@ class ArticlesController < ApplicationController
 
   def index
     @articles = Article.all
+    # @articles = current_user.articles.all
   end
 
   def create

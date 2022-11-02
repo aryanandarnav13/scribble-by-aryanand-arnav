@@ -27,7 +27,7 @@ const App = () => {
   const fetchSiteDetails = async () => {
     try {
       setLoading(true);
-      const response = await websiteApi.get();
+      const response = await websiteApi.list();
       setSiteName(response.data.name);
       setHasPassword(response.data.password_enabled);
     } catch (error) {

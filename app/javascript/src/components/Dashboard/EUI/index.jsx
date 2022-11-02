@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import articlesApi from "apis/articles";
-import categoriesApi from "apis/categories";
+import euiApi from "apis/eui";
 
 import EuiBody from "./EuiBody";
 import EuiNavBar from "./EuiNavBar";
@@ -10,23 +9,27 @@ const Eui = ({ siteName }) => {
   const [categories, setCategories] = useState([]);
   const [articles, setArticles] = useState([]);
 
-  const fetchCategoriesAndArticles = async () => {
+  const fetchCategories = async () => {
     try {
-      const {
-        data: { categories },
-      } = await categoriesApi.list();
-      const {
-        data: { articles },
-      } = await articlesApi.list();
-      setCategories(categories);
-      setArticles(articles);
+      const response = await euiApi.listCategories();
+      setCategories(response.data.categories);
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
+  const fetchArticles = async () => {
+    try {
+      const response = await euiApi.listArticles();
+      setArticles(response.data.articles);
     } catch (error) {
       logger.error(error);
     }
   };
 
   useEffect(() => {
-    fetchCategoriesAndArticles();
+    fetchArticles();
+    fetchCategories();
   }, []);
 
   return (
