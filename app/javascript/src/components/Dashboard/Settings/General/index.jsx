@@ -60,7 +60,7 @@ const General = () => {
         /(?=.*?[0-9])(?=.*?[A-Za-z]).+/,
         "Requires atleast 1 number and letter"
       )
-      .when("passwordEnabled", {
+      .when("password_enabled", {
         is: true,
         then: yup.string().required("Please enter  password"),
       }),

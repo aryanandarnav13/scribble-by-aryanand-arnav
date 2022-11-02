@@ -25,7 +25,7 @@ const EuiBody = ({ articles, categories }) => {
       const activeCategory = categories.find(
         category => category.name === activeArticle.category
       );
-      setSelectedCategoryPosition(activeCategory.position);
+      setSelectedCategoryPosition(activeCategory?.position);
     } else if (articles && articles.length > 0) {
       history.push(`${url}/${articles[0].slug}`);
     }
