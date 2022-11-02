@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class WebsitesController < ApplicationController
-  def index
+  def show
   end
 
   def update

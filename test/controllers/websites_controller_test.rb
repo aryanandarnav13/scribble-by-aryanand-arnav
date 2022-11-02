@@ -16,7 +16,7 @@ class WebsitesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_should_update_valid_website_name
-    put website_path(@website.id),
+    put website_path,
       params: {
         website: {
           name: @website.name, password: @website.password,
@@ -34,7 +34,7 @@ class WebsitesControllerTest < ActionDispatch::IntegrationTest
     new_password = "#{@website.password}-(updated)"
     website_params = { website: { name: new_name, password: new_password, password_enabled: true } }
 
-    put website_path(@website.id), params: website_params, headers: headers, as: :json
+    put website_path, params: website_params, headers: headers, as: :json
     assert_response :success
     @website.reload
     assert_equal @website.name, new_name

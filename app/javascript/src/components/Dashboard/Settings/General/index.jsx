@@ -26,7 +26,8 @@ const General = () => {
 
   const fetchSiteDetails = async () => {
     try {
-      const response = await websiteApi.get();
+      const response = await websiteApi.list();
+      logger.info(response.data);
       setWebsiteName(response.data.name);
       setPasswordEnabled(response.data.password_enabled);
     } catch (error) {
