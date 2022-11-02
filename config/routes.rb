@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     resource :website, except: %i[new edit]
     resource :session, only: %i[create]
     resources :users, only: %i[create index]
-    namespace :eui do
+    namespace :public do
       resources :articles, only: %i[index]
       resources :categories, only: %i[index]
     end

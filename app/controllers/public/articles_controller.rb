@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-class Eui::ArticlesController < ApplicationController
+class Public::ArticlesController < ApplicationController
   before_action :load_article!, only: %i[show]
+  before_action :current_user!, except: %i[new edit]
 
   def index
-    @articles = Article.all
-    # @articles = @_current_user.articles
+    @articles = @_current_user.articles
   end
 
   private
