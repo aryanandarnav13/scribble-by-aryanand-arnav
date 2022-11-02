@@ -166,6 +166,7 @@ const ManageCategories = () => {
             fetchCategories={fetchCategories}
             setCategoryToDelete={setCategoryToDelete}
             setShowAlert={setShowAlert}
+            users={users}
           />
         </div>
       </div>

@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { Reorder, Delete, Edit, Check, Close } from "neetoicons";
 import { Typography, Button, Input } from "neetoui";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import categoriesApi from "apis/categories";
-import userApi from "apis/users";
 
 const List = ({
   articles,
   categories,
+  users,
   fetchCategories,
   setShowAlert,
   setCategoryToDelete,
@@ -17,18 +17,6 @@ const List = ({
   const [categoryId, setCategoryId] = useState(0);
   const [categoryName, setCategoryName] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [users, setUsers] = useState([]);
-
-  const fetchUsers = async () => {
-    try {
-      const {
-        data: { users },
-      } = await userApi.list();
-      setUsers(users);
-    } catch (error) {
-      logger.error(error);
-    }
-  };
 
   const updateCategory = async () => {
     try {
@@ -94,11 +82,6 @@ const List = ({
       setCategoryToDelete(category);
     }
   };
-
-  useEffect(() => {
-    fetchCategories();
-    fetchUsers();
-  }, []);
 
   return (
     <DragDropContext onDragEnd={handleOnDragEnd} onDragStart={handleDragStart}>
