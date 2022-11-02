@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class SessionsController < ApplicationController
+  before_action :current_website!, except: %i[edit]
   def create
-    unless current_website.authenticate(login_params[:password])
+    unless @_current_website.authenticate(login_params[:password])
       respond_with_error("Incorrect credentials", :unauthorized)
     end
   end

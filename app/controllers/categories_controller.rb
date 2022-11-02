@@ -3,10 +3,10 @@
 class CategoriesController < ApplicationController
   protect_from_forgery with: :null_session
   before_action :load_categories!, only: %i[show update destroy]
+  before_action :current_user!, except: %i[new edit]
 
   def index
-    @categories = Category.all.order("position ASC")
-    # @categories = current_user.categories.order("position ASC")
+    @categories = @_current_user.categories.order("position ASC")
   end
 
   def create

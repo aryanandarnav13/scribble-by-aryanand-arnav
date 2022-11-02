@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 class WebsitesController < ApplicationController
+  before_action :current_website!, except: %i[edit]
+
   def show
   end
 
   def update
-    current_website.update!(website_params)
+    @_current_website.update!(website_params)
     respond_with_success(t("successfully_updated", entity: "Website"))
   end
 
