@@ -47,10 +47,8 @@ const EditArticle = () => {
 
   const fetchUsers = async () => {
     try {
-      const {
-        data: { users },
-      } = await userApi.list();
-      setUsers(users);
+      const response = await userApi.list();
+      setUsers(response.data);
     } catch (error) {
       logger.error(error);
     }
@@ -64,7 +62,7 @@ const EditArticle = () => {
       body,
       category_id,
       status: articleStatus,
-      user_id: users[0].id,
+      user_id: users.id,
     };
     setSubmitted(true);
     try {

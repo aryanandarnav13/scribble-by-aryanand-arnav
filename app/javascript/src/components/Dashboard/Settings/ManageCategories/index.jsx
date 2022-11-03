@@ -39,10 +39,8 @@ const ManageCategories = () => {
 
   const fetchUsers = async () => {
     try {
-      const {
-        data: { users },
-      } = await userApi.list();
-      setUsers(users);
+      const response = await userApi.list();
+      setUsers(response.data);
     } catch (error) {
       logger.error(error);
     }
@@ -50,7 +48,7 @@ const ManageCategories = () => {
 
   const createNewCategory = async () => {
     try {
-      await categoriesApi.create({ name: newCategory, user_id: users[0].id });
+      await categoriesApi.create({ name: newCategory, user_id: users.id });
       setAddNew(false);
       setNewCategory("");
       fetchCategories();

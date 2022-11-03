@@ -5,6 +5,5 @@ class UsersController < ApplicationController
 
   def index
     user = @_current_user
-    render status: :ok, json: { user: user }
   end
 end
