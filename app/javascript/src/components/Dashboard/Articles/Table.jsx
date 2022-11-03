@@ -6,46 +6,39 @@ import articlesApi from "apis/articles";
 
 import { buildArticleTableColumnData } from "./utils";
 
-const Table = ({ columnFilter, searchArticle, articleFilterConstraint }) => {
+const Table = ({
+  columnFilter,
+  searchArticle,
+  articleFilterConstraint,
+  setDraftCount,
+  setPublishCount,
+}) => {
   const [articles, setArticles] = useState([]);
-  const [filteredRowData, setFilteredRowData] = useState([]);
 
   const fetchArticles = async () => {
     try {
-      const response = await articlesApi.list();
+      const payload = {
+        statusFilter: articleFilterConstraint.status,
+        categoriesFilter: articleFilterConstraint.category,
+        searchFilter: searchArticle,
+      };
+      const response = await articlesApi.list(payload);
       setArticles(response.data.articles);
+      setDraftCount(response.data.draft);
+      setPublishCount(response.data.publish);
     } catch (err) {
       logger.error(err);
     }
   };
   useEffect(() => {
     fetchArticles();
-  }, []);
-
-  useEffect(() => {
-    const filteredResponse = articles
-      .filter(
-        row =>
-          row.status === articleFilterConstraint.status ||
-          articleFilterConstraint.status === "All"
-      )
-      .filter(
-        row =>
-          articleFilterConstraint.category.includes(row.category) ||
-          articleFilterConstraint.category.length === 0
-      )
-      .filter(row =>
-        row.title.toLowerCase().includes(searchArticle.toLowerCase())
-      );
-
-    setFilteredRowData(filteredResponse);
-  }, [articleFilterConstraint, articles, searchArticle]);
+  }, [searchArticle, articleFilterConstraint]);
 
   return (
     <NeetoUITable
       columnData={buildArticleTableColumnData(columnFilter, fetchArticles)}
       defaultPageSize={20}
-      rowData={filteredRowData}
+      rowData={articles}
       onRowClick={() => {}}
       onRowSelect={() => {}}
     />

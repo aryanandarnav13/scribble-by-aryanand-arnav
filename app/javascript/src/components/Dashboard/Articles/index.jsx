@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { ActionDropdown, Button, Checkbox } from "neetoui";
 import { Container, Header } from "neetoui/layouts";
-
-import articlesApi from "apis/articles";
 
 import { filterItems, camelize } from "./constants";
 import SideMenu from "./SideMenu";
@@ -28,22 +26,6 @@ const Articles = () => {
       [e.target.name]: e.target.checked,
     });
   };
-  const fetchCategories = async () => {
-    try {
-      const {
-        data: { draft, publish },
-      } = await articlesApi.list();
-
-      setDraftCount(draft);
-      setPublishCount(publish);
-    } catch (error) {
-      logger.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchCategories();
-  }, []);
 
   return (
     <div>
@@ -51,6 +33,8 @@ const Articles = () => {
       <div className="flex">
         <SideMenu
           articleFilterConstraint={articleFilterConstraint}
+          draftCount={draftCount}
+          publishCount={publishCount}
           setArticleFilterConstraint={setArticleFilterConstraint}
         />
         <Container>
@@ -97,6 +81,8 @@ const Articles = () => {
             articleFilterConstraint={articleFilterConstraint}
             columnFilter={columnFilter}
             searchArticle={searchArticle}
+            setDraftCount={setDraftCount}
+            setPublishCount={setPublishCount}
           />
         </Container>
       </div>
