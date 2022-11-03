@@ -24,7 +24,7 @@ const List = ({
         id: categoryId,
         payload: {
           name: categoryName,
-          user_id: users[0].id,
+          user_id: users.id,
         },
       });
       setCategoryId(0);

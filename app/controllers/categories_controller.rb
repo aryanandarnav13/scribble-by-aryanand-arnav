@@ -34,6 +34,11 @@ class CategoriesController < ApplicationController
     respond_with_success(t("successfully_deleted", entity: "Category"))
   end
 
+  # def destroy
+  #   Api::Admin::Destroy.new(category_id: params[:id], new_category_id: category_params[:new_category_id]).process
+  #     respond_with_success(t("successfully_deleted", entity: "Category"))
+  # end
+
   private
 
     def load_categories!

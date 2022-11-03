@@ -34,10 +34,8 @@ const NewArticle = () => {
 
   const fetchUsers = async () => {
     try {
-      const {
-        data: { users },
-      } = await userApi.list();
-      setUsers(users);
+      const response = await userApi.list();
+      setUsers(response.data);
     } catch (error) {
       logger.error(error);
     }
@@ -46,10 +44,11 @@ const NewArticle = () => {
   const handleSubmit = async values => {
     try {
       values = {
-        ...values,
+        title: values.title,
+        body: values.body,
         category_id: values.category.value,
         status: articleStatus,
-        user_id: users[0].id,
+        user_id: users.id,
       };
       await articlesApi.create(values);
     } catch (err) {
