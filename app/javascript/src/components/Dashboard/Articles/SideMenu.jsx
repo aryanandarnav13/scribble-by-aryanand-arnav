@@ -4,16 +4,18 @@ import { Search, Plus, Close } from "neetoicons";
 import { Typography } from "neetoui";
 import { MenuBar } from "neetoui/layouts";
 
-import articlesApi from "apis/articles";
 import categoriesApi from "apis/categories";
 
 import Create from "./NewCategory/Create";
 
-const SideMenu = ({ articleFilterConstraint, setArticleFilterConstraint }) => {
+const SideMenu = ({
+  articleFilterConstraint,
+  setArticleFilterConstraint,
+  draftCount,
+  publishCount,
+}) => {
   const [isSearchCollapsed, setIsSearchCollapsed] = useState(true);
   const [isAddCategoryCollapsed, setIsAddCategoryCollapsed] = useState(true);
-  const [draftCount, setDraftCount] = useState(0);
-  const [publishCount, setPublishCount] = useState(0);
   const [searchCategory, setSearchCategory] = useState("");
   const [categories, setCategories] = useState([]);
 
@@ -22,13 +24,7 @@ const SideMenu = ({ articleFilterConstraint, setArticleFilterConstraint }) => {
       const {
         data: { categories },
       } = await categoriesApi.list();
-      const {
-        data: { draft, publish },
-      } = await articlesApi.list();
-
       setCategories(categories);
-      setDraftCount(draft);
-      setPublishCount(publish);
       setIsAddCategoryCollapsed(
         isAddCategoryCollapsed => !isAddCategoryCollapsed
       );
@@ -126,11 +122,11 @@ const SideMenu = ({ articleFilterConstraint, setArticleFilterConstraint }) => {
         )
         .map(category => (
           <MenuBar.Block
-            active={articleFilterConstraint.category.includes(category.name)}
+            active={articleFilterConstraint.category.includes(category.id)}
             count={category.count}
             key={category.id}
             label={category.name}
-            onClick={() => handleCategories(category.name)}
+            onClick={() => handleCategories(category.id)}
           />
         ))}
     </MenuBar>
