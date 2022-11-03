@@ -21,8 +21,12 @@ const ManageCategories = () => {
 
   const fetchArticles = async () => {
     try {
-      const response = await articlesApi.list();
-      setArticles(response.data.articles);
+      const payload = {
+        statusFilter: "All",
+        searchFilter: "",
+      };
+      const response = await articlesApi.list(payload);
+      setArticles(response?.data.articles);
     } catch (err) {
       logger.error(err);
     }
