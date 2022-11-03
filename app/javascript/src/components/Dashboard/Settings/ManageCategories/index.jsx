@@ -38,6 +38,8 @@ const ManageCategories = () => {
       setCategories(res.data.categories);
     } catch (error) {
       logger.error(error);
+    } finally {
+      fetchArticles();
     }
   };
 
@@ -128,10 +130,11 @@ const ManageCategories = () => {
         await categoriesApi.destroy(categoryToDelete.id, {
           id: categoryToDelete.id,
         });
-        await fetchCategories();
         setShowAlert(false);
       } catch (error) {
         logger.log(error);
+      } finally {
+        fetchCategories();
       }
     } else {
       try {
@@ -139,10 +142,11 @@ const ManageCategories = () => {
           id: categoryToDelete.id,
           new_category_id: categoryToUpdateTo.value,
         });
-        await fetchCategories();
         setShowAlert(false);
       } catch (error) {
         logger.error(error);
+      } finally {
+        fetchCategories();
       }
     }
   };
