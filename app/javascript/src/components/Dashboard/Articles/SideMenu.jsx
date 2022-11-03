@@ -4,6 +4,7 @@ import { Search, Plus, Close } from "neetoicons";
 import { Typography } from "neetoui";
 import { MenuBar } from "neetoui/layouts";
 
+import articlesApi from "apis/articles";
 import categoriesApi from "apis/categories";
 
 import Create from "./NewCategory/Create";
@@ -11,14 +12,15 @@ import Create from "./NewCategory/Create";
 const SideMenu = ({
   articleFilterConstraint,
   setArticleFilterConstraint,
-  draftCount,
-  publishCount,
+  setTotalDraftCount,
+  totalDraftCount,
+  totalPublishCount,
+  setTotalPublishCount,
 }) => {
   const [isSearchCollapsed, setIsSearchCollapsed] = useState(true);
   const [isAddCategoryCollapsed, setIsAddCategoryCollapsed] = useState(true);
   const [searchCategory, setSearchCategory] = useState("");
   const [categories, setCategories] = useState([]);
-
   const fetchCategories = async () => {
     try {
       const {
@@ -30,6 +32,20 @@ const SideMenu = ({
       );
     } catch (error) {
       logger.error(error);
+    }
+  };
+
+  const fetchArticles = async () => {
+    try {
+      const payload = {
+        statusFilter: "All",
+        searchFilter: "",
+      };
+      const response = await articlesApi.list(payload);
+      setTotalDraftCount(response.data.draft);
+      setTotalPublishCount(response.data.publish);
+    } catch (err) {
+      logger.error(err);
     }
   };
 
@@ -58,25 +74,26 @@ const SideMenu = ({
 
   useEffect(() => {
     fetchCategories();
+    fetchArticles();
   }, []);
 
   return (
     <MenuBar showMenu title="Articles">
       <MenuBar.Block
         active={articleFilterConstraint.status === "All"}
-        count={draftCount + publishCount}
+        count={totalDraftCount + totalPublishCount}
         label="All"
         onClick={() => handleStatus("All")}
       />
       <MenuBar.Block
         active={articleFilterConstraint.status === "Draft"}
-        count={draftCount}
+        count={totalDraftCount}
         label="Draft"
         onClick={() => handleStatus("Draft")}
       />
       <MenuBar.Block
         active={articleFilterConstraint.status === "Publish"}
-        count={publishCount}
+        count={totalPublishCount}
         label="Published"
         onClick={() => handleStatus("Publish")}
       />

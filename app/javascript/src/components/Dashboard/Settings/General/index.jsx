@@ -45,7 +45,9 @@ const General = () => {
           password_enabled: values.password_enabled,
         },
       });
-      localStorage.setItem("authToken", JSON.stringify(null));
+      if (values.password_enabled === true) {
+        localStorage.setItem("authToken", JSON.stringify(null));
+      }
     } catch (error) {
       logger.error(error);
     }

@@ -53,7 +53,11 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_user_can_get_all_articles
-    get articles_path, headers: headers, as: :json
+    get articles_path,
+      params: {
+        statusFilter: "All",
+        searchFilter: ""
+      }, headers: headers, as: :json
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["articles"].count, 1

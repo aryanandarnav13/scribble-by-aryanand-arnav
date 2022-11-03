@@ -10,8 +10,8 @@ const Table = ({
   columnFilter,
   searchArticle,
   articleFilterConstraint,
-  setDraftCount,
-  setPublishCount,
+  setFilteredDraftCount,
+  setFilteredPublishCount,
 }) => {
   const [articles, setArticles] = useState([]);
 
@@ -23,9 +23,9 @@ const Table = ({
         searchFilter: searchArticle,
       };
       const response = await articlesApi.list(payload);
+      setFilteredDraftCount(response.data.draft);
+      setFilteredPublishCount(response.data.publish);
       setArticles(response.data.articles);
-      setDraftCount(response.data.draft);
-      setPublishCount(response.data.publish);
     } catch (err) {
       logger.error(err);
     }
