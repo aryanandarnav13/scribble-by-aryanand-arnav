@@ -13,8 +13,10 @@ const Articles = () => {
   const [searchArticle, setSearchArticle] = useState("");
   const { Menu, MenuItem } = ActionDropdown;
   const [columnFilter, setColumnFilter] = useState(filterItems);
-  const [draftCount, setDraftCount] = useState(0);
-  const [publishCount, setPublishCount] = useState(0);
+  const [totalDraftCount, setTotalDraftCount] = useState(0);
+  const [totalPublishCount, setTotalPublishCount] = useState(0);
+  const [filteredDraftCount, setFilteredDraftCount] = useState(0);
+  const [filteredPublishCount, setFilteredPublishCount] = useState(0);
   const [articleFilterConstraint, setArticleFilterConstraint] = useState({
     status: "All",
     category: [],
@@ -33,9 +35,11 @@ const Articles = () => {
       <div className="flex">
         <SideMenu
           articleFilterConstraint={articleFilterConstraint}
-          draftCount={draftCount}
-          publishCount={publishCount}
           setArticleFilterConstraint={setArticleFilterConstraint}
+          setTotalDraftCount={setTotalDraftCount}
+          setTotalPublishCount={setTotalPublishCount}
+          totalDraftCount={totalDraftCount}
+          totalPublishCount={totalPublishCount}
         />
         <Container>
           <Header
@@ -75,14 +79,14 @@ const Articles = () => {
             }}
           />
           <div className="max-w-7xl px-2 font-bold">
-            {draftCount + publishCount} Articles
+            {filteredDraftCount + filteredPublishCount} Articles
           </div>
           <Table
             articleFilterConstraint={articleFilterConstraint}
             columnFilter={columnFilter}
             searchArticle={searchArticle}
-            setDraftCount={setDraftCount}
-            setPublishCount={setPublishCount}
+            setFilteredDraftCount={setFilteredDraftCount}
+            setFilteredPublishCount={setFilteredPublishCount}
           />
         </Container>
       </div>
