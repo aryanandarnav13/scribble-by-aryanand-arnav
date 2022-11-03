@@ -24,7 +24,7 @@ const List = ({
         id: categoryId,
         payload: {
           name: categoryName,
-          user_id: users[0].id,
+          user_id: users.id,
         },
       });
       setCategoryId(0);
@@ -71,7 +71,6 @@ const List = ({
       try {
         await categoriesApi.destroy(category.id, {
           id: category.id,
-          new_category_id: "none",
         });
         await fetchCategories();
       } catch (error) {
