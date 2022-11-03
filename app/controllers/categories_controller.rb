@@ -23,21 +23,14 @@ class CategoriesController < ApplicationController
   end
 
   def destroy
-    if category_params[:new_category_id] === nil
-      new_category = Category.create!({ name: "General", user_id: User.first.id })
-      Article.where(category_id: params[:id]).update_all(category_id: new_category.id)
-    elsif category_params[:new_category_id] != "none"
-      Article.where(category_id: params[:id]).update_all(category_id: category_params[:new_category_id])
+    if DestroyCategory.new(
+      category_id: params[:id], new_category_id: category_params[:new_category_id],
+      current_user: @_current_user).process
+      respond_with_success(t("successfully_deleted", entity: "Category"))
+    else
+      respond_with_error(t("error_deleting", entity: "Category"))
     end
-    @category = Category.find_by!(id: params[:id])
-    @category.destroy!
-    respond_with_success(t("successfully_deleted", entity: "Category"))
   end
-
-  # def destroy
-  #   Api::Admin::Destroy.new(category_id: params[:id], new_category_id: category_params[:new_category_id]).process
-  #     respond_with_success(t("successfully_deleted", entity: "Category"))
-  # end
 
   private
 

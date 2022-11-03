@@ -71,7 +71,6 @@ const List = ({
       try {
         await categoriesApi.destroy(category.id, {
           id: category.id,
-          new_category_id: "none",
         });
         await fetchCategories();
       } catch (error) {
