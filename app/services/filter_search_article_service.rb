@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class FilterSearchArticle
+class FilterSearchArticleService
   attr_reader :articles, :categoriesFilter, :searchFilter, :statusFilter
   def initialize(articles:, categoriesFilter:, searchFilter:, statusFilter:)
     @articles = articles

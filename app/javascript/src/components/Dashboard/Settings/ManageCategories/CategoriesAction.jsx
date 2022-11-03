@@ -34,13 +34,21 @@ const List = ({
     }
   };
 
-  const updateCategoryPosition = async ({ id, position }) => {
+  const updateCategoryPosition = async ({
+    id,
+    sourcePosition,
+    destinationPosition,
+  }) => {
+    const [removed] = categories.splice(sourcePosition, 1);
+    categories.splice(destinationPosition, 0, removed);
+
     try {
       await categoriesApi.update({
         id,
         payload: {
-          position,
+          position: destinationPosition + 1,
         },
+        quiet: true,
       });
       await fetchCategories();
     } catch (error) {
@@ -52,15 +60,16 @@ const List = ({
     setSelectedCategory(item.draggableId);
   };
 
-  const handleOnDragEnd = item => {
+  const handleOnDragEnd = async item => {
     setSelectedCategory("");
     if (item.source.index === item.destination.index) return;
 
     if (!item.destination) return;
 
-    updateCategoryPosition({
+    await updateCategoryPosition({
       id: item.draggableId,
-      position: item.destination.index + 1,
+      destinationPosition: item.destination.index,
+      sourcePosition: item.source.index,
     });
   };
 
