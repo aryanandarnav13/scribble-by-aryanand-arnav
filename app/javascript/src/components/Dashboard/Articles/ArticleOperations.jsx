@@ -7,16 +7,11 @@ import articlesApi from "apis/articles";
 
 const ArticleOperations = ({ slug, fetchArticles }) => {
   const deleteArticle = async () => {
-    const message = confirm(
-      "Are you sure you want to delete this article? This change cannot be undone."
-    );
-    if (message) {
-      try {
-        await articlesApi.destroy(slug);
-        fetchArticles();
-      } catch (error) {
-        logger.error(error);
-      }
+    try {
+      await articlesApi.destroy(slug);
+      fetchArticles();
+    } catch (error) {
+      logger.error(error);
     }
   };
 

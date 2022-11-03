@@ -29,4 +29,31 @@ class DestroyCategoryServiceTest < ActiveSupport::TestCase
     @service.process
     assert_equal category1_articles_original_length, @category2.articles.length
   end
+
+  def test_should_move_articles_to_general_if_only_one_category_remains
+    @user.destroy
+    @user = create(:user, website: @website)
+    @category = create(:category, user: @user)
+    @articles_in_category = create_list(:article, 10, category: @category, user: @user)
+    category_articles_original_length = @category.articles.length
+    @service = DestroyCategoryService.new(
+      category_id: @category.id, new_category_id: nil,
+      current_user: @user)
+    @service.process
+    assert_equal "General", @user.categories.first.name
+    assert_equal @user.categories.find_by!(name: "General").articles.count, 10
+  end
+
+  def test_should_not_delete_the_last_general_category
+    @user.destroy
+    @user = create(:user, website: @website)
+    @category = create(:category, name: "General", user: @user)
+    @articles_in_category = create_list(:article, 10, category: @category, user: @user)
+    category_articles_original_length = @category.articles.length
+
+    @service = DestroyCategoryService.new(
+      category_id: @category.id, new_category_id: nil,
+      current_user: @user)
+    assert_nil @service.process
+  end
 end
