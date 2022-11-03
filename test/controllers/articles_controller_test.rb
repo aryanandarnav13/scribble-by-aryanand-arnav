@@ -59,7 +59,42 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
         searchFilter: ""
       }, headers: headers, as: :json
     assert_response :success
-    response_json = response.parsed_body
-    assert_equal response_json["articles"].count, 1
+  end
+
+  def test_user_can_get_all_published_articles
+    get articles_path,
+      params: {
+        statusFilter: "Publish",
+        searchFilter: ""
+      }, headers: headers, as: :json
+    assert_response :success
+  end
+
+  def test_user_can_get_all_drafted_articles
+    get articles_path,
+      params: {
+        statusFilter: "Draft",
+        searchFilter: ""
+      }, headers: headers, as: :json
+    assert_response :success
+  end
+
+  def test_user_can_get_particlular_category__articles
+    get articles_path,
+      params: {
+        statusFilter: "All",
+        searchFilter: "",
+        categoriesFilter: @category.id
+      }, headers: headers, as: :json
+    assert_response :success
+  end
+
+  def test_user_can_get_searched__articles
+    get articles_path,
+      params: {
+        statusFilter: "All",
+        searchFilter: @article.title
+      }, headers: headers, as: :json
+    assert_response :success
   end
 end

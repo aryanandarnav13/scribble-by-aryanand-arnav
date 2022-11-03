@@ -23,7 +23,7 @@ class CategoriesController < ApplicationController
   end
 
   def destroy
-    if DestroyCategory.new(
+    if DestroyCategoryService.new(
       category_id: params[:id], new_category_id: category_params[:new_category_id],
       current_user: @_current_user).process
       respond_with_success(t("successfully_deleted", entity: "Category"))

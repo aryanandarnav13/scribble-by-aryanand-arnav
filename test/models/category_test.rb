@@ -18,4 +18,20 @@ class CategoryTest < ActiveSupport::TestCase
     @category.user = nil
     assert_not @category.valid?
   end
+
+  def user_cannot_create_category_with_same_name
+    @category1 = create(:category, user: @user)
+    @category2 = build(:category, user: @user, name: @category1.name)
+    assert_not @category2.valid?
+  end
+
+  def user_cannot_create_category_without_name
+    @category = build(:category, user: @user, name: "")
+    assert_not @category.valid?
+  end
+
+  def user_cannot_create_category_without_user
+    @category = build(:category, user: nil)
+    assert_not @category.valid?
+  end
 end

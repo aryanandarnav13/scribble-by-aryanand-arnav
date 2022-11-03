@@ -66,16 +66,18 @@ const List = ({
 
   const destroyCategory = async category => {
     if (
-      articles?.filter(item => item.category === category?.name).length === 0 ||
-      (category?.name === "General" && categories.length === 1)
+      articles?.filter(item => item?.category === category?.name)?.length ===
+        0 ||
+      (category?.name === "General" && categories?.length === 1)
     ) {
       try {
         await categoriesApi.destroy(category.id, {
           id: category.id,
         });
-        await fetchCategories();
       } catch (error) {
         logger.error(error);
+      } finally {
+        fetchCategories();
       }
     } else {
       setShowAlert(true);

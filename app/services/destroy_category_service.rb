@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DestroyCategory
+class DestroyCategoryService
   attr_reader :category_id, :new_category_id, :current_user
   def initialize(category_id:, new_category_id:, current_user:)
     @_current_user = current_user
