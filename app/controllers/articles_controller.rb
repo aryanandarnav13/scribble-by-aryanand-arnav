@@ -7,7 +7,7 @@ class ArticlesController < ApplicationController
 
   def index
     @articles = @_current_user.articles
-    @articles = FilterSearchArticle.new(
+    @articles = FilterSearchArticleService.new(
       articles: @articles, categoriesFilter: params[:categoriesFilter],
       searchFilter: params[:searchFilter], statusFilter: params[:statusFilter]).process
   end
