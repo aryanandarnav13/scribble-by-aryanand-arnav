@@ -9,6 +9,7 @@ task populate_with_sample_data: [:environment] do
   if Rails.env.production?
     puts "Skipping deleting and populating sample data in production"
   else
+    Rake::Task["db:schema:load"].invoke
     create_sample_data!
     puts "sample data has been added."
   end
@@ -18,6 +19,6 @@ def create_sample_data!
   puts "Seeding with sample data..."
 
   Site.create!(name: "Spinkart", password: "welcome1")
-  User.create!(name:'Oliver Smith', email:'oliver@example.com', site_id: 1)
-  Category.create(name: "Getting Started", user_id: 1)
+  User.create!(name:'Oliver Smith', email:'oliver@example.com', site_id: Site.first.id)
+  Category.create!(name: "Getting Started", position: 1, user_id: User.first.id)
 end
