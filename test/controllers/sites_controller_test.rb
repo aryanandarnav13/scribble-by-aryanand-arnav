@@ -16,7 +16,7 @@ class SitesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_should_update_valid_site_name
-    put site_path,
+    put api_site_path,
       params: {
         site: {
           name: @site.name, password: @site.password,
@@ -34,7 +34,7 @@ class SitesControllerTest < ActionDispatch::IntegrationTest
     new_password = "#{@site.password}-(updated)"
     site_params = { site: { name: new_name, password: new_password, password_enabled: true } }
 
-    put site_path, params: site_params, headers: headers, as: :json
+    put api_site_path, params: site_params, headers: headers, as: :json
     assert_response :success
     @site.reload
     assert_equal @site.name, new_name

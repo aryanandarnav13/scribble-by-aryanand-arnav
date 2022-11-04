@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SessionsController < ApplicationController
+class Api::SessionsController < ApplicationController
   before_action :current_site!, except: %i[edit]
   def create
     unless @_current_site.authenticate(login_params[:password])

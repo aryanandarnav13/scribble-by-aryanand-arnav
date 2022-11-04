@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RedirectionsController < ApplicationController
+class Api::RedirectionsController < ApplicationController
   protect_from_forgery with: :null_session
   before_action :load_redirections!, only: %i[show update destroy]
 

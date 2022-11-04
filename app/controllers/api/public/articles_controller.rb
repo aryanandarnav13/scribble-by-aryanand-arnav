@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Public::ArticlesController < ApplicationController
+class Api::Public::ArticlesController < ApplicationController
   before_action :load_article!, only: %i[show]
   before_action :current_user!, except: %i[new edit]
 

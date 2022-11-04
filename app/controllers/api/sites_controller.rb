@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SitesController < ApplicationController
+class Api::SitesController < ApplicationController
   before_action :current_site!, except: %i[edit]
 
   def show
