@@ -9,7 +9,7 @@ class User < ApplicationRecord
     uniqueness: { case_sensitive: false },
     format: { with: VALID_EMAIL }
   before_save :to_lowercase
-  belongs_to :website
+  belongs_to :site
 
   private
 

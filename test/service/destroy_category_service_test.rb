@@ -4,8 +4,8 @@ require "test_helper"
 
 class DestroyCategoryServiceTest < ActiveSupport::TestCase
   def setup
-    @website = create(:website)
-    @user = create(:user, website: @website)
+    @site = create(:site)
+    @user = create(:user, site: @site)
     @category = create(:category, user: @user)
   end
 
@@ -32,7 +32,7 @@ class DestroyCategoryServiceTest < ActiveSupport::TestCase
 
   def test_should_move_articles_to_general_if_only_one_category_remains
     @user.destroy
-    @user = create(:user, website: @website)
+    @user = create(:user, site: @site)
     @category = create(:category, user: @user)
     @articles_in_category = create_list(:article, 10, category: @category, user: @user)
     category_articles_original_length = @category.articles.length
@@ -46,7 +46,7 @@ class DestroyCategoryServiceTest < ActiveSupport::TestCase
 
   def test_should_not_delete_the_last_general_category
     @user.destroy
-    @user = create(:user, website: @website)
+    @user = create(:user, site: @site)
     @category = create(:category, name: "General", user: @user)
     @articles_in_category = create_list(:article, 10, category: @category, user: @user)
     category_articles_original_length = @category.articles.length

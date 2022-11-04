@@ -4,8 +4,8 @@ require "test_helper"
 
 class CategoriesControllerTest < ActionDispatch::IntegrationTest
   def setup
-    @website = create(:website)
-    @user = create(:user, website: @website)
+    @site = create(:site)
+    @user = create(:user, site: @site)
     @category = create(:category, user: @user)
   end
 

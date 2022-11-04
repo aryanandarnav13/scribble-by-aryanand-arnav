@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :user do
-    association :website_id, factory: :website
+    association :site_id, factory: :site
     name { Faker::Name.name }
     email { Faker::Internet.email }
   end
