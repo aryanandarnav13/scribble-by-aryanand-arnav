@@ -11,14 +11,11 @@ const Row = ({ redirection, fetchRedirectionsDetails }) => {
   const [isEdit, setIsEdit] = useState(false);
 
   const handleDelete = async id => {
-    const value = confirm("Press OK to Delete Redirection");
-    if (value) {
-      try {
-        await redirectionApi.destroy(id);
-        fetchRedirectionsDetails();
-      } catch (error) {
-        logger.error(error);
-      }
+    try {
+      await redirectionApi.destroy(id);
+      fetchRedirectionsDetails();
+    } catch (error) {
+      logger.error(error);
     }
   };
 

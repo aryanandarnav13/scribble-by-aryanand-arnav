@@ -5,14 +5,14 @@ import { Button, Typography } from "neetoui";
 import { Input, Checkbox } from "neetoui/formik";
 import * as yup from "yup";
 
-import websiteApi from "apis/websites";
+import siteApi from "apis/sites";
 
 import { PasswordForm } from "./PasswordForm";
 
 const General = () => {
   const [isPasswordInputDisabled, setIsPasswordInputDisabled] = useState(true);
   const [passwordEnabled, setPasswordEnabled] = useState(false);
-  const [websiteName, setWebsiteName] = useState("");
+  const [siteName, setSiteName] = useState("");
   const [passwordValidation, setPasswordValidation] = useState({
     minChar: false,
     letterAndNumber: false,
@@ -26,9 +26,9 @@ const General = () => {
 
   const fetchSiteDetails = async () => {
     try {
-      const response = await websiteApi.list();
+      const response = await siteApi.list();
       logger.info(response.data);
-      setWebsiteName(response.data.name);
+      setSiteName(response.data.name);
       setPasswordEnabled(response.data.password_enabled);
     } catch (error) {
       logger.error(error);
@@ -38,7 +38,7 @@ const General = () => {
   const handleSubmit = async values => {
     try {
       const pass = values.password_enabled ? values.password : null;
-      await websiteApi.update({
+      await siteApi.update({
         payload: {
           name: values.name,
           password: pass,
@@ -79,7 +79,7 @@ const General = () => {
         validateOnBlur={false}
         validationSchema={schema}
         initialValues={{
-          name: websiteName,
+          name: siteName,
           password: "",
           password_enabled: passwordEnabled,
         }}

@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     resources :articles, except: %i[new edit], param: :slug
     resources :categories, except: %i[new edit]
     resources :redirections, except: %i[new edit]
-    resource :website, except: %i[new edit]
+    resource :site, except: %i[new edit]
     resource :session, only: %i[create]
     resources :users, only: %i[create index]
     namespace :public do

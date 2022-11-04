@@ -17,7 +17,7 @@ end
 def create_sample_data!
   puts "Seeding with sample data..."
 
-  Website.create!(name: "Spinkart", password: "welcome1")
-  User.create!(name:'Oliver Smith', email:'oliver@example.com', website_id: 1)
+  Site.create!(name: "Spinkart", password: "welcome1")
+  User.create!(name:'Oliver Smith', email:'oliver@example.com', site_id: 1)
   Category.create(name: "Getting Started", user_id: 1)
 end
