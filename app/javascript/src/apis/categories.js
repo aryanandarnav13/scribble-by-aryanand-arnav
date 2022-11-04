@@ -1,21 +1,21 @@
 import axios from "axios";
 
-const list = () => axios.get("/categories");
+const list = () => axios.get("/api/categories");
 
 const create = payload =>
-  axios.post("/categories", {
+  axios.post("/api/categories", {
     category: payload,
   });
 
-const show = id => axios.get(`/categories/${id}`);
+const show = id => axios.get(`/api/categories/${id}`);
 
 const update = ({ id, payload }) =>
-  axios.put(`/categories/${id}`, {
+  axios.put(`/api/categories/${id}`, {
     category: payload,
   });
 
 const destroy = (id, payload) =>
-  axios.delete(`/categories/${id}`, { data: { category: payload } });
+  axios.delete(`/api/categories/${id}`, { data: { category: payload } });
 
 const categoriesApi = {
   create,

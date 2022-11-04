@@ -10,7 +10,7 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_user_can_create_valid_category
-    post categories_url,
+    post api_categories_url,
       params: {
         category:
         {
@@ -31,7 +31,7 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
               name: new_name, user_id: @user.id
             }
     }
-    put category_path(@category.id), params: category_params, headers: headers, as: :json
+    put api_category_path(@category.id), params: category_params, headers: headers, as: :json
     assert_response :success
     @category.reload
     assert_equal @category.name, new_name
@@ -39,7 +39,7 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_user_can_view_all_categories
-    get categories_url, headers: headers, as: :json
+    get api_categories_url, headers: headers, as: :json
     assert_response :success
     assert_equal response.parsed_body.count, 1
   end

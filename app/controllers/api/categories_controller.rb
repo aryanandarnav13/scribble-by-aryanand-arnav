@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CategoriesController < ApplicationController
+class Api::CategoriesController < ApplicationController
   protect_from_forgery with: :null_session
   before_action :load_categories!, only: %i[show update destroy]
   before_action :current_user!, except: %i[new edit]

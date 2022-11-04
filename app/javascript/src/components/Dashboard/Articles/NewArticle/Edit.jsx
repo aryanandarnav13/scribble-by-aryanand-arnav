@@ -9,8 +9,7 @@ import articlesApi from "apis/articles";
 import categoriesApi from "apis/categories";
 import userApi from "apis/users";
 import { ARTICLE_VALIDATION_SCHEMA } from "components/Dashboard/Articles/constants";
-
-import NavBar from "../../../NavBar";
+import NavBar from "components/NavBar";
 
 const EditArticle = () => {
   const [submitted, setSubmitted] = useState(false);

@@ -11,8 +11,7 @@ import {
   ARTICLE_VALIDATION_SCHEMA,
   ARTICLE_INITIAL_VALUES,
 } from "components/Dashboard/Articles/constants";
-
-import NavBar from "../../../NavBar";
+import NavBar from "components/NavBar";
 
 const NewArticle = () => {
   const [submitted, setSubmitted] = useState(false);

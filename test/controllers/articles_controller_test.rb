@@ -11,7 +11,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_user_should_create_valid_article
-    post articles_url,
+    post api_articles_path,
       params: {
         article:
         {
@@ -33,7 +33,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
               body: "This is a test article body"
             }
     }
-    put article_path(@article.slug), params: article_params, headers: headers, as: :json
+    put api_article_path(@article.slug), params: article_params, headers: headers, as: :json
     assert_response :success
     @article.reload
     assert_equal @article.title, new_title
@@ -46,14 +46,14 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_user_can_destroy_article
-    delete article_path(@article.slug), headers: headers, as: :json
+    delete api_article_path(@article.slug), headers: headers, as: :json
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["notice"], t("successfully_deleted", entity: "Article")
   end
 
   def test_user_can_get_all_articles
-    get articles_path,
+    get api_articles_path,
       params: {
         statusFilter: "All",
         searchFilter: ""
@@ -62,7 +62,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_user_can_get_all_published_articles
-    get articles_path,
+    get api_articles_path,
       params: {
         statusFilter: "Publish",
         searchFilter: ""
@@ -71,7 +71,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_user_can_get_all_drafted_articles
-    get articles_path,
+    get api_articles_path,
       params: {
         statusFilter: "Draft",
         searchFilter: ""
@@ -80,7 +80,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_user_can_get_particlular_category__articles
-    get articles_path,
+    get api_articles_path,
       params: {
         statusFilter: "All",
         searchFilter: "",
@@ -90,7 +90,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_user_can_get_searched__articles
-    get articles_path,
+    get api_articles_path,
       params: {
         statusFilter: "All",
         searchFilter: @article.title
