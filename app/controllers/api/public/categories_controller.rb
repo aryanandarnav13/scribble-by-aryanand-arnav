@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Public::CategoriesController < ApplicationController
+class Api::Public::CategoriesController < ApplicationController
   before_action :current_user!, except: %i[new edit]
 
   def index

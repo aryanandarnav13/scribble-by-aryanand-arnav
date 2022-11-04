@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const listCategories = () => axios.get("/public/categories");
+const listCategories = () => axios.get("/api/public/categories");
 
-const listArticles = () => axios.get("/public/articles");
+const listArticles = () => axios.get("/api/public/articles");
 
 const publicApi = {
   listCategories,

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ArticlesController < ApplicationController
+class Api::ArticlesController < ApplicationController
   protect_from_forgery with: :null_session
   before_action :load_articles!, only: %i[show update destroy]
   before_action :current_user!, except: %i[new edit]
