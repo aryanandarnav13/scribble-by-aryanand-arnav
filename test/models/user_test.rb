@@ -4,8 +4,8 @@ require "test_helper"
 
 class UserTest < ActiveSupport::TestCase
   def setup
-    @website = create(:website)
-    @user = create(:user, website: @website)
+    @site = create(:site)
+    @user = create(:user, site: @site)
   end
 
   def test_user_should_not_be_valid_and_saved_without_name
@@ -20,10 +20,10 @@ class UserTest < ActiveSupport::TestCase
     assert_includes @user.errors.full_messages, "Email can't be blank"
   end
 
-  def test_user_should_not_be_valid_and_saved_without_website
-    @user.website = nil
+  def test_user_should_not_be_valid_and_saved_without_site
+    @user.site = nil
     assert_not @user.valid?
-    assert_includes @user.errors.full_messages, "Website must exist"
+    assert_includes @user.errors.full_messages, "Site must exist"
   end
 
   def test_user_should_not_be_valid_and_saved_if_email_not_unique

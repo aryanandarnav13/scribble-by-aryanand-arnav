@@ -4,7 +4,7 @@ require "test_helper"
 
 class UsersControllerTest < ActionDispatch::IntegrationTest
   def setup
-    @website = create(:website)
-    @user = create(:user, website: @website)
+    @site = create(:site)
+    @user = create(:user, site: @site)
   end
 end

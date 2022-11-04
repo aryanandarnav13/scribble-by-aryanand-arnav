@@ -6,7 +6,7 @@ import { ToastContainer } from "react-toastify";
 import { getFromLocalStorage } from "src/utils/storage";
 
 import { setAuthHeaders, registerIntercepts } from "apis/axios";
-import websiteApi from "apis/websites";
+import siteApi from "apis/sites";
 import { initializeLogger } from "common/logger";
 import Dashboard from "components/Dashboard";
 import NewArticle from "components/Dashboard/Articles/NewArticle/Create";
@@ -27,7 +27,7 @@ const App = () => {
   const fetchSiteDetails = async () => {
     try {
       setLoading(true);
-      const response = await websiteApi.list();
+      const response = await siteApi.list();
       setSiteName(response.data.name);
       setHasPassword(response.data.password_enabled);
     } catch (error) {
