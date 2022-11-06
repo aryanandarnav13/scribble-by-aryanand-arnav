@@ -12,9 +12,9 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
   def test_user_can_create_valid_category
     post api_categories_url,
       params: {
-        category:
+        payload:
         {
-          name: "test category", user_id: @user.id
+          name: "test category", position: 1, user_id: @user.id
         }
       },
       headers: headers, as: :json
@@ -23,12 +23,12 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
     assert_equal response_json["notice"], t("successfully_created", entity: "Category")
   end
 
-  def test_user_can_update_any_category
+  def test_user_can_update_any_category_name
     new_name = "updated name"
     category_params = {
-      category:
+      payload:
             {
-              name: new_name, user_id: @user.id
+              name: new_name, position: 1, user_id: @user.id, id: @category.id
             }
     }
     put api_category_path(@category.id), params: category_params, headers: headers, as: :json
@@ -36,11 +36,34 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
     @category.reload
     assert_equal @category.name, new_name
     assert_equal @category.user_id, @user.id
+    assert_equal @category.position, 1
+  end
+
+  def test_user_can_update_any_category_position
+    new_position = 2
+    category_position_params = {
+      payload:
+            {
+              id: @category.id, position: new_position
+            }
+    }
+    patch reorder_api_categories_path, params: category_position_params, headers: headers, as: :json
+    assert_response :success
+    @category.reload
+    assert_equal @category.name, @category.name
+    assert_equal @category.user_id, @user.id
+    assert_equal @category.position, new_position
   end
 
   def test_user_can_view_all_categories
     get api_categories_url, headers: headers, as: :json
     assert_response :success
     assert_equal response.parsed_body.count, 1
+  end
+
+  def test_user_can_delete_any_category
+    delete api_category_path(@category.id), headers: headers, as: :json
+    assert_response :success
+    assert_equal response.parsed_body["notice"], t("successfully_deleted", entity: "Category")
   end
 end

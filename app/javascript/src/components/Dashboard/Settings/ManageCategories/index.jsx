@@ -127,8 +127,10 @@ const ManageCategories = () => {
   const switchAndDeleteCategory = async () => {
     if (categories.length === 1) {
       try {
-        await categoriesApi.destroy(categoryToDelete.id, {
-          id: categoryToDelete.id,
+        await categoriesApi.destroy({
+          payload: {
+            id: categoryToDelete.id,
+          },
         });
         setShowAlert(false);
       } catch (error) {
@@ -138,9 +140,11 @@ const ManageCategories = () => {
       }
     } else {
       try {
-        await categoriesApi.destroy(categoryToDelete.id, {
-          id: categoryToDelete.id,
-          new_category_id: categoryToUpdateTo.value,
+        await categoriesApi.destroy({
+          payload: {
+            id: categoryToDelete.id,
+            new_category_id: categoryToUpdateTo.value,
+          },
         });
         setShowAlert(false);
       } catch (error) {
