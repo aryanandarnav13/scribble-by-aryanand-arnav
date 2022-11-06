@@ -7,7 +7,7 @@ import redirectionApi from "apis/redirections";
 
 import EditForm from "../EditForm";
 
-const Row = ({ redirection, fetchRedirectionsDetails }) => {
+const Row = ({ redirection, fetchRedirectionsDetails, setAddRedirection }) => {
   const [isEdit, setIsEdit] = useState(false);
 
   const handleDelete = async id => {
@@ -24,36 +24,35 @@ const Row = ({ redirection, fetchRedirectionsDetails }) => {
       <EditForm
         fetchRedirectionsDetails={fetchRedirectionsDetails}
         id={redirection.id}
+        isEdit={isEdit}
+        setAddRedirection={setAddRedirection}
         setIsEdit={setIsEdit}
       />
     );
   }
 
   return (
-    <tr className="border-b-8 border-indigo-100 bg-white">
-      <td
-        className="whitespace-no-wrap mr-3 flex overflow-x-auto p-3 text-left"
+    <div className="mx-4 flex border-b-8 border-indigo-100 bg-white">
+      <div
+        className="whitespace-no-wrap mr-3 flex overflow-x-auto p-3"
         style={{ maxWidth: "300px", minWidth: "300px" }}
       >
         {window.location.hostname}/{window.location.port}
         {redirection.frompath}
-      </td>
-      <td
-        className=" overflow-x-auto"
-        style={{ maxWidth: "280px", minWidth: "280px" }}
-      >
+      </div>
+      <div className="  mt-2" style={{ maxWidth: "280px", minWidth: "280px" }}>
         {window.location.hostname}/{window.location.port}
         {redirection.topath}
-      </td>
-      <td className="pr-2">
+      </div>
+      <div className="mt-1 ml-4 pr-2">
         <Button
           icon={Delete}
           style="text"
           onClick={() => handleDelete(redirection.id)}
         />
         <Button icon={Edit} style="text" onClick={() => setIsEdit(true)} />
-      </td>
-    </tr>
+      </div>
+    </div>
   );
 };
 

@@ -1,43 +1,82 @@
 import React from "react";
 
-import { Check } from "neetoicons";
-import { Input, Button } from "neetoui";
+import { Formik, Form as FormikForm } from "formik";
+import { Check, Close } from "neetoicons";
+import { Button, Typography } from "neetoui";
+import { Input } from "neetoui/formik";
+
+import redirectionApi from "apis/redirections";
+
+import { REDIRECTION_VALIDATION_SCHEMA } from "./constants";
 
 export const Form = ({
-  handleCheck,
+  id,
+  fetchRedirectionsDetails,
   redirectionDetails,
-  setRedirectionDetails,
+  setAddRedirection,
+  isEdit,
+  setIsEdit,
 }) => {
-  const handleChange = e => {
-    const name = e.target.name;
-    const value = e.target.value.split(" ").join("");
-    setRedirectionDetails(details => ({ ...details, [name]: value }));
+  const handleSubmit = async values => {
+    try {
+      if (isEdit) {
+        await redirectionApi.update({
+          id,
+          payload: {
+            frompath: values.frompath,
+            topath: values.topath,
+          },
+        }),
+          setIsEdit(false);
+      } else {
+        await redirectionApi.create({
+          frompath: values.frompath,
+          topath: values.topath,
+        });
+        setAddRedirection(false);
+      }
+      fetchRedirectionsDetails();
+    } catch (error) {
+      logger.error(error);
+    }
   };
 
   return (
-    <tr className="border-b-8 border-indigo-100 bg-white">
-      <td className="p-2">
-        <Input
-          name="frompath"
-          value={redirectionDetails.frompath}
-          onChange={handleChange}
-        />
-      </td>
-      <td>
-        <Input
-          name="topath"
-          value={redirectionDetails.topath}
-          onChange={handleChange}
-        />
-      </td>
-      <td>
-        <Button
-          className="ml-8"
-          icon={Check}
-          style="text"
-          onClick={handleCheck}
-        />
-      </td>
-    </tr>
+    <Formik
+      enableReinitialize
+      initialValues={redirectionDetails}
+      validationSchema={REDIRECTION_VALIDATION_SCHEMA}
+      onSubmit={handleSubmit}
+    >
+      <FormikForm>
+        <div className="mx-4 flex border-b-8 border-indigo-100 bg-white">
+          <div className="whitespace-no-wrap mr-3 flex overflow-x-auto p-2 ">
+            <Typography className="p-1" style="body2">
+              {window.location.hostname}/{window.location.port}
+            </Typography>
+            <Input className="ml-1" name="frompath" />
+          </div>
+          <div
+            className=" flex"
+            style={{ maxWidth: "280px", minWidth: "280px" }}
+          >
+            <Typography className="mt-2 p-1" style="body2">
+              {window.location.hostname}/{window.location.port}
+            </Typography>
+            <Input className="ml-1 mt-2" name="topath" />
+          </div>
+          <div className="mt-1 ml-4 pr-2">
+            <Button icon={Check} style="text" type="submit" />
+            <Button
+              icon={Close}
+              style="text"
+              onClick={() =>
+                isEdit ? setIsEdit(false) : setAddRedirection(false)
+              }
+            />
+          </div>
+        </div>
+      </FormikForm>
+    </Formik>
   );
 };

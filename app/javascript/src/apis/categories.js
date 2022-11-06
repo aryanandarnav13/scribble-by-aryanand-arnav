@@ -4,24 +4,32 @@ const list = () => axios.get("/api/categories");
 
 const create = payload =>
   axios.post("/api/categories", {
-    category: payload,
+    payload,
   });
 
 const show = id => axios.get(`/api/categories/${id}`);
 
-const update = ({ id, payload }) =>
-  axios.put(`/api/categories/${id}`, {
-    category: payload,
+const update = ({ payload }) =>
+  axios.put(`/api/categories`, {
+    payload,
   });
 
-const destroy = (id, payload) =>
-  axios.delete(`/api/categories/${id}`, { data: { category: payload } });
+const reorder = ({ payload }) =>
+  axios.patch(`/api/categories/reorder`, {
+    payload,
+  });
+
+const destroy = ({ payload }) =>
+  axios.delete(
+    `/api/categories/${payload.id}?new_category_id=${payload.new_category_id}`
+  );
 
 const categoriesApi = {
   create,
   list,
   show,
   update,
+  reorder,
   destroy,
 };
 

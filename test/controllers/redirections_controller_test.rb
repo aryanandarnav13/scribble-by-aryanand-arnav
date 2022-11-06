@@ -38,7 +38,7 @@ class RedirectionsControllerTest < ActionDispatch::IntegrationTest
     put api_redirection_path(@redirection.id), params: redirection_params, headers: headers, as: :json
     assert_response :success
     @redirection.reload
-    assert_equal @redirection.topath, "/#{new_topath}"
+    assert_equal @redirection.topath, new_topath
     response_json = response.parsed_body
     assert_equal response_json["notice"], t("successfully_updated", entity: "Redirection")
   end
