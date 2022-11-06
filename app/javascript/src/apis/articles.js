@@ -10,7 +10,7 @@ const create = payload =>
 const show = slug => axios.get(`/api/articles/${slug}`);
 
 const update = (slug, payload) =>
-  axios.put(`/articles/${slug}`, {
+  axios.put(`/api/articles/${slug}`, {
     article: payload,
   });
 

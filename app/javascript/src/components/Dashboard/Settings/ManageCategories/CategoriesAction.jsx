@@ -21,10 +21,10 @@ const List = ({
   const updateCategory = async () => {
     try {
       await categoriesApi.update({
-        id: categoryId,
         payload: {
           name: categoryName,
           user_id: users.id,
+          id: categoryId,
         },
       });
       setCategoryId(0);
@@ -43,10 +43,10 @@ const List = ({
     categories.splice(destinationPosition, 0, removed);
 
     try {
-      await categoriesApi.update({
-        id,
+      await categoriesApi.reorder({
         payload: {
           position: destinationPosition + 1,
+          id,
         },
         quiet: true,
       });
@@ -80,8 +80,10 @@ const List = ({
       (category?.name === "General" && categories?.length === 1)
     ) {
       try {
-        await categoriesApi.destroy(category.id, {
-          id: category.id,
+        await categoriesApi.destroy({
+          payload: {
+            id: category.id,
+          },
         });
       } catch (error) {
         logger.error(error);

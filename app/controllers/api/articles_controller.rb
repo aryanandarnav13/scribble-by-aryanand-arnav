@@ -2,7 +2,7 @@
 
 class Api::ArticlesController < ApplicationController
   protect_from_forgery with: :null_session
-  before_action :load_articles!, only: %i[show update destroy]
+  before_action :load_article!, only: %i[show update destroy]
   before_action :current_user!, except: %i[new edit]
 
   def index
@@ -13,12 +13,13 @@ class Api::ArticlesController < ApplicationController
   end
 
   def create
-    article = Article.new(article_params)
+    article = Article.create!(article_params)
     article.save!
     respond_with_success(t("successfully_created", entity: "Article"))
   end
 
   def show
+    render
   end
 
   def update
@@ -33,7 +34,7 @@ class Api::ArticlesController < ApplicationController
 
   private
 
-    def load_articles!
+    def load_article!
       @article = Article.find_by!(slug: params[:slug])
     end
 

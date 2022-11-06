@@ -4,6 +4,7 @@ class Api::SitesController < ApplicationController
   before_action :current_site!, except: %i[edit]
 
   def show
+    render
   end
 
   def update

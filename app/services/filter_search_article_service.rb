@@ -10,15 +10,18 @@ class FilterSearchArticleService
   end
 
   def process
-    if categoriesFilter != nil
+    if categoriesFilter
       @articles = @articles.where(category_id: categoriesFilter)
     end
+
     if searchFilter != ""
       @articles = @articles.where("title LIKE ?", "%#{searchFilter}%")
     end
+
     if statusFilter != "All"
       @articles = @articles.where(status: statusFilter)
     end
+
     @articles
   end
 end

@@ -4,23 +4,19 @@ import redirectionApi from "apis/redirections";
 
 import { Form } from "./Form";
 
-const EditForm = ({ id, setIsEdit, fetchRedirectionsDetails }) => {
-  const [redirection, setRedirection] = useState({});
+const EditForm = ({
+  id,
+  isEdit,
+  setIsEdit,
+  fetchRedirectionsDetails,
+  setAddRedirection,
+}) => {
+  const [redirection, setRedirection] = useState({ frompath: "", topath: "" });
 
   const fetchRedirection = async () => {
     try {
       const response = await redirectionApi.show(id);
-      setRedirection(response.data);
-    } catch (error) {
-      logger.error(error);
-    }
-  };
-
-  const handleUpdate = async () => {
-    try {
-      await redirectionApi.update({ id, payload: redirection });
-      setIsEdit(false);
-      fetchRedirectionsDetails();
+      setRedirection(response.data.redirection);
     } catch (error) {
       logger.error(error);
     }
@@ -32,9 +28,12 @@ const EditForm = ({ id, setIsEdit, fetchRedirectionsDetails }) => {
 
   return (
     <Form
-      handleCheck={handleUpdate}
+      fetchRedirectionsDetails={fetchRedirectionsDetails}
+      id={id}
+      isEdit={isEdit}
       redirectionDetails={redirection}
-      setRedirectionDetails={setRedirection}
+      setAddRedirection={setAddRedirection}
+      setIsEdit={setIsEdit}
     />
   );
 };

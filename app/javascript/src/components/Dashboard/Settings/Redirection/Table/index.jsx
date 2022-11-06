@@ -12,24 +12,25 @@ export const Table = ({ redirectionDetails, fetchRedirectionsDetails }) => {
   const [addRedirection, setAddRedirection] = useState(false);
 
   return (
-    <table className="w-680 mx-auto " style={{ minWidth: "680px" }}>
-      <thead>
-        <tr className="w-full text-left">
+    <div className="w-680 mx-auto" style={{ minWidth: "680px" }}>
+      <div>
+        <div className=" mx-5 flex justify-between border-b-8 border-indigo-100">
           {TABLE_HEADER.map((title, idx) => (
-            <th key={idx}>
-              <Typography className="py-3 text-gray-500" style="h5">
+            <div className="m-y-auto" key={idx}>
+              <Typography className="py-3  text-gray-500" style="h5">
                 {title}
               </Typography>
-            </th>
+            </div>
           ))}
-        </tr>
-      </thead>
-      <tbody>
+        </div>
+      </div>
+      <div>
         {redirectionDetails.map((redirection, index) => (
           <Row
             fetchRedirectionsDetails={fetchRedirectionsDetails}
             key={index}
             redirection={redirection}
+            setAddRedirection={setAddRedirection}
           />
         ))}
         {addRedirection && (
@@ -38,19 +39,19 @@ export const Table = ({ redirectionDetails, fetchRedirectionsDetails }) => {
             setAddRedirection={setAddRedirection}
           />
         )}
-        <tr>
-          <td>
+        <div>
+          <div>
             <Button
-              className="mt-2"
+              className="mt-2 ml-4"
               icon={Plus}
               iconPosition="left"
               label="Add new Redirection"
               style="link"
               onClick={() => setAddRedirection(value => !value)}
             />
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };

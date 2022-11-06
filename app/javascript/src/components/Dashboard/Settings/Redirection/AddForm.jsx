@@ -1,30 +1,18 @@
-import React, { useState } from "react";
-
-import redirectionApi from "apis/redirections";
+import React from "react";
 
 import { Form } from "./Form";
 
 const AddForm = ({ setAddRedirection, fetchRedirectionsDetails }) => {
-  const [redirection, setRedirection] = useState({
-    from: "",
-    to: "",
-  });
-
-  const handleAdd = async () => {
-    try {
-      await redirectionApi.create(redirection);
-      setAddRedirection(false);
-      fetchRedirectionsDetails();
-    } catch (error) {
-      logger.error(error);
-    }
+  const redirection = {
+    frompath: "/",
+    topath: "/",
   };
 
   return (
     <Form
-      handleCheck={handleAdd}
+      fetchRedirectionsDetails={fetchRedirectionsDetails}
       redirectionDetails={redirection}
-      setRedirectionDetails={setRedirection}
+      setAddRedirection={setAddRedirection}
     />
   );
 };
