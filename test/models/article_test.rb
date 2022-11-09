@@ -33,10 +33,10 @@ class ArticleTest < ActiveSupport::TestCase
   def test_incremental_slug_generation_for_articles_with_duplicate_two_worded_titles
     first_article = Article.create!(
       title: "test article", body: "This is a test article body",
-      user_id: @user.id, category: @category, status: "Publish")
+      user_id: @user.id, category: @category, status: "Publish", position: 1)
     second_article = Article.create!(
       title: "test article", body: "This is a test article body",
-      user_id: @user.id, category: @category, status: "Publish")
+      user_id: @user.id, category: @category, status: "Publish", position: 1)
 
     assert_equal "test-article", first_article.slug
     assert_equal "test-article-2", second_article.slug

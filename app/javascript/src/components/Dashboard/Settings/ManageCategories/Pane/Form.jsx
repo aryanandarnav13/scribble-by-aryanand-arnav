@@ -7,7 +7,7 @@ import { Input } from "neetoui/formik";
 import categoriesApi from "apis/categories";
 import userApi from "apis/users";
 
-// import { NOTES_FORM_VALIDATION_SCHEMA, TAGS, ROLES } from "../constants";
+import { CATEGORIES_FORM_VALIDATION_SCHEMA } from "../constants";
 
 const CategoryForm = ({ onClose, refetch, category, isEdit }) => {
   const [submitted, setSubmitted] = useState(false);
@@ -52,7 +52,7 @@ const CategoryForm = ({ onClose, refetch, category, isEdit }) => {
       initialValues={category}
       validateOnBlur={submitted}
       validateOnChange={submitted}
-      // validationSchema={NOTES_FORM_VALIDATION_SCHEMA}
+      validationSchema={CATEGORIES_FORM_VALIDATION_SCHEMA}
       onSubmit={handleSubmit}
     >
       {({ isSubmitting }) => (

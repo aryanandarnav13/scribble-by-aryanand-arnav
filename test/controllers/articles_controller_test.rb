@@ -16,7 +16,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
         article:
         {
           title: "test article", body: "This is a test article body",
-          user_id: @user.id, category_id: @category.id, status: "Publish"
+          user_id: @user.id, category_id: @category.id, status: "Publish", position: 1
         }
       }, as: :json, headers: headers
     assert_response :success
@@ -29,7 +29,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
     article_params = {
       article:
             {
-              title: new_title, category_id: @category.id, status: "Publish", user_id: @user.id,
+              title: new_title, category_id: @category.id, status: "Publish", user_id: @user.id, position: 1,
               body: "This is a test article body"
             }
     }

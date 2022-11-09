@@ -7,5 +7,6 @@ FactoryBot.define do
     title { Faker::Lorem.sentence }
     body { Faker::Lorem.paragraph }
     status { "Draft" }
+    position { Faker::Number.number(digits: 3) }
   end
 end

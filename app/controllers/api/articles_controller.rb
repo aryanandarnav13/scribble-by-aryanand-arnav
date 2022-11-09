@@ -6,7 +6,7 @@ class Api::ArticlesController < ApplicationController
   before_action :current_user!, except: %i[new edit]
 
   def index
-    @articles = @_current_user.articles
+    @articles = @_current_user.articles.order("position ASC")
     @articles = FilterSearchArticleService.new(
       articles: @articles, categoriesFilter: params[:categoriesFilter],
       searchFilter: params[:searchFilter], statusFilter: params[:statusFilter]).process
@@ -39,6 +39,6 @@ class Api::ArticlesController < ApplicationController
     end
 
     def article_params
-      params.require(:article).permit(:title, :body, :category_id, :status, :user_id)
+      params.require(:article).permit(:title, :position, :body, :category_id, :status, :user_id)
     end
 end
