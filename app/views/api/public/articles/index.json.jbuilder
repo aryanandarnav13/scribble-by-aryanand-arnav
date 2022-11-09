@@ -3,6 +3,7 @@
 json.articles @articles do |article|
   json.id article.id
   json.title article.title
+  json.position article.position
   json.body article.body
   json.category article.category_id ? article.category.name : ""
   json.status article.status

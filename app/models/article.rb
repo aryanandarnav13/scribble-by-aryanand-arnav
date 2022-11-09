@@ -9,6 +9,7 @@ class Article < ApplicationRecord
   belongs_to :category
   belongs_to :user
   before_create :set_slug
+  acts_as_list
 
   private
 
