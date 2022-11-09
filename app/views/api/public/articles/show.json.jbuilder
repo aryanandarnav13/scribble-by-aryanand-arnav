@@ -7,3 +7,4 @@ json.category do
 end
 json.body @article.body
 json.slug @article.slug
+json.position @article.position
