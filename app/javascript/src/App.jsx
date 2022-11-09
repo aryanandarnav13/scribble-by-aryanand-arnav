@@ -13,6 +13,7 @@ import NewArticle from "components/Dashboard/Articles/NewArticle/Create";
 import EditArticle from "components/Dashboard/Articles/NewArticle/Edit";
 import Eui from "components/Dashboard/EUI";
 import Settings from "components/Dashboard/Settings";
+import "lib/dayjs";
 
 import PrivateRoute from "./components/Common/PrivateRoute";
 import { Login } from "./components/Dashboard/EUI/Login";
