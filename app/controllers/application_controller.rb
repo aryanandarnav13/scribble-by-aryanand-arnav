@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
     end
 
     def current_user!
-      current_site = current_site!
-      @_current_user ||= current_site.users.first
+      current_site!
+      @_current_user ||= @_current_site.users.first
     end
 end
