@@ -19,6 +19,6 @@ class RedirectionTest < ActiveSupport::TestCase
     r3 = @site.redirections.create! frompath: r2.topath, topath: "redirection_page_3"
     r4 = @site.redirections.new frompath: r3.topath, topath: @redirection.frompath
     assert_not r4.valid?
-    assert_equal ["Cyclic redirection detected"], r4.errors.full_messages
+    assert_equal ["This redirection creates cycle. It cannot be created"], r4.errors.full_messages
   end
 end
