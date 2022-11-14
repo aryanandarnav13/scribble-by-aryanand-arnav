@@ -16,7 +16,7 @@ class Redirection < ApplicationRecord
       next_path = topath
       while (r = Redirection.find_by(frompath: next_path))
         if r.topath === frompath
-          errors.add(:base, "Cyclic redirection detected")
+          errors.add(:base, "This redirection creates cycle. It cannot be created")
           break
         end
         next_path = r.topath
