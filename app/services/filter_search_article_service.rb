@@ -11,17 +11,17 @@ class FilterSearchArticleService
 
   def process
     if categoriesFilter
-      @articles = @articles.where(category_id: categoriesFilter)
+      @articles = articles.where(category_id: categoriesFilter)
     end
 
     if searchFilter != ""
-      @articles = @articles.where("title LIKE ?", "%#{searchFilter}%")
+      @articles = articles.where("title ILIKE ?", "%#{searchFilter.downcase}%")
     end
 
     if statusFilter != "All"
-      @articles = @articles.where(status: statusFilter)
+      @articles = articles.where(status: statusFilter)
     end
 
-    @articles
+    articles
   end
 end

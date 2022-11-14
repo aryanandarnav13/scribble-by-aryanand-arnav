@@ -5,10 +5,10 @@ import { Button } from "neetoui";
 
 import articlesApi from "apis/articles";
 
-const ArticleOperations = ({ slug, fetchArticles }) => {
+const ArticleOperations = ({ id, fetchArticles }) => {
   const deleteArticle = async () => {
     try {
-      await articlesApi.destroy(slug);
+      await articlesApi.destroy(id);
       fetchArticles();
     } catch (error) {
       logger.error(error);
@@ -17,8 +17,8 @@ const ArticleOperations = ({ slug, fetchArticles }) => {
 
   return (
     <div className="flex">
-      <Button icon={Delete} style="text" onClick={() => deleteArticle(slug)} />
-      <Button icon={Edit} style="text" to={`/articles/${slug}/edit`} />
+      <Button icon={Delete} style="text" onClick={() => deleteArticle(id)} />
+      <Button icon={Edit} style="text" to={`/articles/${id}/edit`} />
     </div>
   );
 };

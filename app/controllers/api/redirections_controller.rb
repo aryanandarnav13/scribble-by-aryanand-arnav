@@ -2,14 +2,15 @@
 
 class Api::RedirectionsController < ApplicationController
   protect_from_forgery with: :null_session
+  before_action :current_site!, except: %i[new edit]
   before_action :load_redirection!, only: %i[show update destroy]
 
   def index
-    @redirections = Redirection.all
+    @redirections = @_current_site.redirections
   end
 
   def create
-    Redirection.create!(frompath: redirection_params[:frompath], topath: redirection_params[:topath])
+    @_current_site.redirections.create!(redirection_params)
     respond_with_success(t("successfully_created", entity: "Redirection"))
   end
 
@@ -18,7 +19,7 @@ class Api::RedirectionsController < ApplicationController
   end
 
   def update
-    @redirection.update!(frompath: redirection_params[:frompath], topath: redirection_params[:topath])
+    @redirection.update!(redirection_params)
     respond_with_success(t("successfully_updated", entity: "Redirection"))
   end
 
@@ -30,7 +31,7 @@ class Api::RedirectionsController < ApplicationController
   private
 
     def load_redirection!
-      @redirection = Redirection.find(params[:id])
+      @redirection = @_current_site.redirections.find(params[:id])
     end
 
     def redirection_params

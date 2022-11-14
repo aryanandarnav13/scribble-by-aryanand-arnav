@@ -12,7 +12,7 @@ class HomeController < ApplicationController
       frompath = request.path
       redirection = Redirection.find_by(frompath: frompath)
       if redirection
-        redirect_to redirection.topath
+        redirect_to redirection.topath, status: :moved_permanently
       end
     end
 end

@@ -55,7 +55,7 @@ const App = () => {
       <Switch>
         <Route exact component={Dashboard} path="/" />
         <Route exact component={NewArticle} path="/articles/create" />
-        <Route exact component={EditArticle} path="/articles/:slug/edit" />
+        <Route exact component={EditArticle} path="/articles/:id/edit" />
         <Route exact component={Settings} path="/settings" />
         <Route
           exact

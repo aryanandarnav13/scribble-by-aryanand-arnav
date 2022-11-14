@@ -31,10 +31,10 @@ class ArticleTest < ActiveSupport::TestCase
   end
 
   def test_incremental_slug_generation_for_articles_with_duplicate_two_worded_titles
-    first_article = Article.create!(
+    first_article = @user.articles.create!(
       title: "test article", body: "This is a test article body",
       user_id: @user.id, category: @category, status: "Publish", position: 1)
-    second_article = Article.create!(
+    second_article = @user.articles.create!(
       title: "test article", body: "This is a test article body",
       user_id: @user.id, category: @category, status: "Publish", position: 1)
 
@@ -57,4 +57,12 @@ class ArticleTest < ActiveSupport::TestCase
       assert_equal updated_category, @article.category
     end
    end
+
+  def test_error_raised_for_duplicate_slug
+    assert_raises ActiveRecord::RecordInvalid do
+       @article.update!(slug: "test-article")
+     end
+    error_msg = @article.errors.full_messages.to_sentence
+    assert_match t("article.slug.immutable"), error_msg
+  end
 end

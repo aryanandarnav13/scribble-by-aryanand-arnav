@@ -4,6 +4,7 @@ class Redirection < ApplicationRecord
   validates :frompath, uniqueness: true
   validate :check_both_input_is_not_same
   validate :check_cyclic_redirection_does_not_exist
+  belongs_to :site
 
   private
 

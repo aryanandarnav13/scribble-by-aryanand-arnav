@@ -3,9 +3,13 @@
 Rails.application.routes.draw do
   constraints(lambda { |req| req.format == :json }) do
     namespace :api do
-      resources :articles, except: %i[new edit], param: :slug
-      resources :categories, except: %i[new edit update]
-      resources :categories, only: %i[update] do
+      resources :articles, except: %i[new edit] do
+        member do
+          patch :reorder
+          patch :transfer
+        end
+      end
+      resources :categories, except: %i[new edit] do
         collection do
           patch :reorder
           put :update
