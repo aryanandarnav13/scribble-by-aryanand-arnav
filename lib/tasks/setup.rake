@@ -21,4 +21,5 @@ def create_sample_data!
   Site.create!(name: "Spinkart", password: "welcome1")
   User.create!(name:'Oliver Smith', email:'oliver@example.com', site_id: Site.first.id)
   Category.create!(name: "Getting Started", position: 1, user_id: User.first.id)
+  Article.create!(title: "Welcome to Spinkart", body: "This is the first article", status: "Publish", category_id: Category.first.id, user_id: User.first.id)
 end
