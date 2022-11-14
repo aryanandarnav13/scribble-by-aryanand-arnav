@@ -12,42 +12,42 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_13_073648) do
+ActiveRecord::Schema.define(version: 2022_11_14_180835) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
-  create_table "articles", force: :cascade do |t|
+  create_table "articles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "title", null: false
     t.string "body", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "slug"
-    t.bigint "category_id"
     t.string "status"
-    t.integer "user_id"
     t.integer "position"
-    t.index ["category_id"], name: "index_articles_on_category_id"
+    t.uuid "category_id"
+    t.uuid "user_id"
     t.index ["slug"], name: "index_articles_on_slug", unique: true
   end
 
-  create_table "categories", force: :cascade do |t|
+  create_table "categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "position"
-    t.integer "user_id"
+    t.uuid "user_id"
   end
 
-  create_table "redirections", force: :cascade do |t|
+  create_table "redirections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "frompath"
     t.string "topath"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "site_id"
+    t.uuid "site_id"
   end
 
-  create_table "sites", force: :cascade do |t|
+  create_table "sites", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "name", null: false
     t.string "password_digest"
     t.string "authentication_token"
@@ -56,16 +56,16 @@ ActiveRecord::Schema.define(version: 2022_11_13_073648) do
     t.boolean "password_enabled", default: false
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "name", null: false
     t.string "email", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "site_id"
+    t.uuid "site_id"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
-  add_foreign_key "articles", "categories"
+  add_foreign_key "articles", "categories", on_delete: :cascade
   add_foreign_key "articles", "users", on_delete: :cascade
   add_foreign_key "categories", "users", on_delete: :cascade
   add_foreign_key "redirections", "sites", on_delete: :cascade
