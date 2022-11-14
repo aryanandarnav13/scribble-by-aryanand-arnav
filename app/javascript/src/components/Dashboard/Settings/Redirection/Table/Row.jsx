@@ -37,14 +37,16 @@ const Row = ({ redirection, fetchRedirectionsDetails, setAddRedirection }) => {
         className=" mr-3 flex overflow-x-auto p-3"
         style={{ maxWidth: "300px", minWidth: "300px" }}
       >
-        {window.location.hostname}/{window.location.port}
+        {window.location.hostname}
+        {/* /{window.location.port} */}
         {redirection.frompath}
       </div>
       <div
         className="mt-2 overflow-x-auto"
         style={{ maxWidth: "280px", minWidth: "280px" }}
       >
-        {window.location.hostname}/{window.location.port}
+        {window.location.hostname}
+        {/* /{window.location.port} */}
         {redirection.topath}
       </div>
       <div className="mt-1 ml-4 pr-2">
