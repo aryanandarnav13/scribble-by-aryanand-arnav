@@ -39,21 +39,21 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
     assert_equal @category.position, 1
   end
 
-  # def test_user_can_update_any_category_position
-  #   new_position = 2
-  #   category_position_params = {
-  #     payload:
-  #       {
-  #         id: @category.id, position: new_position
-  #       }
-  #   }
-  #   patch reorder_api_category_path(@category.id), params: category_position_params, headers: headers, as: :json
-  #   assert_response :success
-  #   @category.reload
-  #   assert_equal @category.name, @category.name
-  #   assert_equal @category.user_id, @user.id
-  #   assert_equal @category.position, new_position
-  # end
+  def test_user_can_update_any_category_position
+    new_position = 2
+    category_position_params = {
+      payload:
+        {
+          id: @category.id, position: new_position
+        }
+    }
+    patch reorder_api_categories_path(), params: category_position_params, headers: headers, as: :json
+    assert_response :success
+    @category.reload
+    assert_equal @category.name, @category.name
+    assert_equal @category.user_id, @user.id
+    assert_equal @category.position, new_position
+  end
 
   def test_user_can_view_all_categories
     get api_categories_url, headers: headers, as: :json
@@ -67,8 +67,13 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
     assert_equal response.parsed_body["notice"], t("successfully_deleted", entity: "Category")
   end
 
-  def user_can_get_a_category
-    get api_category_path(@category.id), headers: headers, as: :json
-    assert_response :success
+  def test_user_should_not_delete_the_last_general_category
+    @user.destroy
+    @user = create(:user, site: @site)
+    @category = create(:category, name: "General", user: @user)
+    @articles_in_category = create_list(:article, 10, category: @category, user: @user)
+    delete api_category_path(@category.id), headers: headers, as: :json
+    assert_response :unprocessable_entity
+    assert_equal response.parsed_body["error"], t("error_deleting", entity: "Category")
   end
 end

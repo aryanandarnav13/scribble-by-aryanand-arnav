@@ -7,8 +7,6 @@ const create = payload =>
     payload,
   });
 
-const show = id => axios.get(`/api/categories/${id}`);
-
 const update = ({ payload }) =>
   axios.put(`/api/categories`, {
     payload,
@@ -27,7 +25,6 @@ const destroy = ({ payload }) =>
 const categoriesApi = {
   create,
   list,
-  show,
   update,
   reorder,
   destroy,
