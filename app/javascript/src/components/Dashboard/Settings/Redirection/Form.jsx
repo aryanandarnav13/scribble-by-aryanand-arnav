@@ -64,7 +64,7 @@ export const Form = ({
             />
           </div>
           <div
-            className=" flex overflow-x-auto"
+            className="whitespace-no-wrap flex overflow-y-auto"
             style={{ maxWidth: "280px", minWidth: "280px" }}
           >
             <Typography className="mt-2 overflow-x-auto p-1" style="body2">
