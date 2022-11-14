@@ -40,7 +40,10 @@ const Row = ({ redirection, fetchRedirectionsDetails, setAddRedirection }) => {
         {window.location.hostname}/{window.location.port}
         {redirection.frompath}
       </div>
-      <div className="  mt-2" style={{ maxWidth: "280px", minWidth: "280px" }}>
+      <div
+        className="mt-2 overflow-x-auto"
+        style={{ maxWidth: "280px", minWidth: "280px" }}
+      >
         {window.location.hostname}/{window.location.port}
         {redirection.topath}
       </div>

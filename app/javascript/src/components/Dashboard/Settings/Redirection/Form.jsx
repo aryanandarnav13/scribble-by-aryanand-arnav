@@ -50,20 +50,31 @@ export const Form = ({
     >
       <FormikForm>
         <div className="mx-4 flex border-b-8 border-indigo-100 bg-white">
-          <div className="whitespace-no-wrap mr-3 flex overflow-x-auto p-2 ">
-            <Typography className="p-1" style="body2">
+          <div
+            className="whitespace-no-wrap mr-3 flex overflow-y-auto p-2"
+            style={{ maxWidth: "300px", minWidth: "300px" }}
+          >
+            <Typography className="overflow-x-auto p-1" style="body2">
               {window.location.hostname}/{window.location.port}
             </Typography>
-            <Input className="ml-1" name="frompath" />
+            <Input
+              className="ml-1"
+              name="frompath"
+              style={{ width: "160px" }}
+            />
           </div>
           <div
-            className=" flex"
+            className=" flex overflow-y-auto"
             style={{ maxWidth: "280px", minWidth: "280px" }}
           >
-            <Typography className="mt-2 p-1" style="body2">
+            <Typography className="mt-2 overflow-x-auto p-1" style="body2">
               {window.location.hostname}/{window.location.port}
             </Typography>
-            <Input className="ml-1 mt-2" name="topath" />
+            <Input
+              className="ml-1 mt-2"
+              name="topath"
+              style={{ width: "160px" }}
+            />
           </div>
           <div className="mt-1 ml-4 pr-2">
             <Button icon={Check} style="text" type="submit" />
