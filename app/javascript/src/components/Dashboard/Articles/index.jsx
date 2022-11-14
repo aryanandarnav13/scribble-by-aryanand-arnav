@@ -35,6 +35,9 @@ const Articles = () => {
       <div className="flex">
         <SideMenu
           articleFilterConstraint={articleFilterConstraint}
+          filteredDraftCount={filteredDraftCount}
+          filteredPublishCount={filteredPublishCount}
+          searchArticle={searchArticle}
           setArticleFilterConstraint={setArticleFilterConstraint}
           setTotalDraftCount={setTotalDraftCount}
           setTotalPublishCount={setTotalPublishCount}

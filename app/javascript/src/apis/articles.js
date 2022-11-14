@@ -7,20 +7,32 @@ const create = payload =>
     article: payload,
   });
 
-const show = slug => axios.get(`/api/articles/${slug}`);
+const show = id => axios.get(`/api/articles/${id}`);
 
-const update = (slug, payload) =>
-  axios.put(`/api/articles/${slug}`, {
+const update = (id, payload) =>
+  axios.put(`/api/articles/${id}`, {
     article: payload,
   });
 
-const destroy = slug => axios.delete(`/api/articles/${slug}`);
+const reorder = (id, payload) =>
+  axios.patch(`/api/articles/${id}/reorder`, {
+    article: payload,
+  });
+
+const destroy = id => axios.delete(`/api/articles/${id}`);
+
+const transfer = payload =>
+  axios.patch(
+    `/api/articles/${payload.article_ids}/transfer/?new_category_id=${payload.new_category_id}`
+  );
 
 const articlesApi = {
   create,
   list,
   show,
+  transfer,
   update,
+  reorder,
   destroy,
 };
 

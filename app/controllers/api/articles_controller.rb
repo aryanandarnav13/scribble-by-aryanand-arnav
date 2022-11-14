@@ -2,8 +2,8 @@
 
 class Api::ArticlesController < ApplicationController
   protect_from_forgery with: :null_session
-  before_action :load_article!, only: %i[show update destroy]
   before_action :current_user!, except: %i[new edit]
+  before_action :load_article!, only: %i[show update destroy reorder]
 
   def index
     @articles = @_current_user.articles.order("position ASC")
@@ -13,13 +13,23 @@ class Api::ArticlesController < ApplicationController
   end
 
   def create
-    article = Article.create!(article_params)
+    article = @_current_user.articles.create!(article_params)
     article.save!
     respond_with_success(t("successfully_created", entity: "Article"))
   end
 
   def show
     render
+  end
+
+  def reorder
+    @article.insert_at(article_params[:position])
+  end
+
+  def transfer
+    TransferArticleService.new(
+      article_ids: params[:id], new_category_id: params[:new_category_id],
+      current_user: @_current_user).process
   end
 
   def update
@@ -35,10 +45,12 @@ class Api::ArticlesController < ApplicationController
   private
 
     def load_article!
-      @article = Article.find_by!(slug: params[:slug])
+      @article = @_current_user.articles.find_by!(id: params[:id])
     end
 
     def article_params
-      params.require(:article).permit(:title, :position, :body, :category_id, :status, :user_id)
+      params.require(:article).permit(
+        :title, :position, :body, :category_id, :status, :user_id, :article_ids,
+        :new_category_id)
     end
 end

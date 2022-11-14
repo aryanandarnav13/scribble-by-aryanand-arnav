@@ -9,7 +9,8 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_redirection_should_work
-    redirection = create(:redirection)
+    @site = create(:site)
+    redirection = create(:redirection, site: @site)
     get redirection.frompath
     assert_redirected_to redirection.topath
   end

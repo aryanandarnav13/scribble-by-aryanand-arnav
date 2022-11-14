@@ -1,36 +1,51 @@
 import React, { useState } from "react";
 
 import { Clock } from "neetoicons";
-import { Typography, Tag, Tooltip, Checkbox } from "neetoui";
+import { Typography, Tag, Tooltip, Checkbox, Avatar } from "neetoui";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import articlesApi from "apis/articles";
 
 import { calculateCreatedAgo, weekDaydateFormat } from "./utils";
 
-const ArticlesList = ({ articles, categoryToDisplay, fetchArticles }) => {
+const ArticlesList = ({
+  articles,
+  checkedArticle,
+  setCheckedArticle,
+  categoryToDisplay,
+  fetchArticles,
+}) => {
   const [selectedArticle, setSelectedArticle] = useState("");
 
   const updateArticlePosition = async ({
-    slug,
+    id,
     sourcePosition,
     destinationPosition,
   }) => {
     const [removed] = articles.splice(sourcePosition, 1);
     articles.splice(destinationPosition, 0, removed);
     const payload = {
-      title: selectedArticle.title,
-      body: selectedArticle.body,
-      category_id: selectedArticle.category_id,
-      status: selectedArticle.status,
-      user_id: selectedArticle.user_id,
       position: destinationPosition + 1,
     };
     try {
-      await articlesApi.update(slug, payload);
+      await articlesApi.reorder(id, payload);
       await fetchArticles();
     } catch (error) {
       logger.error(error);
+    }
+  };
+
+  const handleArticles = article => {
+    if (checkedArticle.article.includes(article)) {
+      setCheckedArticle({
+        ...checkedArticle,
+        article: checkedArticle.article.filter(item => item !== article),
+      });
+    } else {
+      setCheckedArticle({
+        ...checkedArticle,
+        article: [...checkedArticle.article, article],
+      });
     }
   };
 
@@ -45,7 +60,7 @@ const ArticlesList = ({ articles, categoryToDisplay, fetchArticles }) => {
     if (!item.destination) return;
 
     await updateArticlePosition({
-      slug: item.draggableId,
+      id: item.draggableId,
       destinationPosition: item.destination.index,
       sourcePosition: item.source.index,
     });
@@ -60,7 +75,7 @@ const ArticlesList = ({ articles, categoryToDisplay, fetchArticles }) => {
               (article, index) =>
                 article.category === categoryToDisplay.name && (
                   <Draggable
-                    draggableId={article.slug.toString()}
+                    draggableId={article.id.toString()}
                     index={index}
                     key={article.id}
                   >
@@ -77,31 +92,48 @@ const ArticlesList = ({ articles, categoryToDisplay, fetchArticles }) => {
                       >
                         <div className="neeto-ui-shadow-xs neeto-ui-rounded-none neeto-ui-border-gray-400 border mb-4 w-full space-y-2 p-5">
                           <div>
-                            <Checkbox id="checkbox_name_disabled" />
+                            <Checkbox
+                              id="checkbox_name_disabled"
+                              onClick={() => handleArticles(article.id)}
+                            />
                             <Typography className="mt-2" style="h4">
                               {article.title}
                             </Typography>
                           </div>
                           <div className="mb-2">
-                            <Typography className="text-sm" style="body2">
+                            <Typography
+                              className="truncate text-sm"
+                              style="body2"
+                            >
                               {article.body}
                             </Typography>
                           </div>
                           <hr />
                           <div className="mt-3 flex align-middle ">
                             <div className="item-center ml-auto flex space-x-2">
-                              <Clock size="20" />
+                              <Clock className="mt-2" size="20" />
                               <Tooltip
                                 content={weekDaydateFormat(article.created_at)}
                                 position="bottom"
                               >
-                                <Typography style="body3">
-                                  {`Created ${calculateCreatedAgo(
-                                    article.created_at
+                                <Typography className="mt-2" style="body3">
+                                  {`${
+                                    article.status === "Publish"
+                                      ? "Published"
+                                      : "Drafted"
+                                  } ${calculateCreatedAgo(
+                                    article.updated_at
                                   )} `}
                                 </Typography>
                               </Tooltip>
                             </div>
+                            <Avatar
+                              className="ml-2 mt-1"
+                              size="small"
+                              user={{
+                                name: article.author,
+                              }}
+                            />
                             <Tag
                               className="neeto-ui-rounded-none ml-2 bg-gray-200"
                               label={article.status}

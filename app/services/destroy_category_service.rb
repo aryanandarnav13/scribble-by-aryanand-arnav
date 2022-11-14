@@ -10,18 +10,18 @@ class DestroyCategoryService
 
   def process
     if @_current_user.categories.count == 1
-      if Category.find_by_id(category_id).name == "General"
+      if @_current_user.categories.find_by_id(category_id).name == "General"
         return nil
       end
 
-      new_category = Category.create!({ name: "General", user_id: User.first.id })
-      Article.where(category_id: category_id).update(category_id: new_category.id)
+      new_category = @_current_user.categories.create!({ name: "General", user_id: User.first.id })
+      @_current_user.articles.where(category_id: category_id).update(category_id: new_category.id)
     else
       if @new_category_id != nil
-        Article.where(category_id: category_id).update(category_id: new_category_id)
+        @_current_user.articles.where(category_id: category_id).update(category_id: new_category_id)
       end
     end
-    category = Category.find_by!(id: category_id)
+    category = @_current_user.categories.find_by!(id: category_id)
     category.destroy!
   end
 end

@@ -18,4 +18,13 @@ class FilterSearchArticleServiceTest < ActiveSupport::TestCase
     @service.process
     assert_equal @service.articles.class.count, @user.articles.count
   end
+
+  def test_user_can_searched_articles
+    @article1 = create(:article, category: @category, user: @user, title: "test1")
+    @article2 = create(:article, category: @category, user: @user, title: "test2")
+    @service = FilterSearchArticleService.new(
+      articles: @user.articles, statusFilter: "All", searchFilter: "test2", categoriesFilter: nil)
+    @service.process
+    assert_equal @service.articles.count, 1
+  end
 end

@@ -2,15 +2,15 @@
 
 class Api::CategoriesController < ApplicationController
   protect_from_forgery with: :null_session
-  before_action :load_category!, only: %i[show update reorder]
   before_action :current_user!, except: %i[new edit]
+  before_action :load_category!, only: %i[show update reorder]
 
   def index
     @categories = @_current_user.categories.order("position ASC")
   end
 
   def create
-    category = Category.create!(category_params)
+    category = @_current_user.categories.create!(category_params)
     category.save!
     respond_with_success(t("successfully_created", entity: "Category"))
   end
@@ -20,7 +20,7 @@ class Api::CategoriesController < ApplicationController
   end
 
   def reorder
-    @category.update!(category_position_params)
+    @category.insert_at(params[:payload][:position])
   end
 
   def update
@@ -40,14 +40,10 @@ class Api::CategoriesController < ApplicationController
   private
 
     def load_category!
-      @category = Category.find(params[:payload][:id])
+      @category = @_current_user.categories.find(params[:payload][:id])
     end
 
     def category_params
       params.require(:payload).permit(:id, :name, :position, :new_category_id, :user_id)
-    end
-
-    def category_position_params
-      params.require(:payload).permit(:position)
     end
 end

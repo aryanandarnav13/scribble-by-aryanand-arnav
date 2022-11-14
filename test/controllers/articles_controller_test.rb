@@ -33,7 +33,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
               body: "This is a test article body"
             }
     }
-    put api_article_path(@article.slug), params: article_params, headers: headers, as: :json
+    put api_article_path(@article.id), params: article_params, headers: headers, as: :json
     assert_response :success
     @article.reload
     assert_equal @article.title, new_title
@@ -46,7 +46,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_user_can_destroy_article
-    delete api_article_path(@article.slug), headers: headers, as: :json
+    delete api_article_path(@article.id), headers: headers, as: :json
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["notice"], t("successfully_deleted", entity: "Article")
@@ -97,4 +97,37 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
       }, headers: headers, as: :json
     assert_response :success
   end
+
+  def test_user_can_update_any_article_position
+    new_position = 2
+    article_params = {
+      article:
+            {
+              position: new_position
+            }
+    }
+    patch reorder_api_article_path(@article.id), params: article_params, headers: headers, as: :json
+    assert_response :success
+    @article.reload
+    assert_equal @article.position, new_position
+  end
+
+  def test_user_can_get_an_article
+    get api_article_path(@article.id), headers: headers, as: :json
+    assert_response :success
+  end
+
+  # def test_user_can_transfer_article_to_another_category
+  #   new_category = create(:category, user: @user)
+  #   article_params = {
+  #     article:
+  #           {
+  #             category_id: new_category.id
+  #           }
+  #   }
+  #   patch transfer_api_article_path(@article.id), params: article_params, headers: headers, as: :json
+  #   assert_response :success
+  #   @article.reload
+  #   assert_equal @article.category_id, new_category.id
+  # end
 end

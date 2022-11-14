@@ -4,6 +4,8 @@ json.articles @articles do |article|
   json.id article.id
   json.title article.title
   json.body article.body
+  json.updated_at article.updated_at
+  json.created_at article.created_at
   json.position article.position
   json.category article.category_id ? article.category.name : ""
   json.status article.status

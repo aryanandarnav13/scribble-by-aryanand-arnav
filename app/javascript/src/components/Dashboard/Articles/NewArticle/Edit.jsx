@@ -19,7 +19,7 @@ const EditArticle = () => {
   const [articleStatus, setArticleStatus] = useState("Draft");
   const [articleDetails, setArticleDetails] = useState({});
   const history = useHistory();
-  const { slug } = useParams();
+  const { id } = useParams();
 
   const fetchCategories = async () => {
     try {
@@ -35,14 +35,14 @@ const EditArticle = () => {
   useEffect(() => {
     const fetchArticleDetails = async () => {
       try {
-        const response = await articlesApi.show(slug);
+        const response = await articlesApi.show(id);
         setArticleDetails(response.data);
       } catch (error) {
         logger.error(error);
       }
     };
     fetchArticleDetails();
-  }, [slug]);
+  }, [id]);
 
   const fetchUsers = async () => {
     try {
@@ -65,7 +65,7 @@ const EditArticle = () => {
     };
     setSubmitted(true);
     try {
-      await articlesApi.update(slug, payload);
+      await articlesApi.update(id, payload);
       history.push("/");
     } catch (error) {
       logger.error(error);
