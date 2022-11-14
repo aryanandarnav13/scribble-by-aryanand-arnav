@@ -50,6 +50,8 @@ const General = () => {
       }
     } catch (error) {
       logger.error(error);
+    } finally {
+      window.location.reload();
     }
   };
 

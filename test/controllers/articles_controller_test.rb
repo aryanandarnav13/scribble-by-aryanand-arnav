@@ -117,17 +117,14 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  # def test_user_can_transfer_article_to_another_category
-  #   new_category = create(:category, user: @user)
-  #   article_params = {
-  #     article:
-  #           {
-  #             category_id: new_category.id
-  #           }
-  #   }
-  #   patch transfer_api_article_path(@article.id), params: article_params, headers: headers, as: :json
-  #   assert_response :success
-  #   @article.reload
-  #   assert_equal @article.category_id, new_category.id
-  # end
+  def test_user_can_transfer_article_to_another_category
+    new_category = create(:category, user: @user)
+    article_params = {
+      article_ids: "#{@article.id}", new_category_id: new_category.id, current_user: @user
+    }
+    patch transfer_api_article_path(@article.id), params: article_params, headers: headers, as: :json
+    assert_response :success
+    @article.reload
+    assert_equal @article.category_id, new_category.id
+  end
 end

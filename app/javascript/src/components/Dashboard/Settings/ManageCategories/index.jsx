@@ -97,6 +97,9 @@ const ManageCategories = () => {
                   />
                   <Menu className="flex flex-col gap-y-1">
                     {categories
+                      .filter(
+                        category => category.name !== categoryToDisplay.name
+                      )
                       .filter(category =>
                         category.name
                           .toLowerCase()

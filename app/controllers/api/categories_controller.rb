@@ -3,7 +3,7 @@
 class Api::CategoriesController < ApplicationController
   protect_from_forgery with: :null_session
   before_action :current_user!, except: %i[new edit]
-  before_action :load_category!, only: %i[show update reorder]
+  before_action :load_category!, only: %i[update reorder]
 
   def index
     @categories = @_current_user.categories.order("position ASC")
@@ -13,10 +13,6 @@ class Api::CategoriesController < ApplicationController
     category = @_current_user.categories.create!(category_params)
     category.save!
     respond_with_success(t("successfully_created", entity: "Category"))
-  end
-
-  def show
-    render
   end
 
   def reorder
