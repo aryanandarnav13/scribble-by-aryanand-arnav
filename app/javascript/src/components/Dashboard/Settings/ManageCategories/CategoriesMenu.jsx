@@ -12,7 +12,9 @@ import Edit from "./Pane/Edit";
 const CategoriesMenu = ({
   articles,
   categories,
+  categoryToDisplay,
   setCategoryToDisplay,
+  setCheckedArticle,
   fetchCategories,
 }) => {
   const [showNewCategoryPane, setShowNewCategoryPane] = useState(false);
@@ -170,8 +172,17 @@ const CategoriesMenu = ({
                         }
                       >
                         <div
-                          className="flex items-center justify-between py-3 hover:bg-blue-100"
-                          onClick={() => setCategoryToDisplay(category)}
+                          className={
+                            categoryToDisplay.id === category.id
+                              ? "flex items-center justify-between bg-blue-100  py-3"
+                              : "flex items-center justify-between py-3 hover:bg-gray-100"
+                          }
+                          onClick={() => {
+                            setCategoryToDisplay(category);
+                            setCheckedArticle({
+                              article: [],
+                            });
+                          }}
                         >
                           <div className="items-center">
                             <Typography

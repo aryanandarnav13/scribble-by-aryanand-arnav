@@ -1,6 +1,6 @@
 import React from "react";
 
-import ArticleActions from "./ArticleOperations";
+import ArticleOperations from "./ArticleOperations";
 
 export const buildArticleTableColumnData = (columnFilter, fetchArticles) =>
   [
@@ -39,8 +39,8 @@ export const buildArticleTableColumnData = (columnFilter, fetchArticles) =>
       dataIndex: "actions",
       key: "actions",
       width: "20",
-      render: (_, { slug }) => (
-        <ArticleActions fetchArticles={fetchArticles} slug={slug} />
+      render: (_, { id }) => (
+        <ArticleOperations fetchArticles={fetchArticles} id={id} />
       ),
     },
   ].filter(

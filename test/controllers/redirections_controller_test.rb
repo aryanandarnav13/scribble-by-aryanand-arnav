@@ -4,18 +4,19 @@ require "test_helper"
 
 class RedirectionsControllerTest < ActionDispatch::IntegrationTest
   def setup
-    @redirection = create(:redirection)
+    @site = create(:site)
+    @redirection = create(:redirection, site: @site)
   end
 
   def test_should_list_all_redirections
     get api_redirections_path, headers: headers, as: :json
     assert_response :success
     response_json = response.parsed_body
-    assert_equal response_json["redirections"].length, Redirection.count
+    assert_equal response_json["redirections"].length, @site.redirections.count
   end
 
   def test_redirection_uniqueness
-    test_redirection2 = Redirection.new frompath: @redirection.frompath, topath: "test"
+    test_redirection2 = @site.redirections.new frompath: @redirection.frompath, topath: "test"
     assert_not test_redirection2.valid?
   end
 
@@ -48,5 +49,10 @@ class RedirectionsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["notice"], t("successfully_deleted", entity: "Redirection")
+  end
+
+  def test_should_get_redirection
+    get api_redirection_path(@redirection.id), headers: headers, as: :json
+    assert_response :success
   end
 end

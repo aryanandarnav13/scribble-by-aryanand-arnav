@@ -10,9 +10,12 @@ import categoriesApi from "apis/categories";
 import Create from "./NewCategory/Create";
 
 const SideMenu = ({
+  searchArticle,
   articleFilterConstraint,
   setArticleFilterConstraint,
   setTotalDraftCount,
+  filteredDraftCount,
+  filteredPublishCount,
   totalDraftCount,
   totalPublishCount,
   setTotalPublishCount,
@@ -81,20 +84,32 @@ const SideMenu = ({
     <MenuBar showMenu title="Articles">
       <MenuBar.Block
         active={articleFilterConstraint.status === "All"}
-        count={totalDraftCount + totalPublishCount}
         label="All"
+        count={
+          articleFilterConstraint.category.length !== 0 || searchArticle !== ""
+            ? filteredDraftCount + filteredPublishCount
+            : totalDraftCount + totalPublishCount
+        }
         onClick={() => handleStatus("All")}
       />
       <MenuBar.Block
         active={articleFilterConstraint.status === "Draft"}
-        count={totalDraftCount}
         label="Draft"
+        count={
+          articleFilterConstraint.category.length !== 0 || searchArticle !== ""
+            ? filteredDraftCount
+            : totalDraftCount
+        }
         onClick={() => handleStatus("Draft")}
       />
       <MenuBar.Block
         active={articleFilterConstraint.status === "Publish"}
-        count={totalPublishCount}
         label="Published"
+        count={
+          articleFilterConstraint.category.length !== 0 || searchArticle !== ""
+            ? filteredPublishCount
+            : totalPublishCount
+        }
         onClick={() => handleStatus("Publish")}
       />
       <MenuBar.SubTitle

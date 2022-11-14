@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_09_182529) do
+ActiveRecord::Schema.define(version: 2022_11_13_073648) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 2022_11_09_182529) do
     t.string "body", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "slug", null: false
+    t.string "slug"
     t.bigint "category_id"
     t.string "status"
     t.integer "user_id"
@@ -44,6 +44,7 @@ ActiveRecord::Schema.define(version: 2022_11_09_182529) do
     t.string "topath"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "site_id"
   end
 
   create_table "sites", force: :cascade do |t|
@@ -67,5 +68,6 @@ ActiveRecord::Schema.define(version: 2022_11_09_182529) do
   add_foreign_key "articles", "categories"
   add_foreign_key "articles", "users", on_delete: :cascade
   add_foreign_key "categories", "users", on_delete: :cascade
+  add_foreign_key "redirections", "sites", on_delete: :cascade
   add_foreign_key "users", "sites", on_delete: :cascade
 end

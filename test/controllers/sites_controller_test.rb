@@ -40,4 +40,9 @@ class SitesControllerTest < ActionDispatch::IntegrationTest
     assert_equal @site.name, new_name
     assert @site.reload.authenticate(new_password)
   end
+
+  def test_user_can_get_site_details
+    get api_site_path, headers: headers, as: :json
+    assert_response :success
+  end
 end

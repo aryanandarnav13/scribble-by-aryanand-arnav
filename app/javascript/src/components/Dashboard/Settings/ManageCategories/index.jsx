@@ -1,19 +1,32 @@
 import React, { useState, useEffect } from "react";
 
-import { ActionDropdown } from "neetoui";
+import { Input, Dropdown } from "neetoui";
 
 import articlesApi from "apis/articles";
 import categoriesApi from "apis/categories";
 
 import ArticlesList from "./ArticlesList";
+import ArticleTransferConfirmation from "./ArticleTransferConfirmation";
 import CategoriesMenu from "./CategoriesMenu";
 
 const ManageCategories = () => {
   const [categoryToDisplay, setCategoryToDisplay] = useState({});
-  const { Menu, MenuItem } = ActionDropdown;
+  const { Menu, MenuItem } = Dropdown;
   const [categories, setCategories] = useState([]);
   const [articles, setArticles] = useState([]);
   const [info, setInfo] = useState(true);
+  const [checkedArticle, setCheckedArticle] = useState({
+    article: [],
+  });
+  const [open, setOpen] = useState(false);
+  const [searchCategory, setSearchCategory] = useState("");
+  const [categoryToTransferTo, setCategoryToTransferTo] = useState("");
+  const handleInfo = () => {
+    const bannerCondition = localStorage.getItem("banner");
+    if (bannerCondition === "false") {
+      setInfo(false);
+    }
+  };
 
   const fetchArticles = async () => {
     try {
@@ -33,7 +46,9 @@ const ManageCategories = () => {
         data: { categories },
       } = await categoriesApi.list();
       setCategories(categories);
-      setCategoryToDisplay(categories[0]);
+      if (categoryToDisplay.id === undefined) {
+        setCategoryToDisplay(categories[0]);
+      }
     } catch (error) {
       logger.error(error);
     }
@@ -42,6 +57,7 @@ const ManageCategories = () => {
   useEffect(() => {
     fetchArticles();
     fetchCategories();
+    handleInfo();
   }, []);
 
   return (
@@ -50,35 +66,60 @@ const ManageCategories = () => {
         <CategoriesMenu
           articles={articles}
           categories={categories}
+          categoryToDisplay={categoryToDisplay}
           fetchCategories={fetchCategories}
           setCategoryToDisplay={setCategoryToDisplay}
+          setCheckedArticle={setCheckedArticle}
         />
         <div style={{ width: "780px" }}>
           <div className="flex justify-between pb-4">
             <div className=" pl-8 pt-8 text-xl font-semibold">
               Manage articles
             </div>
-            <ActionDropdown
-              buttonStyle="secondary"
-              className="mr-3 mt-3"
-              label="Move to"
-            >
-              <Menu>
-                {categories.map((category, idx) => (
-                  <MenuItem.Button
-                    key={idx}
-                    onClick={() => {
-                      // console.log(category);
-                    }}
-                  >
-                    {category.name}
-                  </MenuItem.Button>
-                ))}
-              </Menu>
-            </ActionDropdown>
+            <div className="mt-6 p-0">
+              <Dropdown
+                buttonStyle="secondary"
+                closeOnSelect={false}
+                disabled={checkedArticle.article.length === 0}
+                label="Move to"
+                onClick={() => {
+                  setSearchCategory("");
+                }}
+              >
+                <div className="flex flex-col gap-y-1 rounded-md p-2">
+                  <Input
+                    className="m-2"
+                    placeholder="Search category"
+                    prefix={<s />}
+                    type="search"
+                    value={searchCategory}
+                    onChange={e => setSearchCategory(e.target.value)}
+                  />
+                  <Menu className="flex flex-col gap-y-1">
+                    {categories
+                      .filter(category =>
+                        category.name
+                          .toLowerCase()
+                          .includes(searchCategory.toLocaleLowerCase())
+                      )
+                      .map(category => (
+                        <MenuItem.Button
+                          key={category.id}
+                          onClick={() => {
+                            setOpen(true);
+                            setCategoryToTransferTo(category);
+                          }}
+                        >
+                          {category.name}
+                        </MenuItem.Button>
+                      ))}
+                  </Menu>
+                </div>
+              </Dropdown>
+            </div>
           </div>
           {info && (
-            <div className="m-4 mr-1 mt-2 bg-blue-100 p-4">
+            <div className="m-4 mr-1 mt-2 bg-blue-100 p-4 text-xs text-gray-600">
               You can reorder categories or articles by drag and drop here. You
               can also multiselect articles and move them together to any
               category you have created.
@@ -86,28 +127,36 @@ const ManageCategories = () => {
                 className="cursor-pointer underline"
                 onClick={() => {
                   setInfo(false);
+                  localStorage.setItem("banner", false);
                 }}
               >
-                {" "}
                 Don't show this info again.
               </span>
             </div>
           )}
           <div className="ml-4">
-            {/* {articles.map(
-              (article, index) =>
-                article.category === categoryToDisplay.name && (
-                  <ArticlesList article={article} key={index} />
-                )
-            )} */}
             <ArticlesList
               articles={articles}
               categoryToDisplay={categoryToDisplay}
+              checkedArticle={checkedArticle}
               fetchArticles={fetchArticles}
+              setCheckedArticle={setCheckedArticle}
             />
           </div>
         </div>
       </div>
+      {open && (
+        <ArticleTransferConfirmation
+          category={categoryToTransferTo}
+          checkedArticle={checkedArticle}
+          fetchArticles={fetchArticles}
+          fetchCategories={fetchCategories}
+          open={open}
+          setCheckedArticle={setCheckedArticle}
+          setOpen={setOpen}
+          setSearchCategory={setSearchCategory}
+        />
+      )}
     </div>
   );
 };
