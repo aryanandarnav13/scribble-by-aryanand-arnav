@@ -21,4 +21,9 @@ class RedirectionTest < ActiveSupport::TestCase
     assert_not r4.valid?
     assert_equal ["This redirection creates cycle. It cannot be created"], r4.errors.full_messages
   end
+
+  def test_redirection_should_be_deleted_when_site_is_deleted
+    @site.destroy
+    assert_empty @site.redirections
+  end
 end

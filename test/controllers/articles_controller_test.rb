@@ -101,10 +101,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
   def test_user_can_update_any_article_position
     new_position = 2
     article_params = {
-      article:
-            {
-              position: new_position
-            }
+      position: new_position
     }
     patch reorder_api_article_path(@article.id), params: article_params, headers: headers, as: :json
     assert_response :success

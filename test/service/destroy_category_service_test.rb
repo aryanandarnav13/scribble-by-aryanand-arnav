@@ -13,7 +13,7 @@ class DestroyCategoryServiceTest < ActiveSupport::TestCase
     @service = DestroyCategoryService.new(
       category_id: @category.id, new_category_id: nil, current_user: @user)
     @service.process
-    assert_nil Category.find_by_id(@category.id)
+    assert_nil @user.categories.find_by_id(@category.id)
   end
 
   def test_should_move_articles_from_one_category_to_the_other

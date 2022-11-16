@@ -8,7 +8,7 @@ const create = payload =>
   });
 
 const update = ({ payload }) =>
-  axios.put(`/api/categories`, {
+  axios.put(`/api/categories/${payload.id}`, {
     payload,
   });
 

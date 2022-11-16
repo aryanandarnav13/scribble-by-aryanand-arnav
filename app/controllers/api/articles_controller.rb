@@ -23,7 +23,7 @@ class Api::ArticlesController < ApplicationController
   end
 
   def reorder
-    @article.insert_at(article_params[:position])
+    @article.insert_at(params[:position])
   end
 
   def transfer

@@ -10,9 +10,8 @@ Rails.application.routes.draw do
         end
       end
       resources :categories, except: %i[new edit] do
-        collection do
+        member do
           patch :reorder
-          put :update
         end
       end
       resources :redirections, except: %i[new edit]

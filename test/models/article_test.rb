@@ -65,4 +65,14 @@ class ArticleTest < ActiveSupport::TestCase
     error_msg = @article.errors.full_messages.to_sentence
     assert_match t("article.slug.immutable"), error_msg
   end
+
+  def test_article_should_be_deleted_when_category_is_deleted
+    @category.destroy
+    assert_empty @category.articles
+  end
+
+  def test_article_should_be_deleted_when_user_is_deleted
+    @user.destroy
+    assert_empty @user.articles
+  end
 end

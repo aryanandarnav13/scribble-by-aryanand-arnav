@@ -51,4 +51,9 @@ class UserTest < ActiveSupport::TestCase
     @user.save!
     assert_equal uppercase_email.downcase, @user.email
   end
+
+  def test_user_should_be_deleted_when_site_is_deleted
+    @site.destroy
+    assert_empty @site.users
+  end
 end
