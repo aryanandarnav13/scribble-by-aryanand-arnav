@@ -15,9 +15,7 @@ const update = (id, payload) =>
   });
 
 const reorder = (id, payload) =>
-  axios.patch(`/api/articles/${id}/reorder`, {
-    article: payload,
-  });
+  axios.patch(`/api/articles/${id}/reorder`, payload);
 
 const destroy = id => axios.delete(`/api/articles/${id}`);
 

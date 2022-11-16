@@ -47,7 +47,7 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
           id: @category.id, position: new_position
         }
     }
-    patch reorder_api_categories_path(), params: category_position_params, headers: headers, as: :json
+    patch reorder_api_category_path(@category.id), params: category_position_params, headers: headers, as: :json
     assert_response :success
     @category.reload
     assert_equal @category.name, @category.name

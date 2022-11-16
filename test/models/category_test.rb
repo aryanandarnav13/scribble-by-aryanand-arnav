@@ -34,4 +34,9 @@ class CategoryTest < ActiveSupport::TestCase
     @category = build(:category, user: nil)
     assert_not @category.valid?
   end
+
+  def test_category_should_be_deleted_when_user_is_deleted
+    @user.destroy
+    assert_empty @user.categories
+  end
 end
