@@ -51,7 +51,7 @@ const General = () => {
     } catch (error) {
       logger.error(error);
     } finally {
-      window.location.reload();
+      setIsPasswordInputDisabled(true);
     }
   };
 
@@ -107,6 +107,7 @@ const General = () => {
             </div>
             <Checkbox
               checked={passwordEnabled}
+              disabled={!isPasswordInputDisabled}
               label="Password Protection Knowledge base"
               name="password_enabled"
               style={{
@@ -145,6 +146,9 @@ const General = () => {
                 label="Cancel"
                 style="text"
                 type="reset"
+                onClick={() => {
+                  setIsPasswordInputDisabled(true);
+                }}
               />
             </div>
           </Form>

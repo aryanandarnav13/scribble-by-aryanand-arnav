@@ -2,7 +2,8 @@
 
 class Article < ApplicationRecord
   enum status: { Draft: "Draft", Publish: "Publish" }
-  validates :title, presence: true
+  validates :title, presence: true, length: { maximum: 255 },
+    format: { with: /\A[a-zA-Z0-9\s]+\z/, message: "is invalid" }
   validates :body, presence: true
   validates :status, presence: true
   validate :slug_not_changed
