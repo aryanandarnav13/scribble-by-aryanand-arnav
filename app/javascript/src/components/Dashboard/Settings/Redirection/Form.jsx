@@ -55,7 +55,7 @@ export const Form = ({
             style={{ maxWidth: "300px", minWidth: "300px" }}
           >
             <Typography className="overflow-x-auto p-1" style="body2">
-              {window.location.hostname}/{window.location.port}
+              {window.location.hostname}
             </Typography>
             <Input
               className="ml-1"
@@ -68,7 +68,7 @@ export const Form = ({
             style={{ maxWidth: "280px", minWidth: "280px" }}
           >
             <Typography className="mt-2 overflow-x-auto p-1" style="body2">
-              {window.location.hostname}/{window.location.port}
+              {window.location.hostname}
             </Typography>
             <Input
               className="ml-1 mt-2"
