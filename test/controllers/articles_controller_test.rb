@@ -24,18 +24,6 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
     assert_equal response_json["notice"], t("successfully_created", entity: "Article")
   end
 
-  def test_user_cannot_create_article_with_non_alphanumeric_title
-    post api_articles_path,
-      params: {
-        article:
-        {
-          title: "test article_@", body: "This is a test article body",
-          user_id: @user.id, category_id: @category.id, status: "Publish", position: 1
-        }
-      }, as: :json, headers: headers
-    assert_response :unprocessable_entity
-  end
-
   def test_user_can_update_any_article
     new_title = "updated title"
     article_params = {
