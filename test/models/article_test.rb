@@ -75,4 +75,12 @@ class ArticleTest < ActiveSupport::TestCase
     @user.destroy
     assert_empty @user.articles
   end
+
+  def test_user_cannot_create_article_with_non_alphanumeric_title
+    assert_raises ActiveRecord::RecordInvalid do
+      @user.articles.create!(
+        title: "test article!", body: "This is a test article body",
+        user_id: @user.id, category: @category, status: "Publish", position: 1)
+    end
+  end
 end
