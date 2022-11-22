@@ -2,14 +2,14 @@
 
 require "test_helper"
 
-class RedirectionsControllerTest < ActionDispatch::IntegrationTest
+class Api::RedirectionsControllerTest < ActionDispatch::IntegrationTest
   def setup
     @site = create(:site)
     @redirection = create(:redirection, site: @site)
   end
 
   def test_should_list_all_redirections
-    get api_redirections_path, headers: headers, as: :json
+    get api_redirections_path, headers: headers
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["redirections"].length, @site.redirections.count
@@ -21,8 +21,7 @@ class RedirectionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_should_create_redirection
-    post api_redirections_path, params: { redirection: { frompath: "test1", topath: "test2" } }, headers: headers,
-      as: :json
+    post api_redirections_path, params: { redirection: { frompath: "test1", topath: "test2" } }, headers: headers
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["notice"], t("successfully_created", entity: "Redirection")
@@ -36,7 +35,7 @@ class RedirectionsControllerTest < ActionDispatch::IntegrationTest
               topath: new_topath, frompath: @redirection.frompath
             }
     }
-    put api_redirection_path(@redirection.id), params: redirection_params, headers: headers, as: :json
+    put api_redirection_path(@redirection.id), params: redirection_params, headers: headers
     assert_response :success
     @redirection.reload
     assert_equal @redirection.topath, new_topath
@@ -45,7 +44,7 @@ class RedirectionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_should_delete_redirection
-    delete api_redirection_path(@redirection.id), headers: headers, as: :json
+    delete api_redirection_path(@redirection.id), headers: headers
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["notice"], t("successfully_deleted", entity: "Redirection")

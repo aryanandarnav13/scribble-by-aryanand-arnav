@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Article < ApplicationRecord
+  acts_as_list scope: :category
   enum status: { Draft: "Draft", Publish: "Publish" }
   validates :title, presence: true, length: { maximum: 255 },
     format: { with: /\A[a-zA-Z0-9\s]+\z/, message: "is invalid" }
@@ -11,7 +12,6 @@ class Article < ApplicationRecord
   belongs_to :user
   before_create :set_slug
   before_update :set_slug
-  acts_as_list
 
   private
 

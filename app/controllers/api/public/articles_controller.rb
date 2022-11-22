@@ -5,7 +5,8 @@ class Api::Public::ArticlesController < ApplicationController
   before_action :current_user!, except: %i[new edit]
 
   def index
-    @articles = @_current_user.articles.order("position ASC")
+    articles = @_current_user.articles.order("position ASC")
+    @published_articles = articles.where(status: "Publish")
   end
 
   private
