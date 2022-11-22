@@ -9,8 +9,10 @@ class TransferArticleService
   end
 
   def process
-    article_ids.split(",").each do |article_id|
-      @_current_user.articles.where(id: article_id).update(category_id: new_category_id)
+    article_ids_array = article_ids.split(",")
+    article_ids_array.each do |article_id|
+      @_current_user.articles.find_by_id(article_id).remove_from_list
     end
+    @_current_user.articles.where(id: article_ids_array).update(category_id: new_category_id)
   end
 end

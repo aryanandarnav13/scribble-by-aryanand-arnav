@@ -16,6 +16,7 @@ const CategoriesMenu = ({
   categoryToDisplay,
   setCategoryToDisplay,
   setCheckedArticle,
+  fetchArticles,
   fetchCategories,
 }) => {
   const [showNewCategoryPane, setShowNewCategoryPane] = useState(false);
@@ -65,6 +66,7 @@ const CategoriesMenu = ({
         logger.error(error);
       } finally {
         fetchCategories();
+        fetchArticles();
       }
     } else {
       setShowAlert(true);
@@ -99,6 +101,7 @@ const CategoriesMenu = ({
         logger.log(error);
       } finally {
         fetchCategories();
+        fetchArticles();
       }
     } else {
       try {
@@ -113,6 +116,7 @@ const CategoriesMenu = ({
         logger.error(error);
       } finally {
         fetchCategories();
+        fetchArticles();
       }
     }
   };

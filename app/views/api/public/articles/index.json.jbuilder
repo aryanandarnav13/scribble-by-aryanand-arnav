@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-json.articles @articles do |article|
+json.articles @published_articles do |article|
   json.id article.id
   json.title article.title
   json.position article.position

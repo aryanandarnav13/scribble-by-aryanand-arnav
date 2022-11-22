@@ -48,7 +48,6 @@ const EuiBody = ({ articles, categories }) => {
             <Accordion.Item isOpen key={idx} title={category.name}>
               {articles.map(
                 (article, index) =>
-                  article.status === "Publish" &&
                   article.category === category.name && (
                     <NavLink
                       activeClassName="text-indigo-500"

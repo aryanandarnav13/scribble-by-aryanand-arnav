@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class CategoriesControllerTest < ActionDispatch::IntegrationTest
+class Api::CategoriesControllerTest < ActionDispatch::IntegrationTest
   def setup
     @site = create(:site)
     @user = create(:user, site: @site)
@@ -17,7 +17,7 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
           name: "test category", position: 1, user_id: @user.id
         }
       },
-      headers: headers, as: :json
+      headers: headers
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["notice"], t("successfully_created", entity: "Category")
@@ -31,7 +31,7 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
               name: new_name, position: 1, user_id: @user.id, id: @category.id
             }
     }
-    put api_category_path(@category.id), params: category_params, headers: headers, as: :json
+    put api_category_path(@category.id), params: category_params, headers: headers
     assert_response :success
     @category.reload
     assert_equal @category.name, new_name
@@ -56,7 +56,7 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_user_can_view_all_categories
-    get api_categories_url, headers: headers, as: :json
+    get api_categories_url, headers: headers
     assert_response :success
     assert_equal response.parsed_body.count, 1
   end
@@ -72,7 +72,7 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
     @user = create(:user, site: @site)
     @category = create(:category, name: "General", user: @user)
     @articles_in_category = create_list(:article, 10, category: @category, user: @user)
-    delete api_category_path(@category.id), headers: headers, as: :json
+    delete api_category_path(@category.id), headers: headers
     assert_response :unprocessable_entity
     assert_equal response.parsed_body["error"], t("error_deleting", entity: "Category")
   end

@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class SitesControllerTest < ActionDispatch::IntegrationTest
+class Api::SitesControllerTest < ActionDispatch::IntegrationTest
   def setup
     @site = create(:site)
   end
@@ -23,7 +23,7 @@ class SitesControllerTest < ActionDispatch::IntegrationTest
           password_enabled: true
         }
       },
-      headers: headers, as: :json
+      headers: headers
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["notice"], t("successfully_updated", entity: "Site")
@@ -34,7 +34,7 @@ class SitesControllerTest < ActionDispatch::IntegrationTest
     new_password = "#{@site.password}-(updated)"
     site_params = { site: { name: new_name, password: new_password, password_enabled: true } }
 
-    put api_site_path, params: site_params, headers: headers, as: :json
+    put api_site_path, params: site_params, headers: headers
     assert_response :success
     @site.reload
     assert_equal @site.name, new_name
@@ -42,7 +42,7 @@ class SitesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_user_can_get_site_details
-    get api_site_path, headers: headers, as: :json
+    get api_site_path, headers: headers
     assert_response :success
   end
 end

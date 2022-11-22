@@ -38,6 +38,7 @@ class Api::ArticlesController < ApplicationController
   end
 
   def destroy
+    @article.remove_from_list
     @article.destroy!
     respond_with_success(t("successfully_deleted", entity: "Article"))
   end

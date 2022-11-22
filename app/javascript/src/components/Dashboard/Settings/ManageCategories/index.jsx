@@ -67,6 +67,7 @@ const ManageCategories = () => {
           articles={articles}
           categories={categories}
           categoryToDisplay={categoryToDisplay}
+          fetchArticles={fetchArticles}
           fetchCategories={fetchCategories}
           setCategoryToDisplay={setCategoryToDisplay}
           setCheckedArticle={setCheckedArticle}
@@ -139,11 +140,12 @@ const ManageCategories = () => {
           )}
           <div className="ml-4">
             <ArticlesList
-              articles={articles}
-              categoryToDisplay={categoryToDisplay}
               checkedArticle={checkedArticle}
               fetchArticles={fetchArticles}
               setCheckedArticle={setCheckedArticle}
+              articles={articles.filter(
+                article => article.category === categoryToDisplay.name
+              )}
             />
           </div>
         </div>

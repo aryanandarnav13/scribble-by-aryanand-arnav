@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class SessionsControllerTest < ActionDispatch::IntegrationTest
+class Api::SessionsControllerTest < ActionDispatch::IntegrationTest
   def setup
     @site = create(:site)
   end
