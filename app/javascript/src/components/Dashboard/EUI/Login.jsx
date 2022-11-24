@@ -9,7 +9,6 @@ import * as yup from "yup";
 import authApi from "apis/auth";
 import { setAuthHeaders } from "apis/axios";
 
-import EuiNavBar from "./EuiNavBar";
 import Vector from "./Vector.png";
 
 export const Login = ({ siteName }) => {
@@ -31,7 +30,9 @@ export const Login = ({ siteName }) => {
 
   return (
     <div>
-      <EuiNavBar siteName={siteName} />
+      <div className="h-15 flex items-center justify-center border-b-2 p-4">
+        <Typography className="font-bold">{siteName}</Typography>
+      </div>
       <Formik
         initialValues={{ password: "" }}
         validateOnBlur={false}
