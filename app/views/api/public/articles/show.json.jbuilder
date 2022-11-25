@@ -6,5 +6,4 @@ json.category do
   json.value @article.category_id ? @article.category_id : ""
 end
 json.body @article.body
-json.slug @article.slug
-json.position @article.position
+json.date @article.Publish? ? @article.updated_at.strftime("%B #{@article.updated_at.day.ordinalize}, %Y") : "-"

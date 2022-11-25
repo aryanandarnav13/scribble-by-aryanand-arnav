@@ -3,11 +3,11 @@ import React, { useState, useEffect } from "react";
 import { Accordion, PageLoader } from "neetoui";
 import { MenuBar } from "neetoui/layouts";
 import {
+  useRouteMatch,
+  useHistory,
   NavLink,
   Switch,
   Route,
-  useRouteMatch,
-  useHistory,
 } from "react-router-dom";
 
 import Show from "./Show";
@@ -19,6 +19,7 @@ const EuiBody = ({ articles, categories }) => {
 
   const history = useHistory();
   const slug = window.location.pathname.split("/")[2];
+
   const handleActiveCategory = () => {
     const activeArticle = articles.find(article => article.slug === slug);
     if (activeArticle) {
@@ -66,12 +67,7 @@ const EuiBody = ({ articles, categories }) => {
       <Switch>
         {articles.map((article, index) => (
           <Route key={index} path={`${path}/${article.slug}`}>
-            <Show
-              articleTitle={article.title}
-              body={article.body}
-              categoryTitle={article.category}
-              publishedDate={article.date}
-            />
+            <Show slug={slug} />
           </Route>
         ))}
       </Switch>

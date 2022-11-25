@@ -2,11 +2,10 @@
 
 class Api::RedirectionsController < ApplicationController
   protect_from_forgery with: :null_session
-  before_action :current_site!, except: %i[new edit]
   before_action :load_redirection!, only: %i[show update destroy]
 
   def index
-    @redirections = @_current_site.redirections
+    @redirections = current_site.redirections
   end
 
   def create
@@ -31,7 +30,7 @@ class Api::RedirectionsController < ApplicationController
   private
 
     def load_redirection!
-      @redirection = @_current_site.redirections.find(params[:id])
+      @redirection = current_site.redirections.find(params[:id])
     end
 
     def redirection_params

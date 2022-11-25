@@ -2,15 +2,14 @@
 
 class Api::CategoriesController < ApplicationController
   protect_from_forgery with: :null_session
-  before_action :current_user!, except: %i[new edit]
   before_action :load_category!, only: %i[update reorder]
 
   def index
-    @categories = @_current_user.categories.order("position ASC")
+    @categories = current_user.categories.order("position ASC")
   end
 
   def create
-    category = @_current_user.categories.create!(category_params)
+    category = current_user.categories.create!(category_params)
     category.save!
     respond_with_success(t("successfully_created", entity: "Category"))
   end
@@ -26,7 +25,7 @@ class Api::CategoriesController < ApplicationController
   def destroy
     if DestroyCategoryService.new(
       category_id: params[:id], new_category_id: params[:new_category_id],
-      current_user: @_current_user).process
+      current_user: current_user).process
       respond_with_success(t("successfully_deleted", entity: "Category"))
     else
       respond_with_error(t("error_deleting", entity: "Category"))
@@ -36,7 +35,7 @@ class Api::CategoriesController < ApplicationController
   private
 
     def load_category!
-      @category = @_current_user.categories.find(params[:payload][:id])
+      @category = current_user.categories.find(params[:payload][:id])
     end
 
     def category_params

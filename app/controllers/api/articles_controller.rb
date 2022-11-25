@@ -2,18 +2,17 @@
 
 class Api::ArticlesController < ApplicationController
   protect_from_forgery with: :null_session
-  before_action :current_user!, except: %i[new edit]
   before_action :load_article!, only: %i[show update destroy reorder]
 
   def index
-    @articles = @_current_user.articles.order("position ASC")
+    @articles = current_user.articles.order("position ASC")
     @articles = FilterSearchArticleService.new(
       articles: @articles, categoriesFilter: params[:categoriesFilter],
       searchFilter: params[:searchFilter], statusFilter: params[:statusFilter]).process
   end
 
   def create
-    article = @_current_user.articles.create!(article_params)
+    article = current_user.articles.create!(article_params)
     article.save!
     respond_with_success(t("successfully_created", entity: "Article"))
   end
@@ -29,7 +28,7 @@ class Api::ArticlesController < ApplicationController
   def transfer
     TransferArticleService.new(
       article_ids: params[:id], new_category_id: params[:new_category_id],
-      current_user: @_current_user).process
+      current_user: current_user).process
   end
 
   def update
@@ -46,7 +45,7 @@ class Api::ArticlesController < ApplicationController
   private
 
     def load_article!
-      @article = @_current_user.articles.find(params[:id])
+      @article = current_user.articles.find(params[:id])
     end
 
     def article_params

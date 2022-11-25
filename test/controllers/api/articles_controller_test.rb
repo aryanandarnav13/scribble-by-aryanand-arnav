@@ -124,4 +124,17 @@ class Api::ArticlesControllerTest < ActionDispatch::IntegrationTest
     @article.reload
     assert_equal @article.category_id, new_category.id
   end
+
+  def test_user_should_update_article_category
+    new_category = create(:category, user: @user)
+    article_params = {
+      article: {
+        category_id: new_category.id
+      }
+    }
+    patch api_article_path(@article.id), params: article_params, headers: headers
+    assert_response :success
+    @article.reload
+    assert_equal @article.category_id, new_category.id
+  end
 end
