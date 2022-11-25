@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-json.extract! @_current_site,
+json.extract! @site,
   :id,
   :name,
   :password_enabled

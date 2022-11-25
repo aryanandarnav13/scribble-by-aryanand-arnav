@@ -16,6 +16,7 @@ import Settings from "components/Dashboard/Settings";
 import "lib/dayjs";
 
 import PrivateRoute from "./components/Common/PrivateRoute";
+import Analytics from "./components/Dashboard/Analytics";
 import { Login } from "./components/Dashboard/EUI/Login";
 
 const App = () => {
@@ -57,6 +58,7 @@ const App = () => {
         <Route exact component={NewArticle} path="/articles/create" />
         <Route exact component={EditArticle} path="/articles/:id/edit" />
         <Route exact component={Settings} path="/settings" />
+        <Route exact component={Analytics} path="/analytics" />
         <Route
           exact
           component={() => <Login siteName={siteName} />}

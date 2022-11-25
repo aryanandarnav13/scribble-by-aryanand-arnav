@@ -26,19 +26,19 @@ export const buildArticleTableColumnData = (columnFilter, fetchArticles) =>
       title: "CATEGORY",
       dataIndex: "category",
       key: "category",
-      width: "20",
+      width: "20%",
     },
     {
       title: "STATUS",
       dataIndex: "status",
       key: "status",
-      width: "20",
+      width: "15%",
     },
     {
       title: "",
       dataIndex: "actions",
       key: "actions",
-      width: "20",
+      width: "10%",
       render: (_, { id }) => (
         <ArticleOperations fetchArticles={fetchArticles} id={id} />
       ),

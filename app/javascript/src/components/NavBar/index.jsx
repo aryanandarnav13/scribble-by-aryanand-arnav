@@ -36,6 +36,13 @@ const NavBar = () => (
           >
             Settings
           </NavLink>
+          <NavLink
+            activeClassName="text-indigo-700 px-2"
+            className="px-2 text-base text-gray-400"
+            to="/analytics"
+          >
+            Analytics
+          </NavLink>
         </div>
       }
     />

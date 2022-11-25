@@ -1,14 +1,12 @@
 # frozen_string_literal: true
 
 class Api::SitesController < ApplicationController
-  before_action :current_site!, except: %i[edit]
-
   def show
-    render
+    @site = current_site
   end
 
   def update
-    @_current_site.update!(site_params)
+    current_site.update!(site_params)
     respond_with_success(t("successfully_updated", entity: "Site"))
   end
 
