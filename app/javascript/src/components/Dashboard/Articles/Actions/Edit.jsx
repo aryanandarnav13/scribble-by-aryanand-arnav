@@ -89,7 +89,7 @@ const EditArticle = () => {
 
   return (
     <div>
-      <NavBar />
+      <NavBar articleStatus={articleDetails.status} />
       <div className="m-4 flex h-full w-screen justify-between">
         <div className="mx-auto mt-10 h-full w-1/2">
           <Formik
