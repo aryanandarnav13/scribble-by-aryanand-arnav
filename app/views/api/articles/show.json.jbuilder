@@ -7,3 +7,5 @@ json.category do
 end
 json.body @article.body
 json.slug @article.slug
+json.versions @article.versions
+json.id @article.id

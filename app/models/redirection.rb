@@ -9,14 +9,14 @@ class Redirection < ApplicationRecord
   private
 
     def check_both_input_is_not_same
-      errors.add(:base, "From path and To path cannot be same.") if frompath == topath
+      errors.add(:base, t("redirection.same_path")) if frompath == topath
     end
 
     def check_cyclic_redirection_does_not_exist
       next_path = topath
       while (r = Redirection.find_by(frompath: next_path))
         if r.topath === frompath
-          errors.add(:base, "This redirection creates cycle. It cannot be created")
+          errors.add(:base, t("redirection.cyclic_redirection"))
           break
         end
         next_path = r.topath

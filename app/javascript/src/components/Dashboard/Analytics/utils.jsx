@@ -1,9 +1,22 @@
+import React from "react";
+
+import { Typography } from "antd";
+import { Tooltip } from "neetoui";
+import { Link } from "react-router-dom";
+
 export const analyticsColumnData = [
   {
     dataIndex: "title",
     key: "title",
     title: "TITLE",
     width: 150,
+    render: (title, { id }) => (
+      <Tooltip content="Click to edit article." position="bottom">
+        <Link to={`/articles/${id}/edit`}>
+          <Typography>{title}</Typography>
+        </Link>
+      </Tooltip>
+    ),
   },
   {
     dataIndex: "date",

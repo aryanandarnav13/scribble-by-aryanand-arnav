@@ -13,6 +13,7 @@ const ArticleTransferConfirmation = ({
   checkedArticle,
   setSearchCategory,
   setCheckedArticle,
+  categoryToDisplay,
 }) => {
   const handleArticleTransfer = async () => {
     const payload = {
@@ -36,8 +37,9 @@ const ArticleTransferConfirmation = ({
 
   return (
     <Alert
+      closeButton={false}
       isOpen={open}
-      message="Are you sure you want to transfer these articles?"
+      message={`Are you sure you want to transfer these ${checkedArticle.article.length} articles from ${categoryToDisplay.name} category to ${category?.name} category?`}
       onClose={() => setOpen(false)}
       onSubmit={handleArticleTransfer}
     />

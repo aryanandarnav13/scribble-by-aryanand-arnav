@@ -2,7 +2,7 @@
 
 class Api::ArticlesController < ApplicationController
   protect_from_forgery with: :null_session
-  before_action :load_article!, only: %i[show update destroy reorder]
+  before_action :load_article!, only: %i[show update destroy reorder restore]
 
   def index
     @articles = current_user.articles.order("position ASC")
@@ -40,6 +40,11 @@ class Api::ArticlesController < ApplicationController
     @article.remove_from_list
     @article.destroy!
     respond_with_success(t("successfully_deleted", entity: "Article"))
+  end
+
+  def restore
+    RestoreArticleService.new(@article, params[:version_at], current_user).process
+    respond_with_success(t("successfully_restored", entity: "Article"))
   end
 
   private

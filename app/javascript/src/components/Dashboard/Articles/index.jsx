@@ -67,7 +67,7 @@ const Articles = () => {
                 </ActionDropdown>
                 <Button
                   icon="ri-add-line"
-                  label="Add New Article"
+                  label="Add new article"
                   to="/articles/create"
                 />
               </div>

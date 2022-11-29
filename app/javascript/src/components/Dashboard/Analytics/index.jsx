@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { Table } from "neetoui";
 
-import articlesApi from "apis/articles";
+import publicApi from "apis/public";
 import NavBar from "components/NavBar";
 
 import { analyticsColumnData } from "./utils";
@@ -13,14 +13,10 @@ const Analytics = () => {
 
   const fetchArticles = async () => {
     try {
-      const payload = {
-        statusFilter: "All",
-        searchFilter: "",
-      };
-      const response = await articlesApi.list(payload);
-      setArticles(response?.data.articles);
-    } catch (err) {
-      logger.error(err);
+      const response = await publicApi.listArticles();
+      setArticles(response?.data?.articles);
+    } catch (error) {
+      logger.error(error);
     }
   };
 
@@ -31,7 +27,7 @@ const Analytics = () => {
   return (
     <div>
       <NavBar />
-      <div className="mx-auto mt-10 w-10/12">
+      <div className="mx-auto mt-10 w-7/12">
         <Table
           columnData={analyticsColumnData}
           currentPageNumber={pageNo}

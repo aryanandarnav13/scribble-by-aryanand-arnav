@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import { Formik, Form } from "formik";
 import { Button, Typography } from "neetoui";
@@ -17,6 +17,8 @@ const General = () => {
     minChar: false,
     letterAndNumber: false,
   });
+  const passwordFocus = useRef(null);
+
   const handlePassword = e => {
     const passWord = e.target.value;
     const minChar = passWord.length >= 6;
@@ -58,6 +60,12 @@ const General = () => {
   useEffect(() => {
     fetchSiteDetails();
   }, []);
+
+  useEffect(() => {
+    if (passwordFocus && passwordFocus.current) {
+      passwordFocus?.current.select();
+    }
+  }, [isPasswordInputDisabled]);
 
   return (
     <div className="w-400  mx-auto">
@@ -125,6 +133,7 @@ const General = () => {
                   handlePassword={handlePassword}
                   isPasswordInputDisabled={isPasswordInputDisabled}
                   password={values.password}
+                  passwordFocus={passwordFocus}
                   passwordValidation={passwordValidation}
                   setFieldValue={setFieldValue}
                   setIsPasswordInputDisabled={setIsPasswordInputDisabled}
