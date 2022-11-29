@@ -9,8 +9,8 @@ import { setAuthHeaders, registerIntercepts } from "apis/axios";
 import siteApi from "apis/sites";
 import { initializeLogger } from "common/logger";
 import Dashboard from "components/Dashboard";
-import NewArticle from "components/Dashboard/Articles/NewArticle/Create";
-import EditArticle from "components/Dashboard/Articles/NewArticle/Edit";
+import Actions from "components/Dashboard/Articles/Actions/Create";
+import EditArticle from "components/Dashboard/Articles/Actions/Edit";
 import Eui from "components/Dashboard/EUI";
 import Settings from "components/Dashboard/Settings";
 import "lib/dayjs";
@@ -55,7 +55,7 @@ const App = () => {
       <ToastContainer />
       <Switch>
         <Route exact component={Dashboard} path="/" />
-        <Route exact component={NewArticle} path="/articles/create" />
+        <Route exact component={Actions} path="/articles/create" />
         <Route exact component={EditArticle} path="/articles/:id/edit" />
         <Route exact component={Settings} path="/settings" />
         <Route exact component={Analytics} path="/analytics" />

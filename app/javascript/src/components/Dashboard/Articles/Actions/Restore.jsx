@@ -9,11 +9,11 @@ const RestoreArticle = ({
   showModal,
   setShowModal,
   id,
-  restoringArticle,
+  articleToBeRestored,
   articleVersionDetails,
   articleDetails,
   categoryTitle,
-  categoryNotExists,
+  categoryDeletedInfo,
 }) => {
   const history = useHistory();
 
@@ -21,7 +21,7 @@ const RestoreArticle = ({
     try {
       await articlesApi.restore({
         id,
-        versionAt: restoringArticle.created_at,
+        versionAt: articleToBeRestored.created_at,
       });
       history.push("/");
       setShowModal(false);
@@ -41,7 +41,7 @@ const RestoreArticle = ({
         <Typography className="mb-2" lineHeight="normal" style="body2">
           Version history of {articleDetails.title} in Scribble.
         </Typography>
-        {categoryNotExists && (
+        {categoryDeletedInfo && (
           <Typography
             className="mb-4 bg-red-100 p-1 font-serif text-xs text-gray-600"
             style="body3"

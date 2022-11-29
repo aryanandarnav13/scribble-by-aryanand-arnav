@@ -5,7 +5,7 @@ import { Button } from "neetoui";
 
 import articlesApi from "apis/articles";
 
-const ArticleOperations = ({ id, fetchArticles }) => {
+const TableActions = ({ id, fetchArticles }) => {
   const deleteArticle = async () => {
     try {
       await articlesApi.destroy(id);
@@ -24,4 +24,4 @@ const ArticleOperations = ({ id, fetchArticles }) => {
   );
 };
 
-export default ArticleOperations;
+export default TableActions;
