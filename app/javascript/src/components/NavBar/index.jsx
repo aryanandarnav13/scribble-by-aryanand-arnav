@@ -1,20 +1,38 @@
 import React from "react";
 
 import { ExternalLink } from "@bigbinary/neeto-icons";
-import { Button, Typography } from "@bigbinary/neetoui";
 import { Header } from "@bigbinary/neetoui/layouts";
+import { Button, Typography, Tag } from "neetoui";
 import { NavLink } from "react-router-dom";
 
-const NavBar = () => (
+const NavBar = ({ articleStatus }) => (
   <div className="border-b-2 py-0 px-5">
     <Header
       actionBlock={
-        <Button
-          icon={ExternalLink}
-          label="Preview"
-          style="secondary"
-          to="/preview"
-        />
+        <div className="flex items-center justify-end">
+          {articleStatus &&
+            (articleStatus === "Draft" ? (
+              <Tag
+                className="mr-5 bg-yellow-200"
+                label="Draft"
+                size="large"
+                style="outline"
+              />
+            ) : (
+              <Tag
+                className=" mr-5 bg-green-300"
+                label="Published"
+                size="large"
+                style="outline"
+              />
+            ))}
+          <Button
+            icon={ExternalLink}
+            label="Preview"
+            style="secondary"
+            to="/preview"
+          />
+        </div>
       }
       title={
         <div className="flex text-xl">

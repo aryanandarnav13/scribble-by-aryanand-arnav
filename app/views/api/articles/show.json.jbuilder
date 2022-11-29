@@ -9,3 +9,4 @@ json.body @article.body
 json.slug @article.slug
 json.versions @article.versions
 json.id @article.id
+json.status @article.status
