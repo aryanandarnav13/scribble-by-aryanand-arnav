@@ -37,8 +37,12 @@ en:
     incorrect_credentials: "Incorrect credentials, try again."
   successfully_created: "%{entity} was successfully created."
   successfully_updated: "%{entity} was successfully updated."
+  successfully_restored: "%{entity} was successfully restored."
   successfully_deleted: "%{entity} was successfully deleted."
   error_deleting: "General is the default category. It cannot be deleted."
   article:
     slug:
       immutable: "is immutable!"
+  redirection:
+    cyclic_redirection: "This redirection creates cycle. It cannot be created."
+    same_path: "From path and To path cannot be same."

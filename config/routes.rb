@@ -7,6 +7,7 @@ Rails.application.routes.draw do
         member do
           patch :reorder
           patch :transfer
+          patch :restore
         end
       end
       resources :categories, except: %i[new edit] do

@@ -66,3 +66,5 @@ gem "acts_as_list"
 gem "bcrypt", "~> 3.1.13"
 
 gem "simplecov", require: false, group: :test
+
+gem "paper_trail"

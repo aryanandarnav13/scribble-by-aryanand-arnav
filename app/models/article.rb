@@ -2,6 +2,7 @@
 
 class Article < ApplicationRecord
   acts_as_list scope: :category
+  has_paper_trail on: [:update]
   enum status: { Draft: "Draft", Publish: "Publish" }
   validates :title, presence: true, length: { maximum: 255 },
     format: { with: /\A[a-zA-Z0-9\s]+\z/, message: "is invalid" }

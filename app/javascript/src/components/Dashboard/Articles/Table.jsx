@@ -14,6 +14,7 @@ const Table = ({
   setFilteredPublishCount,
 }) => {
   const [articles, setArticles] = useState([]);
+  const [pageNo, setPageNo] = useState(1);
 
   const fetchArticles = async () => {
     try {
@@ -37,8 +38,12 @@ const Table = ({
   return (
     <NeetoUITable
       columnData={buildArticleTableColumnData(columnFilter, fetchArticles)}
-      defaultPageSize={20}
+      currentPageNumber={pageNo}
+      defaultPageSize={10}
       rowData={articles}
+      handlePageChange={page => {
+        setPageNo(page);
+      }}
       onRowClick={() => {}}
       onRowSelect={() => {}}
     />

@@ -10,6 +10,7 @@ const ArticleOperations = ({ id, fetchArticles }) => {
     try {
       await articlesApi.destroy(id);
       fetchArticles();
+      window.location.reload();
     } catch (error) {
       logger.error(error);
     }

@@ -153,6 +153,7 @@ const ManageCategories = () => {
       {open && (
         <ArticleTransferConfirmation
           category={categoryToTransferTo}
+          categoryToDisplay={categoryToDisplay}
           checkedArticle={checkedArticle}
           fetchArticles={fetchArticles}
           fetchCategories={fetchCategories}

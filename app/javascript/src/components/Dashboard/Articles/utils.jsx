@@ -1,5 +1,9 @@
 import React from "react";
 
+import { Typography } from "antd";
+import { Tooltip } from "neetoui";
+import { Link } from "react-router-dom";
+
 import ArticleOperations from "./ArticleOperations";
 
 export const buildArticleTableColumnData = (columnFilter, fetchArticles) =>
@@ -9,6 +13,13 @@ export const buildArticleTableColumnData = (columnFilter, fetchArticles) =>
       key: "title",
       title: "Title",
       width: "20%",
+      render: (title, { id }) => (
+        <Tooltip content="Click to edit article." position="bottom">
+          <Link to={`/articles/${id}/edit`}>
+            <Typography>{title}</Typography>
+          </Link>
+        </Tooltip>
+      ),
     },
     {
       dataIndex: "date",

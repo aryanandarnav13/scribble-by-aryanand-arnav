@@ -19,6 +19,11 @@ const reorder = (id, payload) =>
 
 const destroy = id => axios.delete(`/api/articles/${id}`);
 
+const restore = ({ id, versionAt }) =>
+  axios.patch(`/api/articles/${id}/restore`, {
+    version_at: versionAt,
+  });
+
 const transfer = payload =>
   axios.patch(
     `/api/articles/${payload.article_ids}/transfer/?new_category_id=${payload.new_category_id}`
@@ -31,6 +36,7 @@ const articlesApi = {
   transfer,
   update,
   reorder,
+  restore,
   destroy,
 };
 
