@@ -6,13 +6,13 @@ import { Scrollable } from "neetoui/layouts";
 import { formatDateAndTime } from "../../Settings/ManageCategories/utils";
 
 const VersionHistory = ({
-  setRestoringArticle,
+  setArticleToBeRestored,
   setArticleVersionDetails,
   setShowModal,
   articleVersions,
   categories,
   setCategoryTitle,
-  setCategoryNotExists,
+  setCategoryDeletedInfo,
   articleVersionDetails,
   articleDetails,
 }) => {
@@ -22,16 +22,16 @@ const VersionHistory = ({
     );
     if (category) {
       setCategoryTitle(category?.name);
-      setCategoryNotExists(false);
+      setCategoryDeletedInfo(false);
     } else {
       setCategoryTitle("Category Deleted");
-      setCategoryNotExists(true);
+      setCategoryDeletedInfo(true);
     }
   };
 
   const fetchData = articleVersion => {
     setArticleVersionDetails(articleVersion.object);
-    setRestoringArticle(articleVersion);
+    setArticleToBeRestored(articleVersion);
     setShowModal(true);
   };
 

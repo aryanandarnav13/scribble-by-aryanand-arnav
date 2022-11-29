@@ -4,7 +4,7 @@ import { Typography } from "antd";
 import { Tooltip } from "neetoui";
 import { Link } from "react-router-dom";
 
-import ArticleOperations from "./ArticleOperations";
+import TableActions from "./TableActions";
 
 export const buildArticleTableColumnData = (columnFilter, fetchArticles) =>
   [
@@ -51,7 +51,7 @@ export const buildArticleTableColumnData = (columnFilter, fetchArticles) =>
       key: "actions",
       width: "10%",
       render: (_, { id }) => (
-        <ArticleOperations fetchArticles={fetchArticles} id={id} />
+        <TableActions fetchArticles={fetchArticles} id={id} />
       ),
     },
   ].filter(

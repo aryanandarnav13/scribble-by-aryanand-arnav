@@ -13,7 +13,7 @@ import {
 } from "components/Dashboard/Articles/constants";
 import NavBar from "components/NavBar";
 
-const NewArticle = () => {
+const Create = () => {
   const [submitted, setSubmitted] = useState(false);
   const [categories, setCategories] = useState([]);
   const [users, setUsers] = useState([]);
@@ -151,4 +151,4 @@ const NewArticle = () => {
   );
 };
 
-export default NewArticle;
+export default Create;

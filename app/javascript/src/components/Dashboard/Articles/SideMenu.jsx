@@ -7,7 +7,7 @@ import { MenuBar } from "neetoui/layouts";
 import articlesApi from "apis/articles";
 import categoriesApi from "apis/categories";
 
-import Create from "./NewCategory/Create";
+import Create from "./Category/Create";
 
 const SideMenu = ({
   articleFilterConstraint,
