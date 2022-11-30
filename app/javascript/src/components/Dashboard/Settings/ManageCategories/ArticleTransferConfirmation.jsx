@@ -39,7 +39,7 @@ const ArticleTransferConfirmation = ({
     <Alert
       closeButton={false}
       isOpen={open}
-      message={`Are you sure you want to transfer these ${checkedArticle.article.length} articles from ${categoryToDisplay.name} category to ${category?.name} category?`}
+      message={`Are you sure you want to transfer ${checkedArticle.article.length} article(s) from ${categoryToDisplay.name} category to ${category?.name} category?`}
       onClose={() => setOpen(false)}
       onSubmit={handleArticleTransfer}
     />

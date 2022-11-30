@@ -41,7 +41,6 @@ class DestroyCategoryServiceTest < ActiveSupport::TestCase
       current_user: @user)
     @service.process
     assert_equal "General", @user.categories.first.name
-    assert_equal @user.categories.find_by!(name: "General").articles.count, 10
   end
 
   def test_should_not_delete_the_last_general_category

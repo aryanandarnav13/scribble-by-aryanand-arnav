@@ -27,7 +27,7 @@ class Api::ArticlesController < ApplicationController
 
   def transfer
     TransferArticleService.new(
-      article_ids: params[:id], new_category_id: params[:new_category_id],
+      article_ids: params[:article_ids], new_category_id: params[:new_category_id],
       current_user: current_user).process
   end
 
