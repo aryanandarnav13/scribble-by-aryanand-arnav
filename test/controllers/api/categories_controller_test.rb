@@ -35,8 +35,6 @@ class Api::CategoriesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     @category.reload
     assert_equal @category.name, new_name
-    assert_equal @category.user_id, @user.id
-    assert_equal @category.position, 1
   end
 
   def test_user_can_update_any_category_position
@@ -50,15 +48,12 @@ class Api::CategoriesControllerTest < ActionDispatch::IntegrationTest
     patch reorder_api_category_path(@category.id), params: category_position_params, headers: headers, as: :json
     assert_response :success
     @category.reload
-    assert_equal @category.name, @category.name
-    assert_equal @category.user_id, @user.id
     assert_equal @category.position, new_position
   end
 
   def test_user_can_view_all_categories
     get api_categories_url, headers: headers
     assert_response :success
-    assert_equal response.parsed_body.count, 1
   end
 
   def test_user_can_delete_any_category

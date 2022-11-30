@@ -13,7 +13,7 @@ class TransferArticleServiceTest < ActiveSupport::TestCase
   def test_should_move_article_to_new_category
     @category1 = create(:category, user: @user)
     @article1 = create(:article, category: @category, user: @user)
-    articleArray = "#{@article1.id},#{@article.id}"
+    articleArray = [@article1.id, @article.id]
     @service = TransferArticleService.new(
       article_ids: articleArray, new_category_id: @category1.id, current_user: @user)
     @service.process

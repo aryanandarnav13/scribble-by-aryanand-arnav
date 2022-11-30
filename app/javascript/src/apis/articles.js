@@ -24,10 +24,7 @@ const restore = ({ id, versionAt }) =>
     version_at: versionAt,
   });
 
-const transfer = payload =>
-  axios.patch(
-    `/api/articles/${payload.article_ids}/transfer/?new_category_id=${payload.new_category_id}`
-  );
+const transfer = payload => axios.patch(`/api/articles/transfer`, payload);
 
 const articlesApi = {
   create,

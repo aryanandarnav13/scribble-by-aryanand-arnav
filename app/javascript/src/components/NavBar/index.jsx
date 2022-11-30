@@ -2,7 +2,7 @@ import React from "react";
 
 import { ExternalLink } from "@bigbinary/neeto-icons";
 import { Header } from "@bigbinary/neetoui/layouts";
-import { Button, Typography, Tag } from "neetoui";
+import { Button, Typography } from "neetoui";
 import { NavLink } from "react-router-dom";
 
 const NavBar = ({ articleStatus }) => (
@@ -12,19 +12,19 @@ const NavBar = ({ articleStatus }) => (
         <div className="flex items-center justify-end">
           {articleStatus &&
             (articleStatus === "Draft" ? (
-              <Tag
-                className="mr-5 bg-yellow-200"
-                label="Draft"
-                size="large"
-                style="outline"
-              />
+              <Typography
+                className="neeto-ui-rounded neeto-ui-bg-pastel-yellow neeto-ui-text-warning-500 mr-4 py-1 px-3"
+                style="h5"
+              >
+                Draft
+              </Typography>
             ) : (
-              <Tag
-                className=" mr-5 bg-green-300"
-                label="Published"
-                size="large"
-                style="outline"
-              />
+              <Typography
+                className="neeto-ui-rounded neeto-ui-bg-success-500 neeto-ui-text-white mr-4 py-1 px-3"
+                style="h5"
+              >
+                Published
+              </Typography>
             ))}
           <Button
             icon={ExternalLink}

@@ -11,6 +11,8 @@ class Api::Public::ArticlesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_user_should_get_only_published_articles
+    published_article = create(:article, category: @category, user: @user, status: "Publish")
+    drafted_article = create(:article, category: @category, user: @user, status: "Draft")
     get api_articles_path,
       params: {
         statusFilter: "Publish",
@@ -18,6 +20,6 @@ class Api::Public::ArticlesControllerTest < ActionDispatch::IntegrationTest
       }, headers: headers
     assert_response :success
     response_json = response.parsed_body
-    assert_equal response_json["articles"].count, 0
+    assert_equal response_json["articles"][0]["status"], "Publish"
   end
 end

@@ -20,11 +20,11 @@ def create_sample_data!
   Site.create!(name: "Spinkart", password: "welcome1", password_enabled: true)
   User.create!(name:'Oliver Smith', email:'oliver@example.com', site_id: Site.first.id)
   categories = YAML.load_file("lib/assets/categories.yml")
-  for category in categories
+  categories.each do |category|
     User.first.categories.create!(category)
   end
   articles = YAML.load_file("lib/assets/articles.yml")
-  for article in articles
+  articles.each do |article|
     article["category_id"] = Category.first.id
     User.first.articles.create!(article)
   end
