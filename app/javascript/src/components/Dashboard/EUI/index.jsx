@@ -36,7 +36,11 @@ const Eui = ({ siteName }) => {
 
   return (
     <div>
-      <EuiNavBar setShowModal={setShowModal} siteName={siteName} />
+      <EuiNavBar
+        setShowModal={setShowModal}
+        showModal={showModal}
+        siteName={siteName}
+      />
       <EuiBody articles={articles} categories={categories} />
       <SearchArticleModal
         articles={articles}
