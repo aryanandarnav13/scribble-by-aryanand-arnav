@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Search } from "@bigbinary/neeto-icons";
+import { Search, DownArrow, UpArrow } from "@bigbinary/neeto-icons";
 import { Modal, Input } from "neetoui";
 import { useHistory } from "react-router-dom";
 
@@ -51,6 +51,17 @@ const SearchArticleModal = ({ showModal, setShowModal, articles }) => {
               {article.title}
             </div>
           ))}
+        <div className="flex flex-row items-center  border-t-2 bg-gray-200 p-2 ">
+          <div className="flex">
+            <UpArrow size={16} />
+            <DownArrow size={16} />
+            <div className="text-xs">to navigate</div>
+          </div>
+          <div className="py- ml-4 mr-1 rounded-full border-gray-500 bg-gray-400 p-1 px-1 text-xs">
+            Enter
+          </div>
+          <div className="text-xs">to select</div>
+        </div>
       </div>
     </Modal>
   );
