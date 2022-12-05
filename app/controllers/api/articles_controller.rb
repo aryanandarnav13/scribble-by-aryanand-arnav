@@ -5,10 +5,12 @@ class Api::ArticlesController < ApplicationController
   before_action :load_article!, only: %i[show update destroy reorder restore]
 
   def index
-    @articles = current_user.articles.order("position ASC")
+    @articles = current_user.articles.order("position ASC").page(params[:page_number])
     @articles = FilterSearchArticleService.new(
       articles: @articles, categoriesFilter: params[:categoriesFilter],
       searchFilter: params[:searchFilter], statusFilter: params[:statusFilter]).process
+    @published_articles_count = current_user.articles.where(status: "Publish").count
+    @drafted_articles_count = current_user.articles.where(status: "Draft").count
   end
 
   def create

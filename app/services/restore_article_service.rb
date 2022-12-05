@@ -21,8 +21,8 @@ class RestoreArticleService
     end
     @article.save!
 
-    created_version = article.versions.last
-    created_version.object["restored"] = true
+    created_version = @article.versions.last
+    created_version.object["restored"] = @version_at
     created_version.save!
   end
 end

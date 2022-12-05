@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Article < ApplicationRecord
+  MAX_PAGE_SIZE = 10
   acts_as_list scope: :category
   has_paper_trail on: [:update]
   enum status: { Draft: "Draft", Publish: "Publish" }
@@ -11,21 +12,21 @@ class Article < ApplicationRecord
   validate :slug_not_changed
   belongs_to :category
   belongs_to :user
-  before_create :set_slug
-  before_update :set_slug
+  has_many :views
+  before_create :set_slug, if: -> { status == "Publish" }
+  before_update :set_slug, if: -> { status == "Publish" && self.slug == nil }
+  paginates_per MAX_PAGE_SIZE
 
   private
 
     def set_slug
-      if self.status == "Publish" && self.slug == nil
-        itr = 1
-        loop do
-          title_slug = title.parameterize
-          slug_candidate = itr > 1 ? "#{title_slug}-#{itr}" : title_slug
-          break self.slug = slug_candidate unless Article.exists?(slug: slug_candidate)
+      itr = 1
+      loop do
+        title_slug = title.parameterize
+        slug_candidate = itr > 1 ? "#{title_slug}-#{itr}" : title_slug
+        break self.slug = slug_candidate unless Article.exists?(slug: slug_candidate)
 
-          itr += 1
-        end
+        itr += 1
       end
     end
 

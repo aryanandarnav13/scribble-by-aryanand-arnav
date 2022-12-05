@@ -84,6 +84,8 @@ const Articles = () => {
           <Table
             articleFilterConstraint={articleFilterConstraint}
             columnFilter={columnFilter}
+            filteredDraftCount={filteredDraftCount}
+            filteredPublishCount={filteredPublishCount}
             searchArticle={searchArticle}
             setFilteredDraftCount={setFilteredDraftCount}
             setFilteredPublishCount={setFilteredPublishCount}

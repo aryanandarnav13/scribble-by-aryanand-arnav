@@ -10,3 +10,4 @@ json.slug @article.slug
 json.versions @article.versions
 json.id @article.id
 json.status @article.status
+json.updated_at @article.updated_at

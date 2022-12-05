@@ -23,10 +23,11 @@ const EuiBody = ({ articles, categories }) => {
   const handleActiveCategory = () => {
     const activeArticle = articles.find(article => article.slug === slug);
     if (activeArticle) {
-      const activeCategory = categories.find(
+      const activeCategoryPosition = categories.findIndex(
         category => category.name === activeArticle.category
       );
-      setSelectedCategoryPosition(activeCategory?.position);
+
+      setSelectedCategoryPosition(activeCategoryPosition);
     } else if (articles && articles.length > 0) {
       history.push(`${url}/${articles[0].slug}`);
     }
@@ -44,9 +45,9 @@ const EuiBody = ({ articles, categories }) => {
   return (
     <div className="flex">
       <MenuBar showMenu>
-        <Accordion defaultActiveKey={selectedCategoryPosition - 1}>
-          {categories.map((category, idx) => (
-            <Accordion.Item isOpen key={idx} title={category.name}>
+        <Accordion defaultActiveKey={selectedCategoryPosition}>
+          {categories.map(category => (
+            <Accordion.Item isOpen key={category.id} title={category.name}>
               {articles.map(
                 (article, index) =>
                   article.category === category.name && (
