@@ -85,7 +85,7 @@ const EditArticle = () => {
 
   useEffect(() => {
     fetchArticleDetails();
-  }, [id]);
+  }, [id, articleVersions]);
 
   return (
     <div>

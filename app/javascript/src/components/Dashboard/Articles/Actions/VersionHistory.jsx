@@ -50,15 +50,45 @@ const VersionHistory = ({
       <Typography className="mb-2" style="body2">
         Version history of {articleDetails.title} in Scribble.
       </Typography>
+      <Typography className="mb-4" style="body3">
+        <div className="rounded my-3 mr-4 flex items-baseline border-black bg-gray-200 p-4">
+          <div>
+            <Typography className="neeto-ui-text-gray-500" style="body3">
+              {formatDateAndTime(articleDetails.updated_at)}
+            </Typography>
+            <Typography className="font-bold" style="body3">
+              Current version
+            </Typography>
+          </div>
+          <Typography
+            className="neeto-ui-gray-700 rounded ml-4 p-1"
+            style="body2"
+            weight="semibold"
+          >
+            Article {articleDetails.status}ed
+          </Typography>
+        </div>
+      </Typography>
       <Scrollable>
         {articleVersions.length > 0 &&
-          articleVersions.map(articleVersion => (
-            <div className="my-5 flex items-baseline" key={articleVersion.id}>
-              <Typography className="neeto-ui-text-gray-500" style="body2">
-                {formatDateAndTime(articleVersion.created_at)}
-              </Typography>
+          articleVersions.reverse().map(articleVersion => (
+            <div
+              className="my-3 mr-4 flex items-baseline border-black bg-gray-100 p-4"
+              key={articleVersion.id}
+            >
+              <div>
+                <Typography className="neeto-ui-text-gray-500" style="body3">
+                  {formatDateAndTime(articleVersion.created_at)}
+                </Typography>
+                {articleVersion.object.restored && (
+                  <Typography className="neeto-ui-text-gray-500 " style="body3">
+                    (Restored from{" "}
+                    {formatDateAndTime(articleVersion.object.restored)})
+                  </Typography>
+                )}
+              </div>
               <Typography
-                className="neeto-ui-text-primary-500 ml-2 cursor-pointer"
+                className="neeto-ui-text-primary-500 ml-4 cursor-pointer"
                 style="body2"
                 weight="semibold"
                 onClick={() => {
