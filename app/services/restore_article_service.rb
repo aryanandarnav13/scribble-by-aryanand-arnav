@@ -10,12 +10,14 @@ class RestoreArticleService
   end
 
   def process
+    original_slug = @article.slug
     @article = article.paper_trail.version_at(version_at)
     old_category = find_old_category
 
     handle_deleted_old_category if old_category == nil
 
     @article.restored_at = restored_at
+    @article.slug = original_slug
     @article.save!
   end
 

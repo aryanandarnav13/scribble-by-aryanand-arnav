@@ -85,34 +85,34 @@ const VersionHistory = ({
             >
               <div>
                 <Typography className="neeto-ui-text-gray-500" style="body3">
-                  {formatDateAndTime(articleVersion.object.updated_at)}
+                  {formatDateAndTime(articleVersion.object?.updated_at)}
                 </Typography>
-                {articleVersion.object.restored_at && (
+                {articleVersion.object?.restored_at && (
                   <Typography className="neeto-ui-text-gray-500 " style="body3">
                     (Restored from{" "}
-                    {formatDateAndTime(articleVersion.object.restored_at)})
+                    {formatDateAndTime(articleVersion.object?.restored_at)})
                   </Typography>
                 )}
               </div>
               <Tooltip
                 content="Click to restore this version."
-                disabled={articleVersion.object.restored_at}
+                disabled={articleVersion.object?.restored_at}
                 position="bottom"
               >
                 <Typography
                   style="body2"
                   weight="semibold"
                   className={
-                    !articleVersion.object.restored_at
+                    !articleVersion.object?.restored_at
                       ? "neeto-ui-text-primary-800 ml-4 cursor-pointer capitalize"
                       : "neeto-ui-text-primary-500 ml-4 capitalize"
                   }
                   onClick={() => {
-                    !articleVersion.object.restored_at &&
+                    !articleVersion.object?.restored_at &&
                       fetchData(articleVersion);
                   }}
                 >
-                  Article {articleVersion && articleVersion.object.status}
+                  Article {articleVersion && articleVersion.object?.status}
                 </Typography>
               </Tooltip>
             </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { Formik, Form } from "formik";
 import { Check } from "neetoicons";
@@ -6,7 +6,6 @@ import { Button } from "neetoui";
 import { Input } from "neetoui/formik";
 
 import categoriesApi from "apis/categories";
-import userApi from "apis/users";
 import {
   CATEGORY_INITIAL_VALUES,
   CATEGORY_VALIDATION_SCHEMA,
@@ -14,22 +13,11 @@ import {
 
 const Create = ({ fetchCategoriesList }) => {
   const [submitted, setSubmitted] = useState(false);
-  const [users, setUsers] = useState([]);
-
-  const fetchUsers = async () => {
-    try {
-      const response = await userApi.list();
-      setUsers(response.data);
-    } catch (error) {
-      logger.error(error);
-    }
-  };
 
   const handleSubmit = async values => {
     try {
       values = {
         ...values,
-        user_id: users.id,
       };
       await categoriesApi.create(values);
     } catch (err) {
@@ -38,10 +26,6 @@ const Create = ({ fetchCategoriesList }) => {
     fetchCategoriesList();
     setSubmitted(true);
   };
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
 
   return (
     <Formik

@@ -3,24 +3,26 @@ import React, { useState, useEffect, useRef } from "react";
 import { Formik, Form } from "formik";
 import { Button, Typography } from "neetoui";
 import { Input, Checkbox } from "neetoui/formik";
-import * as yup from "yup";
 
 import siteApi from "apis/sites";
 
-import { PasswordForm } from "./PasswordForm";
+import { siteSchema } from "./constants";
 
 const General = () => {
   const [isPasswordInputDisabled, setIsPasswordInputDisabled] = useState(true);
   const [passwordEnabled, setPasswordEnabled] = useState(false);
   const [siteName, setSiteName] = useState("");
   const passwordFocus = useRef(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchSiteDetails = async () => {
     try {
+      setLoading(true);
       const response = await siteApi.list();
       logger.info(response.data);
       setSiteName(response.data.name);
       setPasswordEnabled(response.data.password_enabled);
+      setLoading(false);
     } catch (error) {
       logger.error(error);
     }
@@ -36,9 +38,9 @@ const General = () => {
           password_enabled: values.password_enabled,
         },
       });
-      if (values.password_enabled === true) {
-        localStorage.setItem("authToken", JSON.stringify(null));
-      }
+
+      localStorage.setItem("authToken", JSON.stringify(null));
+      fetchSiteDetails();
     } catch (error) {
       logger.error(error);
     } finally {
@@ -56,6 +58,10 @@ const General = () => {
     }
   }, [isPasswordInputDisabled]);
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="w-400  mx-auto">
       <Formik
@@ -66,23 +72,13 @@ const General = () => {
           password: "",
           password_enabled: passwordEnabled,
         }}
-        validationSchema={yup.object().shape({
-          name: yup.string().required("Please Enter a Site name"),
-          password: yup
-            .string()
-            .min(6, "Require atleast 6 character")
-            .matches(
-              /(?=.*?[0-9])(?=.*?[A-Za-z]).+/,
-              "Requires atleast 1 number and letter"
-            )
-            .when("password_enabled", {
-              is: true,
-              then: yup.string().required("Please enter password"),
-            }),
+        validationSchema={siteSchema({
+          isPasswordInputDisabled,
+          passwordEnabled,
         })}
         onSubmit={values => handleSubmit(values)}
       >
-        {({ errors, values, setFieldValue }) => (
+        {({ dirty }) => (
           <Form className="mt-4">
             <div className="mb-3 border-b-2 pb-5">
               <Typography style="h2">General Settings</Typography>
@@ -117,25 +113,36 @@ const General = () => {
             />
             <div>
               {passwordEnabled && (
-                <PasswordForm
-                  errors={errors}
-                  isPasswordInputDisabled={isPasswordInputDisabled}
-                  password={values.password}
-                  passwordFocus={passwordFocus}
-                  setFieldValue={setFieldValue}
-                  setIsPasswordInputDisabled={setIsPasswordInputDisabled}
-                />
+                <div className="flex gap-3 px-1">
+                  <Input
+                    className="mt-5"
+                    disabled={isPasswordInputDisabled}
+                    label="Password"
+                    name="password"
+                    ref={passwordFocus}
+                    type="password"
+                    placeholder={
+                      !isPasswordInputDisabled ? "Enter Password" : "********"
+                    }
+                  />
+                  <Button
+                    className="mt-10 h-8"
+                    label="Enter Password"
+                    size="small"
+                    style="secondary"
+                    onClick={() => {
+                      setIsPasswordInputDisabled(false);
+                    }}
+                  />
+                </div>
               )}
             </div>
             <div className="my-4">
               <Button
                 className="bg-indigo-500 "
+                disabled={isPasswordInputDisabled === passwordEnabled && !dirty}
                 label="Save Changes"
                 type="submit"
-                disabled={
-                  isPasswordInputDisabled === passwordEnabled
-                  //  && !(Formik.isValid && Formik.dirty)
-                }
               />
               <Button
                 className="ml-6"

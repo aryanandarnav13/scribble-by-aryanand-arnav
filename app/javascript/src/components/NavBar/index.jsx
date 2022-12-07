@@ -11,7 +11,7 @@ const NavBar = ({ articleStatus }) => (
       actionBlock={
         <div className="flex items-center justify-end">
           {articleStatus &&
-            (articleStatus === "Draft" ? (
+            (articleStatus === "drafted" ? (
               <Typography
                 className="neeto-ui-rounded neeto-ui-bg-pastel-yellow neeto-ui-text-warning-500 mr-4 py-1 px-3"
                 style="h5"

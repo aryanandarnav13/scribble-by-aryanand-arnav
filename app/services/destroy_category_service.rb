@@ -15,11 +15,9 @@ class DestroyCategoryService
       new_category = create_general_category
       handle_remove_from_list
       update_articles_category(new_category.id)
-    else
-      if @new_category_id != nil
-        handle_remove_from_list
-        update_articles_category(new_category_id)
-      end
+    elsif @new_category_id != nil
+      handle_remove_from_list
+      update_articles_category(new_category_id)
     end
     handle_delete_category
   end

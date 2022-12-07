@@ -7,7 +7,6 @@ import { useHistory, useParams } from "react-router-dom";
 
 import articlesApi from "apis/articles";
 import categoriesApi from "apis/categories";
-import userApi from "apis/users";
 import { RestoreArticle as RestoreArticleModal } from "components/Dashboard/Articles/Actions/Restore";
 import VersionHistory from "components/Dashboard/Articles/Actions/VersionHistory";
 import { ARTICLE_VALIDATION_SCHEMA } from "components/Dashboard/Articles/constants";
@@ -15,7 +14,6 @@ import NavBar from "components/NavBar";
 
 const EditArticle = () => {
   const [submitted, setSubmitted] = useState(false);
-  const [users, setUsers] = useState([]);
   const [categories, setCategories] = useState([]);
   const { Menu, MenuItem } = ActionDropdown;
   const [articleStatus, setArticleStatus] = useState("drafted");
@@ -23,11 +21,11 @@ const EditArticle = () => {
   const [articleToBeRestored, setArticleToBeRestored] = useState([]);
   const [articleVersions, setArticleVersions] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const history = useHistory();
-  const { id } = useParams();
   const [articleVersionDetails, setArticleVersionDetails] = useState({});
   const [categoryTitle, setCategoryTitle] = useState("");
   const [categoryDeletedInfo, setCategoryDeletedInfo] = useState(false);
+  const { id } = useParams();
+  const history = useHistory();
 
   const fetchCategories = async () => {
     try {
@@ -52,15 +50,6 @@ const EditArticle = () => {
     }
   };
 
-  const fetchUsers = async () => {
-    try {
-      const response = await userApi.list();
-      setUsers(response.data);
-    } catch (error) {
-      logger.error(error);
-    }
-  };
-
   const handleEdit = async values => {
     const { title, body } = values;
     const category_id = values.category.value;
@@ -69,7 +58,6 @@ const EditArticle = () => {
       body,
       category_id,
       status: articleStatus,
-      user_id: users.id,
       restored_at: null,
     };
     setSubmitted(true);
@@ -83,7 +71,6 @@ const EditArticle = () => {
 
   useEffect(() => {
     fetchCategories();
-    fetchUsers();
   }, []);
 
   useEffect(() => {

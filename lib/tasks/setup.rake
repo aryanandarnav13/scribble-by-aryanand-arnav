@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "faker"
 desc "drops the db, creates db, migrates db and populates sample data"
 task setup: [:environment, "db:drop", "db:create", "db:migrate"] do
   Rake::Task["populate_with_sample_data"].invoke if Rails.env.development?
@@ -10,22 +11,48 @@ task populate_with_sample_data: [:environment] do
     puts "Skipping deleting and populating sample data in production"
   else
     Rake::Task["db:schema:load"].invoke
-    create_sample_data!
+    create_sample_site!
+    create_sample_user!
+    create_sample_categories!
+    create_sample_drafted_articles!
+    create_sample_published_articles!
     puts "sample data has been added."
   end
 end
 
-def create_sample_data!
-  puts "Seeding with sample data..."
-  Site.create!(name: "Spinkart", password: "welcome1", password_enabled: true)
-  User.create!(name:'Oliver Smith', email:'oliver@example.com', site_id: Site.first.id)
-  categories = YAML.load_file("lib/assets/categories.yml")
-  categories.each do |category|
-    User.first.categories.create!(category)
+def create_sample_site!
+  Site.create!(name: "Spinkart")
+end
+
+def create_sample_user!
+  User.create!(name: "Oliver Smith", email: "oliver@example.com", site_id: Site.first.id)
+end
+
+def create_sample_categories!
+  4.times do
+    User.first.categories.create!(
+      name: Faker::Lorem.word,
+    )
   end
-  articles = YAML.load_file("lib/assets/articles.yml")
-  articles.each do |article|
-    article["category_id"] = Category.first.id
-    User.first.articles.create!(article)
+end
+
+def create_sample_drafted_articles!
+  Category.all.each do |category|
+    User.first.articles.create!(
+      title: Faker::Alphanumeric.alphanumeric(number: 10),
+      body: Faker::Lorem.paragraph,
+      category_id: category.id,
+    )
+  end
+end
+
+def create_sample_published_articles!
+  Category.all.each do |category|
+    User.first.articles.create!(
+      title: Faker::Alphanumeric.alphanumeric(number: 10),
+      body: Faker::Lorem.paragraph,
+      status: "published",
+      category_id: category.id,
+    )
   end
 end
