@@ -16,11 +16,11 @@ export const REDIRECTION_ITEMS = [
 export const TABLE_HEADER = ["FROM PATH", "TO PATH", "ACTIONS"];
 
 export const REDIRECTION_VALIDATION_SCHEMA = yup.object().shape({
-  frompath: yup
+  from: yup
     .string()
     .required("From path is required")
     .matches(/^(?!\/\/)^(?!(^[a-zA-Z0-9\s]))/, "Invalid from path"),
-  topath: yup
+  to: yup
     .string()
     .required("From path is required")
     .matches(/^(?!\/\/)^(?!(^[a-zA-Z0-9\s]))/, "Invalid to path"),

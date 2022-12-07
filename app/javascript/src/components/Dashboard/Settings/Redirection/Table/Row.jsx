@@ -38,14 +38,14 @@ const Row = ({ redirection, fetchRedirectionsDetails, setAddRedirection }) => {
         style={{ maxWidth: "300px", minWidth: "300px" }}
       >
         {window.location.hostname}:{window.location.port}
-        {redirection.frompath}
+        {redirection.from}
       </div>
       <div
         className="mt-2 overflow-x-auto"
         style={{ maxWidth: "280px", minWidth: "280px" }}
       >
         {window.location.hostname}:{window.location.port}
-        {redirection.topath}
+        {redirection.to}
       </div>
       <div className="mt-1 ml-4 pr-2">
         <Button

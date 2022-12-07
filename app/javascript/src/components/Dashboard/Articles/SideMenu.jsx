@@ -42,8 +42,8 @@ const SideMenu = ({
         searchFilter: "",
       };
       const response = await articlesApi.list(payload);
-      setTotalDraftCount(response.data.draft);
-      setTotalPublishCount(response.data.publish);
+      setTotalDraftCount(response.data.drafted);
+      setTotalPublishCount(response.data.published);
     } catch (err) {
       logger.error(err);
     }
@@ -86,16 +86,16 @@ const SideMenu = ({
         onClick={() => handleStatus("All")}
       />
       <MenuBar.Block
-        active={articleFilterConstraint.status === "Draft"}
+        active={articleFilterConstraint.status === "drafted"}
         count={totalDraftCount}
         label="Draft"
-        onClick={() => handleStatus("Draft")}
+        onClick={() => handleStatus("drafted")}
       />
       <MenuBar.Block
-        active={articleFilterConstraint.status === "Publish"}
+        active={articleFilterConstraint.status === "published"}
         count={totalPublishCount}
         label="Published"
-        onClick={() => handleStatus("Publish")}
+        onClick={() => handleStatus("published")}
       />
       <MenuBar.SubTitle
         iconProps={[

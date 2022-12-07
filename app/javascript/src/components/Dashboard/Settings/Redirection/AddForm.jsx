@@ -4,8 +4,8 @@ import { Form } from "./Form";
 
 const AddForm = ({ setAddRedirection, fetchRedirectionsDetails }) => {
   const redirection = {
-    frompath: "/",
-    topath: "/",
+    from: "/",
+    to: "/",
   };
 
   return (

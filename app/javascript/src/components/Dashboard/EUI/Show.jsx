@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 
 import { Typography } from "neetoui";
 
-import publicApi from "apis/public";
+import publicArticlesApi from "apis/public/articles";
 
 const Show = ({ slug }) => {
   const [displayArticle, setDisplayArticle] = useState({});
 
   const fetchDisplayArticles = async () => {
     try {
-      const response = await publicApi.show(slug);
+      const response = await publicArticlesApi.show(slug);
       setDisplayArticle(response?.data);
     } catch (error) {
       logger.error(error);

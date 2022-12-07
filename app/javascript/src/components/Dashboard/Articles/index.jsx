@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { ActionDropdown, Button, Checkbox } from "neetoui";
 import { Container, Header } from "neetoui/layouts";
+
+import articlesApi from "apis/articles";
 
 import { filterItems, camelize } from "./constants";
 import SideMenu from "./SideMenu";
@@ -12,6 +14,8 @@ import NavBar from "../../NavBar";
 const Articles = () => {
   const [searchArticle, setSearchArticle] = useState("");
   const { Menu, MenuItem } = ActionDropdown;
+  const [articles, setArticles] = useState([]);
+  const [pageNo, setPageNo] = useState(1);
   const [columnFilter, setColumnFilter] = useState(filterItems);
   const [totalDraftCount, setTotalDraftCount] = useState(0);
   const [totalPublishCount, setTotalPublishCount] = useState(0);
@@ -23,11 +27,34 @@ const Articles = () => {
   });
 
   const handleColumnCheck = e => {
-    setColumnFilter({
-      ...columnFilter,
-      [e.target.name]: e.target.checked,
-    });
+    if (!(e.target.name === "title" && !e.target.checked)) {
+      setColumnFilter({
+        ...columnFilter,
+        [e.target.name]: e.target.checked,
+      });
+    }
   };
+
+  const fetchArticles = async () => {
+    try {
+      const payload = {
+        statusFilter: articleFilterConstraint.status,
+        categoriesFilter: articleFilterConstraint.category,
+        searchFilter: searchArticle,
+        page_number: pageNo,
+      };
+      const response = await articlesApi.list(payload);
+      setFilteredDraftCount(response.data.drafted);
+      setFilteredPublishCount(response.data.published);
+      setArticles(response.data.articles);
+    } catch (err) {
+      logger.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchArticles();
+  }, [searchArticle, articleFilterConstraint, pageNo]);
 
   return (
     <div>
@@ -79,16 +106,16 @@ const Articles = () => {
             }}
           />
           <div className="max-w-7xl px-2 font-bold">
-            {filteredDraftCount + filteredPublishCount} Articles
+            {totalDraftCount + totalPublishCount} Articles
           </div>
           <Table
-            articleFilterConstraint={articleFilterConstraint}
+            articles={articles}
             columnFilter={columnFilter}
+            fetchArticles={fetchArticles}
             filteredDraftCount={filteredDraftCount}
             filteredPublishCount={filteredPublishCount}
-            searchArticle={searchArticle}
-            setFilteredDraftCount={setFilteredDraftCount}
-            setFilteredPublishCount={setFilteredPublishCount}
+            pageNo={pageNo}
+            setPageNo={setPageNo}
           />
         </Container>
       </div>

@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 class Api::Public::ArticlesController < ApplicationController
+  before_action :authenticate_request!
+
   def index
-    @published_articles = current_user.articles.where(status: "Publish")
-    @published_articles = @published_articles.order("position ASC").page(params[:page_number])
-    @published_articles_count = current_user.articles.where(status: "Publish").count
+    published_articles = current_user.articles.published
+    @published_articles = published_articles.order("position ASC").page(params[:page_number])
   end
 
   def show
     @article = current_user.articles.find_by!(slug: params[:slug])
-    View.create!(article_id: @article.id)
-    render
+    @article.article_visits.create!
   end
 end

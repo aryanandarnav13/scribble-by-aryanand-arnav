@@ -13,18 +13,7 @@ const General = () => {
   const [isPasswordInputDisabled, setIsPasswordInputDisabled] = useState(true);
   const [passwordEnabled, setPasswordEnabled] = useState(false);
   const [siteName, setSiteName] = useState("");
-  const [passwordValidation, setPasswordValidation] = useState({
-    minChar: false,
-    letterAndNumber: false,
-  });
   const passwordFocus = useRef(null);
-
-  const handlePassword = e => {
-    const passWord = e.target.value;
-    const minChar = passWord.length >= 6;
-    const letterAndNumber = !!/(?=.*?[0-9])(?=.*?[A-Za-z]).+/.test(passWord);
-    setPasswordValidation({ minChar, letterAndNumber });
-  };
 
   const fetchSiteDetails = async () => {
     try {
@@ -88,7 +77,7 @@ const General = () => {
             )
             .when("password_enabled", {
               is: true,
-              then: yup.string().required("Please enter  password"),
+              then: yup.string().required("Please enter password"),
             }),
         })}
         onSubmit={values => handleSubmit(values)}
@@ -130,11 +119,9 @@ const General = () => {
               {passwordEnabled && (
                 <PasswordForm
                   errors={errors}
-                  handlePassword={handlePassword}
                   isPasswordInputDisabled={isPasswordInputDisabled}
                   password={values.password}
                   passwordFocus={passwordFocus}
-                  passwordValidation={passwordValidation}
                   setFieldValue={setFieldValue}
                   setIsPasswordInputDisabled={setIsPasswordInputDisabled}
                 />
@@ -146,8 +133,8 @@ const General = () => {
                 label="Save Changes"
                 type="submit"
                 disabled={
-                  isPasswordInputDisabled === passwordEnabled &&
-                  !(Formik.isValid && Formik.dirty)
+                  isPasswordInputDisabled === passwordEnabled
+                  //  && !(Formik.isValid && Formik.dirty)
                 }
               />
               <Button

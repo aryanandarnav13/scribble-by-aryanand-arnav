@@ -23,15 +23,15 @@ export const Form = ({
         await redirectionApi.update({
           id,
           payload: {
-            frompath: values.frompath,
-            topath: values.topath,
+            from: values.from,
+            to: values.to,
           },
         }),
           setIsEdit(false);
       } else {
         await redirectionApi.create({
-          frompath: values.frompath,
-          topath: values.topath,
+          from: values.from,
+          to: values.to,
         });
         setAddRedirection(false);
       }
@@ -57,11 +57,7 @@ export const Form = ({
             <Typography className="overflow-x-auto p-1" style="body2">
               {window.location.hostname}:{window.location.port}
             </Typography>
-            <Input
-              className="ml-1"
-              name="frompath"
-              style={{ width: "160px" }}
-            />
+            <Input className="ml-1" name="from" style={{ width: "160px" }} />
           </div>
           <div
             className="whitespace-no-wrap flex overflow-y-auto"
@@ -70,11 +66,7 @@ export const Form = ({
             <Typography className="mt-2 overflow-x-auto p-1" style="body2">
               {window.location.hostname}:{window.location.port}
             </Typography>
-            <Input
-              className="ml-1 mt-2"
-              name="topath"
-              style={{ width: "160px" }}
-            />
+            <Input className="ml-1 mt-2" name="to" style={{ width: "160px" }} />
           </div>
           <div className="mt-1 ml-4 pr-2">
             <Button icon={Check} style="text" type="submit" />

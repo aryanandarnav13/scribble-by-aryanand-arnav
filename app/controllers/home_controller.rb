@@ -9,10 +9,10 @@ class HomeController < ApplicationController
   private
 
     def redirect
-      frompath = request.path
-      redirection = Redirection.find_by(frompath: frompath)
+      from = request.path
+      redirection = Redirection.find_by(from: from)
       if redirection
-        redirect_to redirection.topath, status: :moved_permanently
+        redirect_to redirection.to, status: :moved_permanently
       end
     end
 end

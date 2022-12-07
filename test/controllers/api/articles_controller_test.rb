@@ -16,7 +16,7 @@ class Api::ArticlesControllerTest < ActionDispatch::IntegrationTest
         article:
         {
           title: "test article", body: "This is a test article body",
-          user_id: @user.id, category_id: @category.id, status: "Publish", position: 1
+          user_id: @user.id, category_id: @category.id, status: "published", position: 1
         }
       }, headers: headers
     assert_response :success
@@ -29,7 +29,7 @@ class Api::ArticlesControllerTest < ActionDispatch::IntegrationTest
     article_params = {
       article:
             {
-              title: new_title, category_id: @category.id, status: "Publish", user_id: @user.id, position: 1,
+              title: new_title, category_id: @category.id, status: "published", user_id: @user.id, position: 1,
               body: "This is a test article body"
             }
     }
@@ -39,7 +39,7 @@ class Api::ArticlesControllerTest < ActionDispatch::IntegrationTest
     assert_equal @article.title, new_title
     assert_equal @article.category_id, @category.id
     assert_equal @article.user_id, @user.id
-    assert_equal @article.status, "Publish"
+    assert_equal @article.status, "published"
     assert_equal @article.body, "This is a test article body"
     response_json = response.parsed_body
     assert_equal response_json["notice"], t("successfully_updated", entity: "Article")
@@ -64,7 +64,7 @@ class Api::ArticlesControllerTest < ActionDispatch::IntegrationTest
   def test_user_can_get_all_published_articles
     get api_articles_path,
       params: {
-        statusFilter: "Publish",
+        statusFilter: "published",
         searchFilter: ""
       }, headers: headers
     assert_response :success
@@ -73,7 +73,7 @@ class Api::ArticlesControllerTest < ActionDispatch::IntegrationTest
   def test_user_can_get_all_drafted_articles
     get api_articles_path,
       params: {
-        statusFilter: "Draft",
+        statusFilter: "drafted",
         searchFilter: ""
       }, headers: headers
     assert_response :success

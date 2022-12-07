@@ -3,7 +3,7 @@ import React from "react";
 import { Typography, Modal, Button, Textarea, Input } from "neetoui";
 import { useHistory } from "react-router-dom";
 
-import articlesApi from "apis/articles";
+import articleVersionsApi from "apis/articleVersions";
 
 const RestoreArticle = ({
   showModal,
@@ -11,7 +11,7 @@ const RestoreArticle = ({
   id,
   articleToBeRestored,
   articleVersionDetails,
-  articleDetails,
+  currentArticleDetails,
   categoryTitle,
   categoryDeletedInfo,
 }) => {
@@ -19,9 +19,10 @@ const RestoreArticle = ({
 
   const restoreVersionHandle = async () => {
     try {
-      await articlesApi.restore({
+      await articleVersionsApi.update({
         id,
         versionAt: articleToBeRestored.created_at,
+        restoredAt: articleToBeRestored.object.updated_at,
       });
       history.push("/");
       setShowModal(false);
@@ -39,7 +40,7 @@ const RestoreArticle = ({
       </Modal.Header>
       <Modal.Body>
         <Typography className="mb-2" lineHeight="normal" style="body2">
-          Version history of {articleDetails.title} in Scribble.
+          Version history of {currentArticleDetails.title} in Scribble.
         </Typography>
         {categoryDeletedInfo && (
           <Typography

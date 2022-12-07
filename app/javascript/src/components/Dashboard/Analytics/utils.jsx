@@ -10,9 +10,9 @@ export const analyticsColumnData = [
     key: "title",
     title: "TITLE",
     width: 150,
-    render: (title, { id }) => (
+    render: (title, { slug }) => (
       <Tooltip content="Click to edit article." position="bottom">
-        <Link to={`/articles/${id}/edit`}>
+        <Link to={`/preview/${slug}`}>
           <Typography>{title}</Typography>
         </Link>
       </Tooltip>

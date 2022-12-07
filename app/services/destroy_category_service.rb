@@ -10,26 +10,43 @@ class DestroyCategoryService
 
   def process
     if current_user.categories.count == 1
-      if current_user.categories.find_by_id(category_id).name == "General"
-        return nil
-      end
+      return nil if find_general_category
 
-      new_category = current_user.categories.create!({ name: "General", user_id: User.first.id })
-      all_articles = current_user.articles.where(category_id: category_id)
-      all_articles.each do |article_id|
-        article = current_user.articles.find_by_id(article_id).remove_from_list
-      end
-      current_user.articles.where(category_id: category_id).update(category_id: new_category.id)
+      new_category = create_general_category
+      handle_remove_from_list
+      update_articles_category(new_category.id)
     else
       if @new_category_id != nil
-        all_articles = current_user.articles.where(category_id: category_id)
-        all_articles.each do |article_id|
-          current_user.articles.find_by_id(article_id).remove_from_list
-        end
-        current_user.articles.where(category_id: category_id).update(category_id: new_category_id)
+        handle_remove_from_list
+        update_articles_category(new_category_id)
       end
     end
-    category = current_user.categories.find_by!(id: category_id)
-    category.destroy!
+    handle_delete_category
   end
+
+  private
+
+    def handle_remove_from_list
+      all_articles = current_user.articles.where(category_id: category_id)
+      all_articles.each do |article_id|
+        current_user.articles.find_by_id(article_id).remove_from_list
+      end
+    end
+
+    def update_articles_category(id)
+      current_user.articles.where(category_id: category_id).update(category_id: id)
+    end
+
+    def create_general_category
+      current_user.categories.create!({ name: "General" })
+    end
+
+    def find_general_category
+      current_user.categories.find_by_id(category_id).name == "General"
+    end
+
+    def handle_delete_category
+      category = current_user.categories.find_by!(id: category_id)
+      category.destroy!
+    end
 end

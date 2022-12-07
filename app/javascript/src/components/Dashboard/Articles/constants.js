@@ -12,7 +12,7 @@ export const camelize = value =>
 export const ARTICLE_INITIAL_VALUES = {
   title: "",
   category_id: null,
-  status: "",
+  status: "drafted",
   body: "",
 };
 

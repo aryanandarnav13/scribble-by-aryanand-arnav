@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :redirection do
     association :site_id, factory: :site
-    topath { "/#{ Faker::Lorem.characters[0..15] }" }
-    frompath { "/#{ Faker::Lorem.characters[0..15] }" }
+    to { "/#{ Faker::Alphanumeric.alphanumeric(number: 10) }" }
+    from { "/#{ Faker::Alphanumeric.alphanumeric(number: 10) }" }
   end
 end

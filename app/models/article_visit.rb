@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-class View < ApplicationRecord
+class ArticleVisit < ApplicationRecord
   belongs_to :article
 end
