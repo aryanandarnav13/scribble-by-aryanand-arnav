@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { Table, Pagination } from "neetoui";
 
-import publicApi from "apis/public";
+import articlesApi from "apis/articles";
 import NavBar from "components/NavBar";
 
 import { analyticsColumnData } from "./utils";
@@ -15,13 +15,15 @@ const Analytics = () => {
   const fetchArticles = async () => {
     try {
       const payload = {
+        statusFilter: "published",
+        searchFilter: "",
         page_number: pageNo,
       };
-      const response = await publicApi.listArticles(payload);
-      setArticles(response?.data?.articles);
+      const response = await articlesApi.list(payload);
+      setArticles(response?.data.articles);
       setTotalCount(response?.data?.published_articles_count);
-    } catch (error) {
-      logger.error(error);
+    } catch (err) {
+      logger.error(err);
     }
   };
 
@@ -40,8 +42,8 @@ const Analytics = () => {
             expandedRowRender: record => (
               <div className="border-gray-500 bg-gray-200 p-2">
                 <div className="flex w-1/4 bg-white">
-                  <p className="ml-3">Date</p>
-                  <p className="ml-24">Visits</p>
+                  <div className="ml-3">Date</div>
+                  <div className="ml-24">Visits</div>
                 </div>
                 <div className="my-2 flex ">
                   <div>

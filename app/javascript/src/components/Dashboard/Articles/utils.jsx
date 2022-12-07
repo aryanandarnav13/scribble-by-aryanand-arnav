@@ -44,6 +44,7 @@ export const buildArticleTableColumnData = (columnFilter, fetchArticles) =>
       dataIndex: "status",
       key: "status",
       width: "15%",
+      render: status => status.charAt(0).toUpperCase() + status.slice(1),
     },
     {
       title: "",

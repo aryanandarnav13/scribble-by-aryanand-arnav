@@ -2,19 +2,19 @@
 
 class Article < ApplicationRecord
   MAX_PAGE_SIZE = 10
-  acts_as_list scope: :category
-  has_paper_trail on: [:update]
-  enum status: { Draft: "Draft", Publish: "Publish" }
+  enum status: { drafted: "drafted", published: "published" }
+  belongs_to :category
+  belongs_to :user
+  has_many :article_visits
   validates :title, presence: true, length: { maximum: 255 },
     format: { with: /\A[a-zA-Z0-9\s]+\z/, message: "is invalid" }
   validates :body, presence: true
   validates :status, presence: true
   validate :slug_not_changed
-  belongs_to :category
-  belongs_to :user
-  has_many :views
-  before_create :set_slug, if: -> { status == "Publish" }
-  before_update :set_slug, if: -> { status == "Publish" && self.slug == nil }
+  before_create :set_slug, if: -> { status == "published" }
+  before_update :set_slug, if: -> { status == "published" && self.slug == nil }
+  acts_as_list scope: :category
+  has_paper_trail on: [:update]
   paginates_per MAX_PAGE_SIZE
 
   private

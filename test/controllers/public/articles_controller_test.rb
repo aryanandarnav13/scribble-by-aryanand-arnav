@@ -11,15 +11,15 @@ class Api::Public::ArticlesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_user_should_get_only_published_articles
-    published_article = create(:article, category: @category, user: @user, status: "Publish")
-    drafted_article = create(:article, category: @category, user: @user, status: "Draft")
+    published_article = create(:article, category: @category, user: @user, status: "published")
+    drafted_article = create(:article, category: @category, user: @user, status: "drafted")
     get api_articles_path,
       params: {
-        statusFilter: "Publish",
+        statusFilter: "published",
         searchFilter: ""
       }, headers: headers
     assert_response :success
     response_json = response.parsed_body
-    assert_equal response_json["articles"][0]["status"], "Publish"
+    assert_equal response_json["articles"][0]["status"], "published"
   end
 end

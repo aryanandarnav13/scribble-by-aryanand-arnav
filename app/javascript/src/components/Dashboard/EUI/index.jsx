@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
-import publicApi from "apis/public";
+import publicArticlesApi from "apis/public/articles";
+import publicCategoriesApi from "apis/public/categories";
 
 import EuiBody from "./EuiBody";
 import EuiNavBar from "./EuiNavBar";
@@ -13,7 +14,7 @@ const Eui = ({ siteName }) => {
 
   const fetchCategories = async () => {
     try {
-      const response = await publicApi.listCategories();
+      const response = await publicCategoriesApi.listCategories();
       setCategories(response?.data?.categories);
     } catch (error) {
       logger.error(error);
@@ -22,7 +23,7 @@ const Eui = ({ siteName }) => {
 
   const fetchArticles = async () => {
     try {
-      const response = await publicApi.listArticles();
+      const response = await publicArticlesApi.listArticles();
       setArticles(response?.data?.articles);
     } catch (error) {
       logger.error(error);

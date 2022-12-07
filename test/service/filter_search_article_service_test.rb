@@ -29,12 +29,12 @@ class FilterSearchArticleServiceTest < ActiveSupport::TestCase
   end
 
   def test_user_can_get_articles_by_status
-    @article1 = create(:article, category: @category, user: @user, status: "Publish")
-    @article2 = create(:article, category: @category, user: @user, status: "Draft")
+    @article1 = create(:article, category: @category, user: @user, status: "published")
+    @article2 = create(:article, category: @category, user: @user, status: "drafted")
     @service = FilterSearchArticleService.new(
-      articles: @user.articles, statusFilter: "Publish", searchFilter: "", categoriesFilter: nil)
+      articles: @user.articles, statusFilter: "published", searchFilter: "", categoriesFilter: nil)
     @service.process
-    assert_equal @service.articles[0].status, "Publish"
+    assert_equal @service.articles[0].status, "published"
   end
 
   def test_user_can_get_articles_by_category

@@ -4,18 +4,12 @@ Rails.application.routes.draw do
   constraints(lambda { |req| req.format == :json }) do
     namespace :api do
       resources :articles, except: %i[new edit] do
-        member do
-          patch :reorder
-          patch :restore
-        end
-        collection do
-          patch :transfer
-        end
+        patch :reorder, on: :member
+        patch :transfer, on: :collection
       end
+      resources :article_versions, only: %i[update]
       resources :categories, except: %i[new edit] do
-        member do
-          patch :reorder
-        end
+        patch :reorder, on: :member
       end
       resources :redirections, except: %i[new edit]
       resource :site, except: %i[new edit]

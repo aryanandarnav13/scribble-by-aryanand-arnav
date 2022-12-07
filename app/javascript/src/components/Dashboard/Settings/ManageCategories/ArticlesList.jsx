@@ -120,7 +120,7 @@ const ArticlesList = ({
                             >
                               <Typography className="mt-2" style="body3">
                                 {`${
-                                  article.status === "Publish"
+                                  article.status === "published"
                                     ? "Published"
                                     : "Drafted"
                                 } ${calculateCreatedAgo(article.updated_at)} `}
@@ -139,7 +139,9 @@ const ArticlesList = ({
                             label={article.status}
                             type="solid"
                             style={
-                              article.status === "Publish" ? "info" : "warning"
+                              article.status === "published"
+                                ? "info"
+                                : "warning"
                             }
                           />
                         </div>

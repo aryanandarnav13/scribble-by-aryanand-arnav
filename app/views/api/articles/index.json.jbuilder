@@ -1,17 +1,14 @@
 # frozen_string_literal: true
 
 json.articles @articles do |article|
-  json.id article.id
-  json.title article.title
-  json.body article.body
-  json.updated_at article.updated_at
   json.created_at article.created_at
   json.position article.position
-  json.category article.category_id ? article.category.name : ""
-  json.status article.status
-  json.slug article.slug
-  json.date article.Publish? ? article.updated_at.strftime("%B #{article.updated_at.day.ordinalize}, %Y") : "-"
+  json.category article.category.name
+  json.views_date article.article_visits.where(article_id: article.id).group_by_day(:created_at).count
+  json.views article.article_visits.where(article_id: article.id).count
+  json.date article.published? ? article.updated_at.strftime("%B #{article.updated_at.day.ordinalize}, %Y") : "-"
   json.author article.user_id ? article.user.name : ""
+  json.partial! "api/articles/article", article: article
 end
-json.draft @drafted_articles_count
-json.publish @published_articles_count
+json.drafted @drafted_articles_count
+json.published @published_articles_count

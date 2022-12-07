@@ -16,29 +16,29 @@ class Api::RedirectionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_redirection_uniqueness
-    test_redirection2 = @site.redirections.new frompath: @redirection.frompath, topath: "test"
+    test_redirection2 = @site.redirections.new from: @redirection.from, to: "test"
     assert_not test_redirection2.valid?
   end
 
   def test_should_create_redirection
-    post api_redirections_path, params: { redirection: { frompath: "test1", topath: "test2" } }, headers: headers
+    post api_redirections_path, params: { redirection: { from: "/test1", to: "/test2" } }, headers: headers
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["notice"], t("successfully_created", entity: "Redirection")
   end
 
   def test_should_update_redirection
-    new_topath = "updated topath"
+    new_to = "/new"
     redirection_params = {
       redirection:
             {
-              topath: new_topath, frompath: @redirection.frompath
+              to: new_to, from: @redirection.from
             }
     }
     put api_redirection_path(@redirection.id), params: redirection_params, headers: headers
     assert_response :success
     @redirection.reload
-    assert_equal @redirection.topath, new_topath
+    assert_equal @redirection.to, new_to
     response_json = response.parsed_body
     assert_equal response_json["notice"], t("successfully_updated", entity: "Redirection")
   end

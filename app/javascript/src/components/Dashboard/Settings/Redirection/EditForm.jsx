@@ -11,7 +11,7 @@ const EditForm = ({
   fetchRedirectionsDetails,
   setAddRedirection,
 }) => {
-  const [redirection, setRedirection] = useState({ frompath: "", topath: "" });
+  const [redirection, setRedirection] = useState({ from: "", to: "" });
 
   const fetchRedirection = async () => {
     try {

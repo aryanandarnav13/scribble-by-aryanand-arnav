@@ -3,10 +3,10 @@ import React, { useState, useEffect } from "react";
 import { Formik, Form as FormikForm } from "formik";
 import { ActionDropdown, Button } from "neetoui";
 import { Input, Textarea, Select } from "neetoui/formik";
+import { useHistory } from "react-router-dom";
 
 import articlesApi from "apis/articles";
 import categoriesApi from "apis/categories";
-import userApi from "apis/users";
 import {
   ARTICLE_VALIDATION_SCHEMA,
   ARTICLE_INITIAL_VALUES,
@@ -16,9 +16,9 @@ import NavBar from "components/NavBar";
 const Create = () => {
   const [submitted, setSubmitted] = useState(false);
   const [categories, setCategories] = useState([]);
-  const [users, setUsers] = useState([]);
+  const history = useHistory();
   const { Menu, MenuItem } = ActionDropdown;
-  const [articleStatus, setArticleStatus] = useState("Draft");
+  const [articleStatus, setArticleStatus] = useState("drafted");
 
   const fetchCategories = async () => {
     try {
@@ -31,15 +31,6 @@ const Create = () => {
     }
   };
 
-  const fetchUsers = async () => {
-    try {
-      const response = await userApi.list();
-      setUsers(response.data);
-    } catch (error) {
-      logger.error(error);
-    }
-  };
-
   const handleSubmit = async values => {
     try {
       values = {
@@ -47,9 +38,9 @@ const Create = () => {
         body: values.body,
         category_id: values.category.value,
         status: articleStatus,
-        user_id: users.id,
       };
       await articlesApi.create(values);
+      history.push("/");
     } catch (err) {
       logger.error(err);
     }
@@ -57,7 +48,6 @@ const Create = () => {
 
   useEffect(() => {
     fetchCategories();
-    fetchUsers();
   }, []);
 
   return (
@@ -66,12 +56,10 @@ const Create = () => {
       <div className="h-1/2 mx-auto mt-8 w-1/2">
         <Formik
           initialValues={ARTICLE_INITIAL_VALUES}
-          validateOnBlur={submitted}
-          validateOnChange={submitted}
           validationSchema={ARTICLE_VALIDATION_SCHEMA}
           onSubmit={handleSubmit}
         >
-          {({ isSubmitting }) => (
+          {formik => (
             <FormikForm className="w-full">
               <div className="space-between flex w-full">
                 <Input
@@ -106,10 +94,10 @@ const Create = () => {
               <div className="mt-4 flex items-center">
                 <div className="flex">
                   <ActionDropdown
-                    label={articleStatus}
+                    label={articleStatus === "drafted" ? "Draft" : "Publish"}
                     buttonProps={{
-                      disabled: isSubmitting,
-                      loading: isSubmitting,
+                      disabled: !(formik.isValid && formik.dirty),
+                      loading: formik.isSubmitting && submitted,
                       type: "submit",
                     }}
                     onClick={() => {
@@ -119,14 +107,14 @@ const Create = () => {
                     <Menu>
                       <MenuItem.Button
                         onClick={() => {
-                          setArticleStatus("Draft");
+                          setArticleStatus("drafted");
                         }}
                       >
                         Draft
                       </MenuItem.Button>
                       <MenuItem.Button
                         onClick={() => {
-                          setArticleStatus("Publish");
+                          setArticleStatus("published");
                         }}
                       >
                         Publish

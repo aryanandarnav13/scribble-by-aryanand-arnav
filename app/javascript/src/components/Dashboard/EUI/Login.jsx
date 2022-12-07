@@ -19,7 +19,9 @@ export const Login = ({ siteName }) => {
         authToken: response.data.authentication_token,
       });
       setAuthHeaders();
-      window.location.href = "/preview";
+      if (response.status !== 401) {
+        window.location.href = "/preview";
+      }
     } catch (error) {
       logger.error(error);
     }

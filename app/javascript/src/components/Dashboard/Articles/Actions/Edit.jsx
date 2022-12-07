@@ -18,8 +18,8 @@ const EditArticle = () => {
   const [users, setUsers] = useState([]);
   const [categories, setCategories] = useState([]);
   const { Menu, MenuItem } = ActionDropdown;
-  const [articleStatus, setArticleStatus] = useState("Draft");
-  const [articleDetails, setArticleDetails] = useState({});
+  const [articleStatus, setArticleStatus] = useState("drafted");
+  const [currentArticleDetails, setCurrentArticleDetails] = useState([]);
   const [articleToBeRestored, setArticleToBeRestored] = useState([]);
   const [articleVersions, setArticleVersions] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -43,8 +43,10 @@ const EditArticle = () => {
   const fetchArticleDetails = async () => {
     try {
       const response = await articlesApi.show(id);
-      setArticleDetails(response.data);
+      setArticleStatus(response.data.status);
+      setCurrentArticleDetails(response.data);
       setArticleVersions(response.data.versions);
+      logger.info(response.data.versions);
     } catch (error) {
       logger.error(error);
     }
@@ -68,6 +70,7 @@ const EditArticle = () => {
       category_id,
       status: articleStatus,
       user_id: users.id,
+      restored_at: null,
     };
     setSubmitted(true);
     try {
@@ -85,22 +88,22 @@ const EditArticle = () => {
 
   useEffect(() => {
     fetchArticleDetails();
-  }, [id, articleVersions]);
+  }, [id]);
 
   return (
     <div>
-      <NavBar articleStatus={articleDetails.status} />
+      <NavBar articleStatus={currentArticleDetails.status} />
       <div className="m-4 flex h-full w-screen justify-between">
         <div className="mx-auto mt-10 h-full w-1/2">
           <Formik
             enableReinitialize
-            initialValues={articleDetails}
+            initialValues={currentArticleDetails}
             validateOnBlur={submitted}
             validateOnChange={submitted}
             validationSchema={ARTICLE_VALIDATION_SCHEMA}
             onSubmit={handleEdit}
           >
-            {({ isSubmitting }) => (
+            {formik => (
               <FormikForm className="w-full">
                 <div className="space-between flex w-full">
                   <Input
@@ -135,10 +138,12 @@ const EditArticle = () => {
                 <div className="mt-4 flex items-center">
                   <div className="flex">
                     <ActionDropdown
-                      label={articleStatus}
+                      label={articleStatus === "drafted" ? "Draft" : "Publish"}
                       buttonProps={{
-                        disabled: isSubmitting,
-                        loading: isSubmitting,
+                        disabled:
+                          articleStatus === formik.initialValues.status &&
+                          !(formik.isValid && formik.dirty),
+                        loading: formik.isSubmitting,
                         type: "submit",
                       }}
                       onClick={() => {
@@ -148,14 +153,14 @@ const EditArticle = () => {
                       <Menu>
                         <MenuItem.Button
                           onClick={() => {
-                            setArticleStatus("Draft");
+                            setArticleStatus("drafted");
                           }}
                         >
                           Draft
                         </MenuItem.Button>
                         <MenuItem.Button
                           onClick={() => {
-                            setArticleStatus("Publish");
+                            setArticleStatus("published");
                           }}
                         >
                           Publish
@@ -177,10 +182,11 @@ const EditArticle = () => {
           </Formik>
         </div>
         <VersionHistory
-          articleDetails={articleDetails}
+          articleToBeRestored={articleToBeRestored}
           articleVersionDetails={articleVersionDetails}
           articleVersions={articleVersions}
           categories={categories}
+          currentArticleDetails={currentArticleDetails}
           id={id}
           setArticleToBeRestored={setArticleToBeRestored}
           setArticleVersionDetails={setArticleVersionDetails}
@@ -190,11 +196,11 @@ const EditArticle = () => {
         />
       </div>
       <RestoreArticleModal
-        articleDetails={articleDetails}
         articleToBeRestored={articleToBeRestored}
         articleVersionDetails={articleVersionDetails}
         categoryDeletedInfo={categoryDeletedInfo}
         categoryTitle={categoryTitle}
+        currentArticleDetails={currentArticleDetails}
         id={id}
         setShowModal={setShowModal}
         showModal={showModal}
