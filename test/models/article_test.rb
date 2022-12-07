@@ -83,4 +83,15 @@ class ArticleTest < ActiveSupport::TestCase
         user_id: @user.id, category: @category, status: "published", position: 1)
     end
   end
+
+  def test_should_not_mutate_slug
+    test_article = @user.articles.create!(
+      category_id: @category.id, title: "test article",
+      body: "This is a test article body", status: "published")
+    test_article.slug = "test-article-1"
+    assert_raises ActiveRecord::RecordInvalid do
+      test_article.save!
+    end
+    assert_match t("article.slug.immutable"), test_article.errors_to_sentence
+  end
 end

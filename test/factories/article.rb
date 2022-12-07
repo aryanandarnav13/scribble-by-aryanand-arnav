@@ -8,5 +8,6 @@ FactoryBot.define do
     body { Faker::Lorem.paragraph }
     status { "drafted" }
     position { Faker::Number.number(digits: 3) }
+    slug { Faker::Alphanumeric.alphanumeric(number: 10) }
   end
 end
