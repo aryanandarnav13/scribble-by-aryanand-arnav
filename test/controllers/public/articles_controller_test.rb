@@ -10,16 +10,19 @@ class Api::Public::ArticlesControllerTest < ActionDispatch::IntegrationTest
     @article = create(:article, category: @category, user: @user)
   end
 
-  def test_user_should_get_only_published_articles
-    published_article = create(:article, category: @category, user: @user, status: "published")
-    drafted_article = create(:article, category: @category, user: @user, status: "drafted")
-    get api_articles_path,
-      params: {
-        statusFilter: "published",
-        searchFilter: ""
-      }, headers: headers
+  def test_user_should_get_all_articles
+    get api_public_articles_path, headers: headers
     assert_response :success
-    response_json = response.parsed_body
-    assert_equal response_json["articles"][0]["status"], "published"
+  end
+
+  def test_user_should_get_article
+    get api_public_article_path(@article.slug), headers: headers
+    assert_response :success
+  end
+
+  def test_should_not_list_articles_if_password_enabled
+    @site.update(password_enabled: true)
+    get api_public_articles_path, headers: headers
+    assert_response :unauthorized
   end
 end

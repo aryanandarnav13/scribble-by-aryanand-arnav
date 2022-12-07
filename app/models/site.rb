@@ -2,11 +2,15 @@
 
 class Site < ApplicationRecord
   attr_accessor :is_token_updated
+
   has_many :users
   has_many :redirections
+
   validates :name, presence: true
+
   has_secure_password :password, validations: false
   has_secure_token :authentication_token
+
   before_update :update_token, if: -> { password_digest_changed? }
 
   private

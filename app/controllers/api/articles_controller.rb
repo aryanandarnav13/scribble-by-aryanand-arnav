@@ -9,6 +9,7 @@ class Api::ArticlesController < ApplicationController
     @articles = FilterSearchArticleService.new(
       articles: paginated_articles, categoriesFilter: params[:categoriesFilter],
       searchFilter: params[:searchFilter], statusFilter: params[:statusFilter]).process
+
     @published_articles_count = current_user.articles.published.size
     @drafted_articles_count = current_user.articles.drafted.size
   end

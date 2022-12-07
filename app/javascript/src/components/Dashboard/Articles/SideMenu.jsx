@@ -21,6 +21,7 @@ const SideMenu = ({
   const [isAddCategoryCollapsed, setIsAddCategoryCollapsed] = useState(true);
   const [searchCategory, setSearchCategory] = useState("");
   const [categories, setCategories] = useState([]);
+
   const fetchCategories = async () => {
     try {
       const {

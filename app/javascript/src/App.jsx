@@ -20,11 +20,12 @@ import Analytics from "./components/Dashboard/Analytics";
 import { Login } from "./components/Dashboard/EUI/Login";
 
 const App = () => {
-  const authToken = getFromLocalStorage("authToken");
-  const isLoggedIn = !either(isNil, isEmpty)(authToken);
   const [loading, setLoading] = useState(true);
   const [hasPassword, setHasPassword] = useState(true);
   const [siteName, setSiteName] = useState("");
+
+  const authToken = getFromLocalStorage("authToken");
+  const isLoggedIn = !either(isNil, isEmpty)(authToken);
 
   const fetchSiteDetails = async () => {
     try {

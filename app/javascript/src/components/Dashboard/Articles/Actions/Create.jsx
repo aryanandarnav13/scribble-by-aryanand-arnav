@@ -16,9 +16,9 @@ import NavBar from "components/NavBar";
 const Create = () => {
   const [submitted, setSubmitted] = useState(false);
   const [categories, setCategories] = useState([]);
-  const history = useHistory();
   const { Menu, MenuItem } = ActionDropdown;
   const [articleStatus, setArticleStatus] = useState("drafted");
+  const history = useHistory();
 
   const fetchCategories = async () => {
     try {

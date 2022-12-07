@@ -39,4 +39,10 @@ class CategoryTest < ActiveSupport::TestCase
     @user.destroy
     assert_empty @user.categories
   end
+
+  def test_should_not_create_category_with_same_name
+    @category1 = create(:category, user: @user)
+    @category2 = build(:category, user: @user, name: @category1.name)
+    assert_not @category2.valid?
+  end
 end

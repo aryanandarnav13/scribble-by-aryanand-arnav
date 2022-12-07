@@ -10,7 +10,13 @@ class Api::Public::CategoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_user_should_get_all_categories
-    get api_categories_path, headers: headers
+    get api_public_categories_path, headers: headers
     assert_response :success
+  end
+
+  def test_should_not_list_categories_if_password_enabled
+    @site.update(password_enabled: true)
+    get api_public_categories_path, headers: headers
+    assert_response :unauthorized
   end
 end
