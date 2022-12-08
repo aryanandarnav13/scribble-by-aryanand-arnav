@@ -1,8 +1,8 @@
 import React from "react";
 
-import { ExternalLink } from "@bigbinary/neeto-icons";
-import { Header } from "@bigbinary/neetoui/layouts";
+import { ExternalLink } from "neetoicons";
 import { Button, Typography } from "neetoui";
+import { Header } from "neetoui/layouts";
 import { NavLink } from "react-router-dom";
 
 const NavBar = ({ articleStatus }) => (

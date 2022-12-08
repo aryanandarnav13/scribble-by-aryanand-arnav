@@ -21,12 +21,13 @@ const CategoriesMenu = ({
 }) => {
   const [showNewCategoryPane, setShowNewCategoryPane] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const { Menu, MenuItem, Divider } = ActionDropdown;
   const [showAlert, setShowAlert] = useState(false);
   const [categoryToDelete, setCategoryToDelete] = useState(null);
   const [categoryToEdit, setCategoryToEdit] = useState(null);
   const [categoryToUpdateTo, setCategoryToUpdateTo] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
+
+  const { Menu, MenuItem, Divider } = ActionDropdown;
 
   const updateCategoryPosition = async ({
     id,

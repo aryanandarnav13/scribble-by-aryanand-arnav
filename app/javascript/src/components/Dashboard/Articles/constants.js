@@ -18,7 +18,7 @@ export const ARTICLE_INITIAL_VALUES = {
 
 export const CATEGORY_INITIAL_VALUES = { name: "", user_id: null };
 
-export const filterItems = {
+export const COLUMN_FILTERS = {
   title: true,
   category: true,
   date: true,

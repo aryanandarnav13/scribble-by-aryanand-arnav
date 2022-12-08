@@ -7,10 +7,11 @@ import { useHistory, useParams } from "react-router-dom";
 
 import articlesApi from "apis/articles";
 import categoriesApi from "apis/categories";
-import { RestoreArticle as RestoreArticleModal } from "components/Dashboard/Articles/Actions/Restore";
-import VersionHistory from "components/Dashboard/Articles/Actions/VersionHistory";
 import { ARTICLE_VALIDATION_SCHEMA } from "components/Dashboard/Articles/constants";
 import NavBar from "components/NavBar";
+
+import { RestoreArticle as RestoreArticleModal } from "./Restore";
+import VersionHistory from "./VersionHistory";
 
 const EditArticle = () => {
   const [submitted, setSubmitted] = useState(false);

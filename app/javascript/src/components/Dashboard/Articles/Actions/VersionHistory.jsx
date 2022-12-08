@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { Typography, Tooltip } from "neetoui";
 import { Scrollable } from "neetoui/layouts";
 
-import { formatDateAndTime } from "../../Settings/ManageCategories/utils";
+import { formatDateAndTime } from "components/Dashboard/Settings/ManageCategories/utils";
 
 const VersionHistory = ({
   setArticleToBeRestored,

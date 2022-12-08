@@ -6,16 +6,15 @@ import { Container, Header } from "neetoui/layouts";
 import articlesApi from "apis/articles";
 import NavBar from "components/NavBar";
 
-import { filterItems, camelize } from "./constants";
+import { COLUMN_FILTERS, camelize } from "./constants";
 import SideMenu from "./SideMenu";
 import Table from "./Table";
 
 const Articles = () => {
   const [searchArticle, setSearchArticle] = useState("");
-  const { Menu, MenuItem } = ActionDropdown;
   const [articles, setArticles] = useState([]);
   const [pageNo, setPageNo] = useState(1);
-  const [columnFilter, setColumnFilter] = useState(filterItems);
+  const [columnFilter, setColumnFilter] = useState(COLUMN_FILTERS);
   const [totalDraftCount, setTotalDraftCount] = useState(0);
   const [totalPublishCount, setTotalPublishCount] = useState(0);
   const [filteredDraftCount, setFilteredDraftCount] = useState(0);
@@ -24,6 +23,7 @@ const Articles = () => {
     status: "All",
     category: [],
   });
+  const { Menu, MenuItem } = ActionDropdown;
 
   const handleColumnCheck = e => {
     if (!(e.target.name === "title" && !e.target.checked)) {

@@ -2,6 +2,8 @@
 
 class Article < ApplicationRecord
   MAX_PAGE_SIZE = 10
+  TITLE_REGEX = /\A[a-zA-Z0-9\s]+\z/
+
   enum status: { drafted: "drafted", published: "published" }
 
   belongs_to :category
@@ -9,7 +11,7 @@ class Article < ApplicationRecord
   has_many :article_visits
 
   validates :title, presence: true, length: { maximum: 255 },
-    format: { with: /\A[a-zA-Z0-9\s]+\z/, message: "is invalid" }
+    format: { with: TITLE_REGEX, message: "is invalid" }
   validates :body, presence: true
   validates :status, presence: true
   validate :slug_not_changed

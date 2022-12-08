@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { UpArrow, DownArrow } from "@bigbinary/neeto-icons";
+import { UpArrow, DownArrow } from "neetoicons";
 import { Modal, Select } from "neetoui";
 import { useHistory } from "react-router-dom";
 

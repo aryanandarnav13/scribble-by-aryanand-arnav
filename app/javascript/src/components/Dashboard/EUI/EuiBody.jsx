@@ -13,10 +13,10 @@ import {
 import Show from "./Show";
 
 const EuiBody = ({ articles, categories }) => {
-  const { url, path } = useRouteMatch();
   const [selectedCategoryPosition, setSelectedCategoryPosition] = useState(0);
   const [loading, setLoading] = useState(true);
 
+  const { url, path } = useRouteMatch();
   const history = useHistory();
   const slug = window.location.pathname.split("/")[2];
 
