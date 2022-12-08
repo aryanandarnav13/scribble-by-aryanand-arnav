@@ -24,7 +24,7 @@ class Api::CategoriesController < ApplicationController
   def destroy
     if DestroyCategoryService.new(
       category_id: params[:id], new_category_id: params[:new_category_id],
-      current_user: current_user).process
+      current_user: current_user).process!
       respond_with_success(t("successfully_deleted", entity: "Category"))
     else
       respond_with_error(t("error_deleting", entity: "Category"))

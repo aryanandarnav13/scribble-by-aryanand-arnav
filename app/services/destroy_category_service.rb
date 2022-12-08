@@ -8,7 +8,7 @@ class DestroyCategoryService
     @new_category_id = new_category_id
   end
 
-  def process
+  def process!
     if current_user.categories.count == 1
       return nil if find_general_category
 
@@ -44,7 +44,7 @@ class DestroyCategoryService
     end
 
     def handle_delete_category
-      category = current_user.categories.find_by!(id: category_id)
+      category = current_user.categories.find(category_id)
       category.destroy!
     end
 end

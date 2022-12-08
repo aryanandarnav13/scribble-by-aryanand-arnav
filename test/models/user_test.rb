@@ -49,6 +49,7 @@ class UserTest < ActiveSupport::TestCase
     uppercase_email = "SAM@EMAIL.COM"
     @user.email = uppercase_email
     @user.save!
+
     assert_equal uppercase_email.downcase, @user.email
   end
 

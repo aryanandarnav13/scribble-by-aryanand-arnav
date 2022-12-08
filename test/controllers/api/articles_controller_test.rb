@@ -15,10 +15,10 @@ class Api::ArticlesControllerTest < ActionDispatch::IntegrationTest
       params: {
         article:
         {
-          title: "test article", body: "This is a test article body",
-          user_id: @user.id, category_id: @category.id, status: "published", position: 1
+          title: "test article", body: "This is a test article body", category_id: @category.id, status: "published"
         }
       }, headers: headers
+
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["notice"], t("successfully_created", entity: "Article")
@@ -29,24 +29,22 @@ class Api::ArticlesControllerTest < ActionDispatch::IntegrationTest
     article_params = {
       article:
             {
-              title: new_title, category_id: @category.id, status: "published", user_id: @user.id, position: 1,
+              title: new_title, category_id: @category.id, status: "published",
               body: "This is a test article body"
             }
     }
     put api_article_path(@article.id), params: article_params, headers: headers
+
     assert_response :success
     @article.reload
     assert_equal @article.title, new_title
-    assert_equal @article.category_id, @category.id
-    assert_equal @article.user_id, @user.id
-    assert_equal @article.status, "published"
-    assert_equal @article.body, "This is a test article body"
     response_json = response.parsed_body
     assert_equal response_json["notice"], t("successfully_updated", entity: "Article")
   end
 
   def test_user_can_destroy_article
     delete api_article_path(@article.id), headers: headers
+
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["notice"], t("successfully_deleted", entity: "Article")
@@ -58,6 +56,7 @@ class Api::ArticlesControllerTest < ActionDispatch::IntegrationTest
         statusFilter: "All",
         searchFilter: ""
       }, headers: headers
+
     assert_response :success
   end
 
@@ -67,6 +66,7 @@ class Api::ArticlesControllerTest < ActionDispatch::IntegrationTest
         statusFilter: "published",
         searchFilter: ""
       }, headers: headers
+
     assert_response :success
   end
 
@@ -76,6 +76,7 @@ class Api::ArticlesControllerTest < ActionDispatch::IntegrationTest
         statusFilter: "drafted",
         searchFilter: ""
       }, headers: headers
+
     assert_response :success
   end
 
@@ -86,6 +87,7 @@ class Api::ArticlesControllerTest < ActionDispatch::IntegrationTest
         searchFilter: "",
         categoriesFilter: @category.id
       }, headers: headers
+
     assert_response :success
   end
 
@@ -95,6 +97,7 @@ class Api::ArticlesControllerTest < ActionDispatch::IntegrationTest
         statusFilter: "All",
         searchFilter: @article.title
       }, headers: headers
+
     assert_response :success
   end
 
@@ -104,6 +107,7 @@ class Api::ArticlesControllerTest < ActionDispatch::IntegrationTest
       position: new_position
     }
     patch reorder_api_article_path(@article.id), params: article_params, headers: headers, as: :json
+
     assert_response :success
     @article.reload
     assert_equal @article.position, new_position
@@ -120,6 +124,7 @@ class Api::ArticlesControllerTest < ActionDispatch::IntegrationTest
       article_ids: [@article.id], new_category_id: new_category.id, current_user: @user
     }
     patch transfer_api_articles_path, params: article_params, headers: headers
+
     assert_response :success
     @article.reload
     assert_equal @article.category_id, new_category.id
@@ -133,6 +138,7 @@ class Api::ArticlesControllerTest < ActionDispatch::IntegrationTest
       }
     }
     patch api_article_path(@article.id), params: article_params, headers: headers
+
     assert_response :success
     @article.reload
     assert_equal @article.category_id, new_category.id

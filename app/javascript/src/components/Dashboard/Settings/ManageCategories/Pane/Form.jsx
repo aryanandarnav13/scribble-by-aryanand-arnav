@@ -1,26 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { Formik, Form } from "formik";
 import { Button, Pane } from "neetoui";
 import { Input } from "neetoui/formik";
 
 import categoriesApi from "apis/categories";
-import userApi from "apis/users";
 
 import { CATEGORIES_FORM_VALIDATION_SCHEMA } from "../constants";
 
 const CategoryForm = ({ onClose, refetch, category, isEdit }) => {
   const [submitted, setSubmitted] = useState(false);
-  const [users, setUsers] = useState([]);
-
-  const fetchUsers = async () => {
-    try {
-      const response = await userApi.list();
-      setUsers(response.data);
-    } catch (error) {
-      logger.error(error);
-    }
-  };
 
   const handleSubmit = async values => {
     try {
@@ -28,12 +17,11 @@ const CategoryForm = ({ onClose, refetch, category, isEdit }) => {
         await categoriesApi.update({
           payload: {
             name: values.name,
-            user_id: users.id,
             id: category.id,
           },
         });
       } else {
-        await categoriesApi.create({ name: values.name, user_id: users.id });
+        await categoriesApi.create({ name: values.name });
       }
       refetch();
       onClose();
@@ -41,10 +29,6 @@ const CategoryForm = ({ onClose, refetch, category, isEdit }) => {
       logger.error(err);
     }
   };
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
 
   return (
     <Formik

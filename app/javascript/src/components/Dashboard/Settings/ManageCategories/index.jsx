@@ -21,6 +21,7 @@ const ManageCategories = () => {
   const [open, setOpen] = useState(false);
   const [searchCategory, setSearchCategory] = useState("");
   const [categoryToTransferTo, setCategoryToTransferTo] = useState("");
+
   const handleInfo = () => {
     const bannerCondition = localStorage.getItem("banner");
     if (bannerCondition === "false") {

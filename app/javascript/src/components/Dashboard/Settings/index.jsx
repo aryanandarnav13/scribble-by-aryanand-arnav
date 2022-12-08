@@ -3,10 +3,10 @@ import React, { useState, useEffect } from "react";
 import { MenuBar } from "neetoui/layouts";
 import queryString from "query-string";
 
+import NavBar from "components/NavBar";
+
 import { SETTINGS_NAVLINKS } from "./constants";
 import { getActiveNavLink } from "./utils";
-
-import NavBar from "../../NavBar";
 
 const Settings = ({ history, location }) => {
   const { tab } = queryString.parse(location.search);

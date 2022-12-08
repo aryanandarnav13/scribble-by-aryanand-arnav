@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import { Formik, Form } from "formik";
-import { Button, Typography } from "neetoui";
+import { Button, Typography, PageLoader } from "neetoui";
 import { Input, Checkbox } from "neetoui/formik";
 
 import siteApi from "apis/sites";
@@ -14,14 +14,15 @@ const General = () => {
   const [siteName, setSiteName] = useState("");
   const passwordFocus = useRef(null);
   const [loading, setLoading] = useState(true);
+  const [passwordEnableCheck, setPasswordEnableCheck] = useState(false);
 
   const fetchSiteDetails = async () => {
     try {
       setLoading(true);
       const response = await siteApi.list();
-      logger.info(response.data);
       setSiteName(response.data.name);
       setPasswordEnabled(response.data.password_enabled);
+      setPasswordEnableCheck(response.data.password_enabled);
       setLoading(false);
     } catch (error) {
       logger.error(error);
@@ -48,6 +49,18 @@ const General = () => {
     }
   };
 
+  const handlePasswordProtectionChange = formik => {
+    if (passwordEnabled === false) {
+      setIsPasswordInputDisabled(false);
+    } else {
+      setIsPasswordInputDisabled(true);
+    }
+
+    setPasswordEnableCheck(previousState => !previousState);
+
+    passwordEnabled === false && formik.setFieldValue("password", "");
+  };
+
   useEffect(() => {
     fetchSiteDetails();
   }, []);
@@ -59,7 +72,7 @@ const General = () => {
   }, [isPasswordInputDisabled]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <PageLoader />;
   }
 
   return (
@@ -70,15 +83,16 @@ const General = () => {
         initialValues={{
           name: siteName,
           password: "",
-          password_enabled: passwordEnabled,
+          password_enabled: passwordEnableCheck,
         }}
         validationSchema={siteSchema({
           isPasswordInputDisabled,
+          passwordEnableCheck,
           passwordEnabled,
         })}
         onSubmit={values => handleSubmit(values)}
       >
-        {({ dirty }) => (
+        {formik => (
           <Form className="mt-4">
             <div className="mb-3 border-b-2 pb-5">
               <Typography style="h2">General Settings</Typography>
@@ -99,7 +113,7 @@ const General = () => {
               </Typography>
             </div>
             <Checkbox
-              checked={passwordEnabled}
+              checked={passwordEnableCheck}
               disabled={!isPasswordInputDisabled}
               label="Password Protection Knowledge base"
               name="password_enabled"
@@ -107,12 +121,10 @@ const General = () => {
                 color: "#6366F1",
                 borderRadius: "5px",
               }}
-              onChange={() => {
-                setPasswordEnabled(prevPasswordEnabled => !prevPasswordEnabled);
-              }}
+              onChange={() => handlePasswordProtectionChange(formik)}
             />
             <div>
-              {passwordEnabled && (
+              {passwordEnableCheck && (
                 <div className="flex gap-3 px-1">
                   <Input
                     className="mt-5"
@@ -122,27 +134,33 @@ const General = () => {
                     ref={passwordFocus}
                     type="password"
                     placeholder={
-                      !isPasswordInputDisabled ? "Enter Password" : "********"
+                      isPasswordInputDisabled && passwordEnabled
+                        ? "*********"
+                        : "Enter Password"
                     }
                   />
-                  <Button
-                    className="mt-10 h-8"
-                    label="Enter Password"
-                    size="small"
-                    style="secondary"
-                    onClick={() => {
-                      setIsPasswordInputDisabled(false);
-                    }}
-                  />
+                  {passwordEnabled && (
+                    <Button
+                      className="mt-10 h-8"
+                      label="Change Password"
+                      size="small"
+                      style="secondary"
+                      onClick={() => {
+                        setIsPasswordInputDisabled(false);
+                      }}
+                    />
+                  )}
                 </div>
               )}
             </div>
             <div className="my-4">
               <Button
                 className="bg-indigo-500 "
-                disabled={isPasswordInputDisabled === passwordEnabled && !dirty}
                 label="Save Changes"
                 type="submit"
+                disabled={
+                  passwordEnabled === passwordEnableCheck && !formik.dirty
+                }
               />
               <Button
                 className="ml-6"

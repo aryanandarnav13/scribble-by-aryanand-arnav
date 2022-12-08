@@ -24,6 +24,7 @@ class Api::SitesControllerTest < ActionDispatch::IntegrationTest
         }
       },
       headers: headers
+
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["notice"], t("successfully_updated", entity: "Site")
@@ -33,8 +34,8 @@ class Api::SitesControllerTest < ActionDispatch::IntegrationTest
     new_name = "#{@site.name}-(updated)"
     new_password = "#{@site.password}-(updated)"
     site_params = { site: { name: new_name, password: new_password, password_enabled: true } }
-
     put api_site_path, params: site_params, headers: headers
+
     assert_response :success
     @site.reload
     assert_equal @site.name, new_name

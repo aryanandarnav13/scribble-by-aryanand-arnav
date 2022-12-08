@@ -24,6 +24,7 @@ const EditArticle = () => {
   const [articleVersionDetails, setArticleVersionDetails] = useState({});
   const [categoryTitle, setCategoryTitle] = useState("");
   const [categoryDeletedInfo, setCategoryDeletedInfo] = useState(false);
+
   const { id } = useParams();
   const history = useHistory();
 
