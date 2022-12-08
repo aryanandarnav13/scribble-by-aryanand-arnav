@@ -12,7 +12,7 @@ class DestroyCategoryServiceTest < ActiveSupport::TestCase
   def test_should_delete_category_with_no_articles
     @service = DestroyCategoryService.new(
       category_id: @category.id, new_category_id: nil, current_user: @user)
-    @service.process
+    @service.process!
 
     assert_nil @user.categories.find_by_id(@category.id)
   end
@@ -26,7 +26,7 @@ class DestroyCategoryServiceTest < ActiveSupport::TestCase
     @service = DestroyCategoryService.new(
       category_id: @category1.id, new_category_id: @category2.id,
       current_user: @user)
-    @service.process
+    @service.process!
 
     assert_equal category1_articles_original_length, @category2.articles.length
   end
@@ -41,7 +41,7 @@ class DestroyCategoryServiceTest < ActiveSupport::TestCase
     @service = DestroyCategoryService.new(
       category_id: @category.id, new_category_id: nil,
       current_user: @user)
-    @service.process
+    @service.process!
 
     assert_equal "General", @user.categories.first.name
   end
@@ -57,6 +57,6 @@ class DestroyCategoryServiceTest < ActiveSupport::TestCase
       category_id: @category.id, new_category_id: nil,
       current_user: @user)
 
-    assert_nil @service.process
+    assert_nil @service.process!
   end
 end
