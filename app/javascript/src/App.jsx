@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+import { PageLoader } from "neetoui";
 import { either, isEmpty, isNil } from "ramda";
 import { Route, Switch, BrowserRouter as Router } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -48,7 +49,7 @@ const App = () => {
   }, []);
 
   if (loading) {
-    return <h1>Loading...</h1>;
+    return <PageLoader />;
   }
 
   return (

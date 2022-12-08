@@ -11,6 +11,7 @@ class RedirectionTest < ActiveSupport::TestCase
   def test_from_path_and_to_path_should_not_be_same
     @redirection.from = "/test"
     @redirection.to = "/test"
+
     assert_not @redirection.valid?
     assert_equal [t("redirection.same_path")], @redirection.errors.full_messages
   end
@@ -19,6 +20,7 @@ class RedirectionTest < ActiveSupport::TestCase
     r2 = @site.redirections.create! from: @redirection.to, to: "/updated"
     r3 = @site.redirections.create! from: r2.to, to: "/new"
     r4 = @site.redirections.new from: r3.to, to: @redirection.from
+
     assert_not r4.valid?
     assert_equal [t("redirection.cyclic_redirection")], r4.errors.full_messages
   end

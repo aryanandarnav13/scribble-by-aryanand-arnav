@@ -46,6 +46,7 @@ class ArticleTest < ActiveSupport::TestCase
     assert_no_changes -> { @article.reload.slug } do
       updated_article_title = "updated article title"
       @article.update!(title: updated_article_title)
+
       assert_equal updated_article_title, @article.title
     end
   end
@@ -54,17 +55,10 @@ class ArticleTest < ActiveSupport::TestCase
     assert_no_changes -> { @article.reload.slug } do
       updated_category = create(:category, user: @user)
       @article.update!(category: updated_category)
+
       assert_equal updated_category, @article.category
     end
    end
-
-  def test_error_raised_for_duplicate_slug
-    assert_raises ActiveRecord::RecordInvalid do
-       @article.update!(slug: "test-article")
-     end
-    error_msg = @article.errors.full_messages.to_sentence
-    assert_match t("article.slug.immutable"), error_msg
-  end
 
   def test_article_should_be_deleted_when_category_is_deleted
     @category.destroy
@@ -89,6 +83,7 @@ class ArticleTest < ActiveSupport::TestCase
       category_id: @category.id, title: "test article",
       body: "This is a test article body", status: "published")
     test_article.slug = "test-article-1"
+
     assert_raises ActiveRecord::RecordInvalid do
       test_article.save!
     end

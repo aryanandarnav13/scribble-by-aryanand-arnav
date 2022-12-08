@@ -4,12 +4,11 @@ import { ActionDropdown, Button, Checkbox } from "neetoui";
 import { Container, Header } from "neetoui/layouts";
 
 import articlesApi from "apis/articles";
+import NavBar from "components/NavBar";
 
 import { filterItems, camelize } from "./constants";
 import SideMenu from "./SideMenu";
 import Table from "./Table";
-
-import NavBar from "../../NavBar";
 
 const Articles = () => {
   const [searchArticle, setSearchArticle] = useState("");
@@ -106,7 +105,7 @@ const Articles = () => {
             }}
           />
           <div className="max-w-7xl px-2 font-bold">
-            {totalDraftCount + totalPublishCount} Articles
+            {articles.length} Articles
           </div>
           <Table
             articles={articles}

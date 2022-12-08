@@ -17,6 +17,8 @@ const Eui = ({ siteName }) => {
       const response = await publicCategoriesApi.listCategories();
       setCategories(response?.data?.categories);
     } catch (error) {
+      window.location.href = "/preview/login";
+
       logger.error(error);
     }
   };

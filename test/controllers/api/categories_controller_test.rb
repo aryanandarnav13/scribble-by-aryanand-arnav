@@ -18,6 +18,7 @@ class Api::CategoriesControllerTest < ActionDispatch::IntegrationTest
         }
       },
       headers: headers
+
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["notice"], t("successfully_created", entity: "Category")
@@ -32,6 +33,7 @@ class Api::CategoriesControllerTest < ActionDispatch::IntegrationTest
             }
     }
     put api_category_path(@category.id), params: category_params, headers: headers
+
     assert_response :success
     @category.reload
     assert_equal @category.name, new_name
@@ -46,6 +48,7 @@ class Api::CategoriesControllerTest < ActionDispatch::IntegrationTest
         }
     }
     patch reorder_api_category_path(@category.id), params: category_position_params, headers: headers, as: :json
+
     assert_response :success
     @category.reload
     assert_equal @category.position, new_position
@@ -57,7 +60,7 @@ class Api::CategoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_user_can_delete_any_category
-    delete api_category_path(@category.id), headers: headers, as: :json
+    delete api_category_path(@category.id), headers: headers
     assert_response :success
     assert_equal response.parsed_body["notice"], t("successfully_deleted", entity: "Category")
   end
@@ -67,6 +70,7 @@ class Api::CategoriesControllerTest < ActionDispatch::IntegrationTest
     @user = create(:user, site: @site)
     @category = create(:category, name: "General", user: @user)
     @articles_in_category = create_list(:article, 10, category: @category, user: @user)
+
     delete api_category_path(@category.id), headers: headers
     assert_response :unprocessable_entity
     assert_equal response.parsed_body["error"], t("error_deleting", entity: "Category")

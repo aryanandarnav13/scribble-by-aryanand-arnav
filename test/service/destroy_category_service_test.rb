@@ -13,13 +13,13 @@ class DestroyCategoryServiceTest < ActiveSupport::TestCase
     @service = DestroyCategoryService.new(
       category_id: @category.id, new_category_id: nil, current_user: @user)
     @service.process
+
     assert_nil @user.categories.find_by_id(@category.id)
   end
 
   def test_should_move_articles_from_one_category_to_the_other
     @category1 = create(:category, user: @user)
     @category2 = create(:category, user: @user)
-
     @articles_in_category1 = create_list(:article, 10, category: @category1, user: @user)
     category1_articles_original_length = @category1.articles.length
 
@@ -27,6 +27,7 @@ class DestroyCategoryServiceTest < ActiveSupport::TestCase
       category_id: @category1.id, new_category_id: @category2.id,
       current_user: @user)
     @service.process
+
     assert_equal category1_articles_original_length, @category2.articles.length
   end
 
@@ -36,10 +37,12 @@ class DestroyCategoryServiceTest < ActiveSupport::TestCase
     @category = create(:category, user: @user)
     @articles_in_category = create_list(:article, 10, category: @category, user: @user)
     category_articles_original_length = @category.articles.length
+
     @service = DestroyCategoryService.new(
       category_id: @category.id, new_category_id: nil,
       current_user: @user)
     @service.process
+
     assert_equal "General", @user.categories.first.name
   end
 
@@ -53,6 +56,7 @@ class DestroyCategoryServiceTest < ActiveSupport::TestCase
     @service = DestroyCategoryService.new(
       category_id: @category.id, new_category_id: nil,
       current_user: @user)
+
     assert_nil @service.process
   end
 end

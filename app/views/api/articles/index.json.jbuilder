@@ -7,7 +7,7 @@ json.articles @articles do |article|
   json.views_date article.article_visits.where(article_id: article.id).group_by_day(:created_at).count
   json.views article.article_visits.where(article_id: article.id).count
   json.date article.published? ? article.updated_at.strftime("%B #{article.updated_at.day.ordinalize}, %Y") : "-"
-  json.author article.user_id ? article.user.name : ""
+  json.author article.user.name
   json.partial! "api/articles/article", article: article
 end
 json.drafted @drafted_articles_count

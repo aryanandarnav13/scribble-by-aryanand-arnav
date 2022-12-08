@@ -42,7 +42,6 @@ const CategoriesMenu = ({
           position: destinationPosition + 1,
           id,
         },
-        quiet: true,
       });
       await fetchCategories();
     } catch (error) {
