@@ -29,4 +29,11 @@ class RedirectionTest < ActiveSupport::TestCase
     @site.destroy
     assert_empty @site.redirections
   end
+
+  def test_from_path_and_to_path_should_be_valid
+    @redirection.from = "test"
+    @redirection.to = "test"
+
+    assert_not @redirection.valid?
+  end
 end

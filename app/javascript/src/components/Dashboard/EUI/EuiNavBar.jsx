@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import { Keyboard } from "@bigbinary/neeto-icons";
+import { Keyboard } from "neetoicons";
 import { Typography } from "neetoui";
 
 const EuiNavBar = ({ siteName, setShowModal, showModal }) => {

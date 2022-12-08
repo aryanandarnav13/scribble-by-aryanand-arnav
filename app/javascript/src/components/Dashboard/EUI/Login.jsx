@@ -4,11 +4,11 @@ import { Formik, Form } from "formik";
 import { Typography, Button } from "neetoui";
 import { Input } from "neetoui/formik";
 import { setToLocalStorage } from "src/utils/storage";
-import * as yup from "yup";
 
 import authApi from "apis/auth";
 import { setAuthHeaders } from "apis/axios";
 
+import { LOGIN_SCHEMA } from "./constants";
 import Vector from "./Vector.png";
 
 export const Login = ({ siteName }) => {
@@ -26,9 +26,6 @@ export const Login = ({ siteName }) => {
       logger.error(error);
     }
   };
-  const schema = yup.object().shape({
-    password: yup.string().required("Password Can't be blank"),
-  });
 
   return (
     <div>
@@ -39,7 +36,7 @@ export const Login = ({ siteName }) => {
         initialValues={{ password: "" }}
         validateOnBlur={false}
         validateOnChange={false}
-        validationSchema={schema}
+        validationSchema={LOGIN_SCHEMA}
         onSubmit={values => {
           handleSubmit(values);
         }}

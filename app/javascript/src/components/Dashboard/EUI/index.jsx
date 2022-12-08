@@ -15,7 +15,7 @@ const Eui = ({ siteName }) => {
   const fetchCategories = async () => {
     try {
       const response = await publicCategoriesApi.listCategories();
-      setCategories(response?.data?.categories);
+      setCategories(response.data?.categories);
     } catch (error) {
       window.location.href = "/preview/login";
 
@@ -26,7 +26,7 @@ const Eui = ({ siteName }) => {
   const fetchArticles = async () => {
     try {
       const response = await publicArticlesApi.listArticles();
-      setArticles(response?.data?.articles);
+      setArticles(response.data?.articles);
     } catch (error) {
       logger.error(error);
     }

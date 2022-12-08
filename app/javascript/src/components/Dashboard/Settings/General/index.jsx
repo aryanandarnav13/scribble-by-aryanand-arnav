@@ -12,9 +12,10 @@ const General = () => {
   const [isPasswordInputDisabled, setIsPasswordInputDisabled] = useState(true);
   const [passwordEnabled, setPasswordEnabled] = useState(false);
   const [siteName, setSiteName] = useState("");
-  const passwordFocus = useRef(null);
   const [loading, setLoading] = useState(true);
   const [passwordEnableCheck, setPasswordEnableCheck] = useState(false);
+
+  const passwordFocus = useRef(null);
 
   const fetchSiteDetails = async () => {
     try {

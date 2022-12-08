@@ -59,17 +59,19 @@ const SideMenu = ({
 
   const handleCategories = category => {
     if (articleFilterConstraint.category.includes(category)) {
-      setArticleFilterConstraint({
+      const filterArticleWithCategory = {
         ...articleFilterConstraint,
         category: articleFilterConstraint.category.filter(
           item => item !== category
         ),
-      });
+      };
+      setArticleFilterConstraint(filterArticleWithCategory);
     } else {
-      setArticleFilterConstraint({
+      const filterArticleWithoutCategory = {
         ...articleFilterConstraint,
         category: [...articleFilterConstraint.category, category],
-      });
+      };
+      setArticleFilterConstraint(filterArticleWithoutCategory);
     }
   };
 
