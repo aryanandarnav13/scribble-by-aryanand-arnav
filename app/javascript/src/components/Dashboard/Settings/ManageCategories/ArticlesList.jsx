@@ -135,7 +135,7 @@ const ArticlesList = ({
                             }}
                           />
                           <Tag
-                            className="neeto-ui-rounded-none ml-2 bg-gray-200"
+                            className="neeto-ui-rounded-none ml-2 bg-gray-200 capitalize"
                             label={article.status}
                             type="solid"
                             style={

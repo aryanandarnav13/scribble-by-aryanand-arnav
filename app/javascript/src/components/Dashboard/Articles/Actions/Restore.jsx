@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-import { Typography, Modal, Button, Textarea, Input } from "neetoui";
-import { useHistory } from "react-router-dom";
+import { Warning, Info } from "neetoicons";
+import { Typography, Modal, Button, Textarea, Input, Callout } from "neetoui";
 
+import articleSchedulesApi from "apis/articleSchedules";
 import articleVersionsApi from "apis/articleVersions";
 
 const RestoreArticle = ({
@@ -14,8 +15,10 @@ const RestoreArticle = ({
   currentArticleDetails,
   categoryTitle,
   categoryDeletedInfo,
+  refetch,
+  setRefetch,
 }) => {
-  const history = useHistory();
+  const [scheduledUpdates, setScheduledUpdates] = useState([]);
 
   const restoreVersionHandle = async () => {
     try {
@@ -24,12 +27,25 @@ const RestoreArticle = ({
         versionAt: articleToBeRestored.created_at,
         restoredAt: articleToBeRestored.object.updated_at,
       });
-      history.push("/");
+      setRefetch(!refetch);
       setShowModal(false);
     } catch (error) {
       logger.error(error);
     }
   };
+
+  const fetchUpdateSchedules = async () => {
+    try {
+      const res = await articleSchedulesApi.list(id);
+      setScheduledUpdates([...res.data.schedules]);
+    } catch (err) {
+      logger.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchUpdateSchedules();
+  }, [refetch]);
 
   return (
     <Modal isOpen={showModal} size="large" onClose={() => setShowModal(false)}>
@@ -43,14 +59,20 @@ const RestoreArticle = ({
           Version history of {currentArticleDetails.title} in Scribble.
         </Typography>
         {categoryDeletedInfo && (
-          <Typography
-            className="mb-4 bg-red-100 p-1 font-serif text-xs text-gray-600"
-            style="body3"
-          >
-            The category of this article version was deleted. So on Restore, the
-            article will be either moved to General category if it exists, or
-            General category will created and moved automatically.
-          </Typography>
+          <div className="mb-2">
+            <Callout icon={Info} style="info">
+              The category of this article version was deleted. So on Restore,
+              the article will be either moved to General category if it exists,
+              or General category will created and moved automatically.
+            </Callout>
+          </div>
+        )}
+        {scheduledUpdates.length > 0 && (
+          <div className="mb-2 w-10/12">
+            <Callout icon={Warning} style="danger">
+              On restore, all the scheduled updates will be deleted.
+            </Callout>
+          </div>
         )}
         <div className="mt-6 w-full">
           <div className="grid grid-cols-2 space-x-20">

@@ -1,0 +1,20 @@
+default: &default
+  future_article_updates_worker:
+    cron: "0 * * * *"
+    class: "FutureArticleUpdatesWorker"
+    queue: "default"
+
+development:
+  future_article_updates_worker:
+    cron: "* * * * *"
+    class: "FutureArticleUpdatesWorker"
+    queue: "default"
+
+test:
+  <<: *default
+
+staging:
+  <<: *default
+
+production:
+  <<: *default
