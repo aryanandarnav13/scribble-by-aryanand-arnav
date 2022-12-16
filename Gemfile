@@ -72,3 +72,7 @@ gem "paper_trail"
 gem "groupdate"
 
 gem "kaminari"
+
+gem "sidekiq", "<7"
+
+gem "sidekiq-cron"

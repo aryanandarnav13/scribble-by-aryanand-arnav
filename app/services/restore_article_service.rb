@@ -19,6 +19,8 @@ class RestoreArticleService
     @article.restored_at = restored_at
     @article.slug = original_slug
     @article.save!
+
+    @article.schedules.destroy_all if @article.schedules.any?
   end
 
   private

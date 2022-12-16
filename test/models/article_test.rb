@@ -89,4 +89,26 @@ class ArticleTest < ActiveSupport::TestCase
     end
     assert_match t("article.slug.immutable"), test_article.errors_to_sentence
   end
+
+  def test_delete_schedule_if_article_status_is_changed_to_draft_and_unpublish_schedule_exists
+    @article.status = "published"
+    @article.save
+    @article.schedules.create(schedule_at: Time.current + 1.hour, status: "drafted")
+    assert @article.schedules.exists?
+    @article.status = "drafted"
+    @article.save
+    @article.reload
+    assert_empty @article.schedules
+  end
+
+  def test_delete_schedule_if_article_status_is_changed_to_published_and_publish_schedule_exists
+    @article.status = "drafted"
+    @article.save
+    @article.schedules.create(schedule_at: Time.current + 1.hour, status: "published")
+    assert @article.schedules.exists?
+    @article.status = "published"
+    @article.save
+    @article.reload
+    assert_empty @article.schedules
+  end
 end

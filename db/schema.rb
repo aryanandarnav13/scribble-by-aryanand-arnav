@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_06_211151) do
+ActiveRecord::Schema.define(version: 2022_12_12_155843) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -54,6 +54,15 @@ ActiveRecord::Schema.define(version: 2022_12_06_211151) do
     t.uuid "site_id"
   end
 
+  create_table "schedules", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "status", default: "drafted", null: false
+    t.datetime "schedule_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.uuid "article_id"
+    t.index ["article_id"], name: "index_schedules_on_article_id"
+  end
+
   create_table "sites", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "name", null: false
     t.string "password_digest"
@@ -86,5 +95,6 @@ ActiveRecord::Schema.define(version: 2022_12_06_211151) do
   add_foreign_key "articles", "users", on_delete: :cascade
   add_foreign_key "categories", "users", on_delete: :cascade
   add_foreign_key "redirections", "sites", on_delete: :cascade
+  add_foreign_key "schedules", "articles"
   add_foreign_key "users", "sites", on_delete: :cascade
 end

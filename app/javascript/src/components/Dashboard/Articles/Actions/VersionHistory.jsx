@@ -51,7 +51,7 @@ const VersionHistory = ({
         Version history of {currentArticleDetails.title} in Scribble.
       </Typography>
       <Typography className="mb-4" style="body3">
-        <div className="rounded my-3 mr-4 flex items-baseline border-black bg-gray-200 p-4">
+        <div className="rounded border-black-100 border my-3 mr-4 flex items-baseline bg-gray-200 p-4">
           <div>
             <Typography className="neeto-ui-text-gray-500" style="body3">
               {formatDateAndTime(currentArticleDetails.updated_at)}
@@ -80,7 +80,7 @@ const VersionHistory = ({
         {articleVersions.length > 0 &&
           articleVersions.map(articleVersion => (
             <div
-              className="my-3 mr-4 flex items-baseline border-black bg-gray-100 p-4"
+              className="border-black-100 border my-3 mr-4 flex items-baseline bg-gray-100 p-4"
               key={articleVersion.id}
             >
               <div>

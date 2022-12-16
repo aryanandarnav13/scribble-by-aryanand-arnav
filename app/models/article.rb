@@ -9,6 +9,7 @@ class Article < ApplicationRecord
   belongs_to :category
   belongs_to :user
   has_many :article_visits
+  has_many :schedules, dependent: :destroy
 
   validates :title, presence: true, length: { maximum: 255 },
     format: { with: TITLE_REGEX, message: "is invalid" }
@@ -18,9 +19,10 @@ class Article < ApplicationRecord
 
   before_create :set_slug, if: -> { status == "published" }
   before_update :set_slug, if: -> { status == "published" && self.slug == nil }
+  before_update :delete_schedules, if: -> { status_changed? && schedules.present? }
 
+  has_paper_trail on: [:update], only: [:title, :body, :status, :category_id]
   acts_as_list scope: :category
-  has_paper_trail on: [:update]
   paginates_per MAX_PAGE_SIZE
 
   private
@@ -40,5 +42,10 @@ class Article < ApplicationRecord
       if slug_changed? && self.persisted?
         errors.add(:slug, t("article.slug.immutable"))
       end
+    end
+
+    def delete_schedules
+      schedules.find_by(status: "drafted").destroy if status == "drafted"
+      schedules.find_by(status: "published").destroy if status == "published"
     end
 end
