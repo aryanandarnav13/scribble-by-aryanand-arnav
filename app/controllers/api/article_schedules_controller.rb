@@ -8,8 +8,7 @@ class Api::ArticleSchedulesController < ApplicationController
   end
 
   def create
-    schedule_at = create_schedule_at
-    @article.schedules.create!(status: params[:status], schedule_at: schedule_at)
+    @article.schedules.create!(status: params[:status], schedule_at: params[:schedule_at])
     respond_with_success(t("successfully_created", entity: "Update Schedule"))
   end
 
@@ -22,9 +21,5 @@ class Api::ArticleSchedulesController < ApplicationController
 
     def load_article!
       @article = current_user.articles.find(params[:id])
-    end
-
-    def create_schedule_at
-      Time.zone.at(params[:schedule_at].to_i)
     end
 end

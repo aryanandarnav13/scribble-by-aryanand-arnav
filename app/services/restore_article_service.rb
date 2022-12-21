@@ -18,6 +18,7 @@ class RestoreArticleService
 
     @article.restored_at = restored_at
     @article.slug = original_slug
+    @article.status = "drafted"
     @article.save!
 
     @article.schedules.destroy_all if @article.schedules.any?

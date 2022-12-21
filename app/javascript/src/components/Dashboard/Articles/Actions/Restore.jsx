@@ -3,8 +3,8 @@ import React, { useState, useEffect } from "react";
 import { Warning, Info } from "neetoicons";
 import { Typography, Modal, Button, Textarea, Input, Callout } from "neetoui";
 
-import articleSchedulesApi from "apis/articleSchedules";
-import articleVersionsApi from "apis/articleVersions";
+import articleSchedulesApi from "apis/article_schedules";
+import articleVersionsApi from "apis/article_versions";
 
 const RestoreArticle = ({
   showModal,
@@ -27,7 +27,7 @@ const RestoreArticle = ({
         versionAt: articleToBeRestored.created_at,
         restoredAt: articleToBeRestored.object.updated_at,
       });
-      setRefetch(!refetch);
+      setRefetch(prevFetch => !prevFetch);
       setShowModal(false);
     } catch (error) {
       logger.error(error);
