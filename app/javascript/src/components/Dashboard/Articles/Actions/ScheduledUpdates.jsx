@@ -3,27 +3,34 @@ import React, { useState } from "react";
 import { Delete } from "neetoicons";
 import { Typography, Button, Tooltip, Alert } from "neetoui";
 
-import articleSchedulesApi from "apis/articleSchedules";
+import articleSchedulesApi from "apis/article_schedules";
 
 const ScheduledUpdates = ({
   scheduledUpdates = [],
-  refetch,
   setRefetch,
   articleStatus,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleDeleteSchedule = id => {
-    if (
+  const handleDeleteSchedule = async id => {
+    const checkDeletionOfBothSchedules =
       scheduledUpdates.length === 2 &&
       scheduledUpdates[0].status !== articleStatus &&
-      scheduledUpdates[0].id === id
-    ) {
+      scheduledUpdates[0].id === id;
+
+    if (checkDeletionOfBothSchedules) {
       setIsOpen(true);
     } else {
-      articleSchedulesApi.destroy(id);
-      setRefetch(!refetch);
+      await articleSchedulesApi.destroy(id);
+      setRefetch(prevFetch => !prevFetch);
     }
+  };
+
+  const handleDeleteBothSchedules = async () => {
+    await articleSchedulesApi.destroy(scheduledUpdates[0].id);
+    await articleSchedulesApi.destroy(scheduledUpdates[1].id);
+    setRefetch(prevFetch => !prevFetch);
+    setIsOpen(false);
   };
 
   return (
@@ -67,10 +74,7 @@ const ScheduledUpdates = ({
         title="Are you sure you want to continue?"
         onClose={() => setIsOpen(false)}
         onSubmit={() => {
-          articleSchedulesApi.destroy(scheduledUpdates[0].id);
-          articleSchedulesApi.destroy(scheduledUpdates[1].id);
-          setRefetch(!refetch);
-          setIsOpen(false);
+          handleDeleteBothSchedules();
         }}
       />
     </div>

@@ -48,7 +48,7 @@ en:
     same_path: "From path and To path cannot be same."
   schedule:
     not_in_past: "Please select future date and time"
-    should_be_after_old_schedule: "Select date and time after previous schedule"
+    should_be_after_old_schedule: "Select date and time after already scheduled update"
     two_schedules: "Maximum only two future schedules are allowed for an article"
     drafted_unpublished: "Drafted article cannot be unpublished"
     published_published: "Published article cannot be published"

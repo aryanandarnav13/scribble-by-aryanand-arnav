@@ -8,7 +8,7 @@ class ScheduleTest < ActiveSupport::TestCase
     @user = create(:user, site: @site)
     @category = create(:category, user: @user)
     @article = create(:article, category: @category, user: @user)
-    @schedule = create(:schedule, article: @article)
+    @schedule = create(:schedule, article: @article, schedule_at: Time.current + 1.minute)
   end
 
   def test_schedule_in_future

@@ -5,8 +5,8 @@ import { ActionDropdown, Button } from "neetoui";
 import { Input, Textarea, Select } from "neetoui/formik";
 import { useHistory, useParams } from "react-router-dom";
 
+import articleSchedulesApi from "apis/article_schedules";
 import articlesApi from "apis/articles";
-import articleSchedulesApi from "apis/articleSchedules";
 import categoriesApi from "apis/categories";
 import { ARTICLE_VALIDATION_SCHEMA } from "components/Dashboard/Articles/constants";
 import NavBar from "components/NavBar";
@@ -31,7 +31,6 @@ const EditArticle = () => {
   const [categoryDeletedInfo, setCategoryDeletedInfo] = useState(false);
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
   const [articleScheduledStatus, setArticleScheduledStatus] = useState("draft");
-  const [dateAndTime, setDateAndTime] = useState("");
   const [label, setLabel] = useState("");
   const [scheduledUpdates, setScheduledUpdates] = useState([]);
   const [formValues, setFormValues] = useState({});
@@ -59,7 +58,7 @@ const EditArticle = () => {
       setArticleStatus(response.data.status);
       setLabel(response.data.status === "drafted" ? "Draft" : "Publish");
       setCurrentArticleDetails(response.data);
-      setArticleVersions(response.data.versions);
+      setArticleVersions(response.data.versions.reverse());
     } catch (error) {
       logger.error(error);
     }
@@ -68,7 +67,7 @@ const EditArticle = () => {
   const fetchUpdateSchedules = async () => {
     try {
       const res = await articleSchedulesApi.list(id);
-      setScheduledUpdates([...res.data.schedules]);
+      setScheduledUpdates(res.data.schedules);
     } catch (err) {
       logger.error(err);
     }
@@ -85,7 +84,7 @@ const EditArticle = () => {
       restored_at: null,
     };
     setSubmitted(true);
-    if (checkForcedScheduleDeletion()) {
+    if (!checkForcedScheduleDeletion()) {
       try {
         await articlesApi.update(id, payload);
         history.push("/");
@@ -109,6 +108,8 @@ const EditArticle = () => {
       restored_at: null,
     };
     setSubmitted(true);
+    setIsScheduleDeletionAlertOpen(false);
+    setRefetch(prevFetch => !prevFetch);
     try {
       await articlesApi.update(id, payload);
     } catch (error) {
@@ -117,35 +118,19 @@ const EditArticle = () => {
   };
 
   const checkForcedScheduleDeletion = () => {
-    if (
+    const deletionCondition =
       (scheduledUpdates.filter(update => update.status === "published").length >
         0 &&
         articleStatus === "published") ||
       (scheduledUpdates.filter(update => update.status === "drafted").length >
         0 &&
-        articleStatus === "drafted")
-    ) {
-      return false;
+        articleStatus === "drafted");
+
+    if (deletionCondition) {
+      return true;
     }
 
-    return true;
-  };
-
-  const handleScheduleUpdate = async () => {
-    try {
-      const d = new Date(`${dateAndTime}`);
-      setRefetch(!refetch);
-      await articleSchedulesApi.create({
-        id,
-        payload: {
-          status: articleScheduledStatus,
-          schedule_at: d.getTime() / 1000,
-        },
-      });
-      setIsScheduleModalOpen(false);
-    } catch (err) {
-      logger.error(err);
-    }
+    return false;
   };
 
   const isUnpublishLaterButtonActive = () =>
@@ -162,11 +147,11 @@ const EditArticle = () => {
 
   useEffect(() => {
     fetchArticleDetails();
-  }, [id]);
+  }, [id, refetch]);
 
   useEffect(() => {
     fetchUpdateSchedules();
-  }, [refetch]);
+  }, [id, refetch, articleStatus]);
 
   return (
     <div>
@@ -255,35 +240,25 @@ const EditArticle = () => {
                         </MenuItem.Button>
                         {scheduledUpdates.length < 2 && (
                           <div>
-                            {isUnpublishLaterButtonActive() ? (
-                              <MenuItem.Button
-                                onClick={() => {
-                                  setIsScheduleModalOpen(true);
-                                  setArticleScheduledStatus("drafted");
-                                  setLabel(
-                                    currentArticleDetails.status === "drafted"
-                                      ? "Draft"
-                                      : "Publish"
-                                  );
-                                }}
-                              >
-                                Unpublish Later
-                              </MenuItem.Button>
-                            ) : (
-                              <MenuItem.Button
-                                onClick={() => {
-                                  setIsScheduleModalOpen(true);
-                                  setArticleScheduledStatus("published");
-                                  setLabel(
-                                    currentArticleDetails.status === "drafted"
-                                      ? "Draft"
-                                      : "Publish"
-                                  );
-                                }}
-                              >
-                                Publish Later
-                              </MenuItem.Button>
-                            )}
+                            <MenuItem.Button
+                              onClick={() => {
+                                setIsScheduleModalOpen(true);
+                                setArticleScheduledStatus(
+                                  isUnpublishLaterButtonActive()
+                                    ? "drafted"
+                                    : "published"
+                                );
+                                setLabel(
+                                  currentArticleDetails.status === "drafted"
+                                    ? "Draft"
+                                    : "Publish"
+                                );
+                              }}
+                            >
+                              {isUnpublishLaterButtonActive()
+                                ? "Unpublish Later"
+                                : "Publish Later"}
+                            </MenuItem.Button>
                           </div>
                         )}
                       </Menu>
@@ -303,17 +278,14 @@ const EditArticle = () => {
           </Formik>
         </div>
         <VersionHistory
-          articleToBeRestored={articleToBeRestored}
           articleVersionDetails={articleVersionDetails}
           articleVersions={articleVersions}
           categories={categories}
           currentArticleDetails={currentArticleDetails}
-          id={id}
           setArticleToBeRestored={setArticleToBeRestored}
           setArticleVersionDetails={setArticleVersionDetails}
           setCategoryDeletedInfo={setCategoryDeletedInfo}
           setCategoryTitle={setCategoryTitle}
-          setRefetch={setRefetch}
           setShowModal={setShowModal}
         />
       </div>
@@ -330,11 +302,11 @@ const EditArticle = () => {
         showModal={showModal}
       />
       <DateAndTimePickerModal
-        handleScheduleUpdate={handleScheduleUpdate}
+        articleScheduledStatus={articleScheduledStatus}
+        id={id}
         isScheduleModalOpen={isScheduleModalOpen}
-        scheduledUpdates={scheduledUpdates}
-        setDateAndTime={setDateAndTime}
         setIsScheduleModalOpen={setIsScheduleModalOpen}
+        setRefetch={setRefetch}
       />
       <ForcedScheduleDeletionAlert
         handleForcedEdit={handleForcedEdit}

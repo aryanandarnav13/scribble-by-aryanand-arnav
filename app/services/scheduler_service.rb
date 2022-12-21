@@ -20,7 +20,7 @@ class SchedulerService
     def update_articles
       schedules_to_update.each do |schedule|
         UpdateArticlesWorker.perform_in(
-          schedule.schedule_at, schedule.article_id, schedule.status, schedule.id)
+          schedule.schedule_at, schedule.id)
       end
     end
 end
