@@ -4,6 +4,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { Formik, Form as FormikForm } from "formik";
 import { ActionDropdown, Button } from "neetoui";
 import { Input, Textarea, Select } from "neetoui/formik";
+import { pick, assoc, pipe } from "ramda";
 import { useHistory, useParams } from "react-router-dom";
 
 import articleSchedulesApi from "apis/article_schedules";
@@ -97,15 +98,13 @@ const EditArticle = () => {
   );
 
   const handleEdit = async values => {
-    const { title, body } = values;
-    const category_id = values.category.value;
-    const payload = {
-      title,
-      body,
-      category_id,
-      status: articleStatus,
-      restored_at: null,
-    };
+    const payload = pipe(
+      assoc("category_id", values.category.value),
+      assoc("status", articleStatus),
+      assoc("restored_at", null),
+      pick(["title", "body", "category_id", "status", "restored_at"])
+    )(values);
+
     setSubmitted(true);
     if (!checkForcedScheduleDeletion()) {
       updateArticle(payload);
@@ -117,15 +116,12 @@ const EditArticle = () => {
 
   const { mutate: handleForcedEdit } = useMutation(
     async () => {
-      const { title, body } = formValues;
-      const category_id = formValues.category.value;
-      const payload = {
-        title,
-        body,
-        category_id,
-        status: articleStatus,
-        restored_at: null,
-      };
+      const payload = pipe(
+        assoc("category_id", formValues.category.value),
+        assoc("status", articleStatus),
+        assoc("restored_at", null),
+        pick(["title", "body", "category_id", "status", "restored_at"])
+      )(formValues);
 
       return await articlesApi.update(id, payload);
     },

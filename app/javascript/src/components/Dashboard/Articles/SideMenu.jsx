@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Search, Plus, Close } from "neetoicons";
 import { Typography } from "neetoui";
 import { MenuBar } from "neetoui/layouts";
+import { assoc } from "ramda";
 
 import articlesApi from "apis/articles";
 import categoriesApi from "apis/categories";
@@ -66,10 +67,9 @@ const SideMenu = ({
   );
 
   const handleStatus = status => {
-    setArticleFilterConstraint({
-      ...articleFilterConstraint,
-      status,
-    });
+    setArticleFilterConstraint(
+      assoc("status", status, articleFilterConstraint)
+    );
   };
 
   const handleCategories = category => {

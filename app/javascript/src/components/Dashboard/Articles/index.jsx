@@ -4,6 +4,7 @@ import { PageLoader } from "@bigbinary/neetoui";
 import { useMutation } from "@tanstack/react-query";
 import { ActionDropdown, Button, Checkbox } from "neetoui";
 import { Container, Header } from "neetoui/layouts";
+import { assoc } from "ramda";
 
 import articlesApi from "apis/articles";
 import NavBar from "components/NavBar";
@@ -29,10 +30,7 @@ const Articles = () => {
 
   const handleColumnCheck = e => {
     if (!(e.target.name === "title" && !e.target.checked)) {
-      setColumnFilter({
-        ...columnFilter,
-        [e.target.name]: e.target.checked,
-      });
+      setColumnFilter(assoc(e.target.name, e.target.checked, columnFilter));
     }
   };
 

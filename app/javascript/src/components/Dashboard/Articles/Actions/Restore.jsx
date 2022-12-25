@@ -50,7 +50,7 @@ const RestoreArticle = ({
     },
     {
       onSuccess: data => {
-        setScheduledUpdates([...data]);
+        setScheduledUpdates(data);
       },
       onError: error => {
         logger.error(error);
