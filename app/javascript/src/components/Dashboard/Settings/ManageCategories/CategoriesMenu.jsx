@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import { useMutation } from "@tanstack/react-query";
 import { MenuVertical, Plus } from "neetoicons";
 import { ActionDropdown, Typography, Button, Tooltip } from "neetoui";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
@@ -29,26 +30,26 @@ const CategoriesMenu = ({
 
   const { Menu, MenuItem, Divider } = ActionDropdown;
 
-  const updateCategoryPosition = async ({
-    id,
-    sourcePosition,
-    destinationPosition,
-  }) => {
-    const [removed] = categories.splice(sourcePosition, 1);
-    categories.splice(destinationPosition, 0, removed);
+  const { mutate: updateCategoryPosition } = useMutation(
+    async ({ id, sourcePosition, destinationPosition }) => {
+      const [removed] = categories.splice(sourcePosition, 1);
+      categories.splice(destinationPosition, 0, removed);
+      const payload = {
+        position: destinationPosition + 1,
+        id,
+      };
 
-    try {
-      await categoriesApi.reorder({
-        payload: {
-          position: destinationPosition + 1,
-          id,
-        },
-      });
-      await fetchCategories();
-    } catch (error) {
-      logger.error(error);
+      return await categoriesApi.reorder({ payload });
+    },
+    {
+      onSuccess: () => {
+        fetchCategories();
+      },
+      onError: error => {
+        logger.error(error);
+      },
     }
-  };
+  );
 
   const destroyCategory = async category => {
     if (
@@ -56,23 +57,31 @@ const CategoriesMenu = ({
         0 ||
       (category?.name === "General" && categories?.length === 1)
     ) {
-      try {
-        await categoriesApi.destroy({
-          payload: {
-            id: category.id,
-          },
-        });
-      } catch (error) {
-        logger.error(error);
-      } finally {
-        fetchCategories();
-        fetchArticles();
-      }
+      handleDestroy(category.id);
     } else {
       setShowAlert(true);
       setCategoryToDelete(category);
     }
   };
+
+  const { mutate: handleDestroy } = useMutation(
+    async id => {
+      const payload = {
+        id,
+      };
+
+      return await categoriesApi.destroy({ payload });
+    },
+    {
+      onSuccess: () => {
+        fetchCategories();
+        fetchArticles();
+      },
+      onError: error => {
+        logger.error(error);
+      },
+    }
+  );
 
   const filteredCategories = () => {
     const filteredCategoriesArray = [];
@@ -90,36 +99,52 @@ const CategoriesMenu = ({
 
   const switchAndDeleteCategory = async () => {
     if (categories.length === 1) {
-      try {
-        await categoriesApi.destroy({
-          payload: {
-            id: categoryToDelete.id,
-          },
-        });
-        setShowAlert(false);
-      } catch (error) {
-        logger.log(error);
-      } finally {
-        fetchCategories();
-        fetchArticles();
-      }
+      handleLastCategoryDelete();
     } else {
-      try {
-        await categoriesApi.destroy({
-          payload: {
-            id: categoryToDelete.id,
-            new_category_id: categoryToUpdateTo.value,
-          },
-        });
-        setShowAlert(false);
-      } catch (error) {
-        logger.error(error);
-      } finally {
-        fetchCategories();
-        fetchArticles();
-      }
+      handleCategoryDeleteAndSwitch();
     }
   };
+
+  const { mutate: handleLastCategoryDelete } = useMutation(
+    async () => {
+      const payload = {
+        id: categoryToDelete.id,
+      };
+
+      return await categoriesApi.destroy({ payload });
+    },
+    {
+      onSuccess: () => {
+        fetchCategories();
+        fetchArticles();
+        setShowAlert(false);
+      },
+      onError: error => {
+        logger.error(error);
+      },
+    }
+  );
+
+  const { mutate: handleCategoryDeleteAndSwitch } = useMutation(
+    async () => {
+      const payload = {
+        id: categoryToDelete.id,
+        new_category_id: categoryToUpdateTo.value,
+      };
+
+      return await categoriesApi.destroy({ payload });
+    },
+    {
+      onSuccess: () => {
+        fetchCategories();
+        fetchArticles();
+        setShowAlert(false);
+      },
+      onError: error => {
+        logger.error(error);
+      },
+    }
+  );
 
   const handleDragStart = item => {
     setSelectedCategory(item.draggableId);

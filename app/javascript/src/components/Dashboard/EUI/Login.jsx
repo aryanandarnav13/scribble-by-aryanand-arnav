@@ -1,5 +1,6 @@
 import React from "react";
 
+import { useMutation } from "@tanstack/react-query";
 import { Formik, Form } from "formik";
 import { Typography, Button } from "neetoui";
 import { Input } from "neetoui/formik";
@@ -12,20 +13,29 @@ import { LOGIN_SCHEMA } from "./constants";
 import Vector from "./Vector.png";
 
 export const Login = ({ siteName }) => {
-  const handleSubmit = async values => {
-    try {
-      const response = await authApi.login({ password: values.password });
-      setToLocalStorage({
-        authToken: response.data.authentication_token,
-      });
-      setAuthHeaders();
-      if (response.status !== 401) {
-        window.location.href = "/preview";
-      }
-    } catch (error) {
-      logger.error(error);
+  const { mutate: handleSubmit } = useMutation(
+    async values => {
+      const payload = { password: values.password };
+
+      const response = await authApi.login(payload);
+
+      return response;
+    },
+    {
+      onSuccess: response => {
+        setToLocalStorage({
+          authToken: response.data.authentication_token,
+        });
+        setAuthHeaders();
+        if (response.status !== 401) {
+          window.location.href = "/preview";
+        }
+      },
+      onError: error => {
+        logger.error(error);
+      },
     }
-  };
+  );
 
   return (
     <div>

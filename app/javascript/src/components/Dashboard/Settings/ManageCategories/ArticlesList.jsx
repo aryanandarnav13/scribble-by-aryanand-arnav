@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import { useMutation } from "@tanstack/react-query";
 import { Clock } from "neetoicons";
 import { Typography, Tag, Tooltip, Checkbox, Avatar } from "neetoui";
 import { Scrollable } from "neetoui/layouts";
@@ -17,23 +18,25 @@ const ArticlesList = ({
 }) => {
   const [selectedArticle, setSelectedArticle] = useState("");
 
-  const updateArticlePosition = async ({
-    id,
-    sourcePosition,
-    destinationPosition,
-  }) => {
-    const [removed] = articles.splice(sourcePosition, 1);
-    articles.splice(destinationPosition, 0, removed);
-    const payload = {
-      position: destinationPosition + 1,
-    };
-    try {
-      await articlesApi.reorder(id, payload);
-      await fetchArticles();
-    } catch (error) {
-      logger.error(error);
+  const { mutate: updateArticlePosition } = useMutation(
+    async ({ id, sourcePosition, destinationPosition }) => {
+      const [removed] = articles.splice(sourcePosition, 1);
+      articles.splice(destinationPosition, 0, removed);
+      const payload = {
+        position: destinationPosition + 1,
+      };
+
+      return await articlesApi.reorder(id, payload);
+    },
+    {
+      onSuccess: () => {
+        fetchArticles();
+      },
+      onError: error => {
+        logger.error(error);
+      },
     }
-  };
+  );
 
   const handleArticles = article => {
     if (checkedArticle.article.includes(article)) {

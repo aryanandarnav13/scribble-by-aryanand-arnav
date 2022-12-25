@@ -1,20 +1,24 @@
 import React from "react";
 
+import { useMutation } from "@tanstack/react-query";
 import { Edit, Delete } from "neetoicons";
 import { Button } from "neetoui";
 
 import articlesApi from "apis/articles";
 
 const TableActions = ({ id, fetchArticles }) => {
-  const deleteArticle = async () => {
-    try {
-      await articlesApi.destroy(id);
-      fetchArticles();
-      window.location.reload();
-    } catch (error) {
-      logger.error(error);
+  const { mutate: deleteArticle } = useMutation(
+    async () => await articlesApi.destroy(id),
+    {
+      onSuccess: () => {
+        fetchArticles();
+        window.location.reload();
+      },
+      onError: error => {
+        logger.error(error);
+      },
     }
-  };
+  );
 
   return (
     <div className="flex">

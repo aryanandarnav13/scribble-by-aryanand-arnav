@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import { useMutation } from "@tanstack/react-query";
 import { Formik, Form } from "formik";
 import { Button, Pane } from "neetoui";
 import { Input } from "neetoui/formik";
@@ -12,23 +13,45 @@ const CategoryForm = ({ onClose, refetch, category, isEdit }) => {
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = async values => {
-    try {
-      if (isEdit) {
-        await categoriesApi.update({
-          payload: {
-            name: values.name,
-            id: category.id,
-          },
-        });
-      } else {
-        await categoriesApi.create({ name: values.name });
-      }
-      refetch();
-      onClose();
-    } catch (err) {
-      logger.error(err);
+    if (isEdit) {
+      handleEdit(values);
+    } else {
+      handleCreate(values);
     }
   };
+
+  const { mutate: handleEdit } = useMutation(
+    async values => {
+      const payload = {
+        name: values.name,
+        id: category.id,
+      };
+
+      return await categoriesApi.update({ payload });
+    },
+    {
+      onSuccess: () => {
+        refetch();
+        onClose();
+      },
+      onError: error => {
+        logger.error(error);
+      },
+    }
+  );
+
+  const { mutate: handleCreate } = useMutation(
+    async values => await categoriesApi.create({ name: values.name }),
+    {
+      onSuccess: () => {
+        refetch();
+        onClose();
+      },
+      onError: error => {
+        logger.error(error);
+      },
+    }
+  );
 
   return (
     <Formik

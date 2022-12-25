@@ -1,4 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+
+import { useQuery } from "@tanstack/react-query";
+import { PageLoader } from "neetoui";
 
 import publicArticlesApi from "apis/public/articles";
 import publicCategoriesApi from "apis/public/categories";
@@ -8,34 +11,39 @@ import EuiNavBar from "./EuiNavBar";
 import SearchArticleModal from "./SearchArticleModal";
 
 const Eui = ({ siteName }) => {
-  const [categories, setCategories] = useState([]);
-  const [articles, setArticles] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
-  const fetchCategories = async () => {
-    try {
-      const response = await publicCategoriesApi.listCategories();
-      setCategories(response.data?.categories);
-    } catch (error) {
-      window.location.href = "/preview/login";
+  const { data: categories, isLoading: categoriesLoading } = useQuery(
+    ["categories"],
+    async () => {
+      const { data } = await publicCategoriesApi.listCategories();
 
-      logger.error(error);
+      return data.categories;
+    },
+    {
+      onError: error => {
+        logger.error(error);
+      },
     }
-  };
+  );
 
-  const fetchArticles = async () => {
-    try {
-      const response = await publicArticlesApi.listArticles();
-      setArticles(response.data?.articles);
-    } catch (error) {
-      logger.error(error);
+  const { data: articles, isLoading: articlesLoading } = useQuery(
+    ["articles"],
+    async () => {
+      const { data } = await publicArticlesApi.listArticles();
+
+      return data.articles;
+    },
+    {
+      onError: error => {
+        logger.error(error);
+      },
     }
-  };
+  );
 
-  useEffect(() => {
-    fetchArticles();
-    fetchCategories();
-  }, []);
+  if (categoriesLoading || articlesLoading) {
+    return <PageLoader />;
+  }
 
   return (
     <div>

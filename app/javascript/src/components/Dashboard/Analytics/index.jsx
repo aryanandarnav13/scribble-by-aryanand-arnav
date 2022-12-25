@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
-import { Table, Pagination } from "neetoui";
+import { useQuery } from "@tanstack/react-query";
+import { Table, Pagination, PageLoader } from "neetoui";
 
 import articlesApi from "apis/articles";
 import NavBar from "components/NavBar";
@@ -8,28 +9,42 @@ import NavBar from "components/NavBar";
 import { analyticsColumnData } from "./utils";
 
 const Analytics = () => {
-  const [articles, setArticles] = useState([]);
   const [pageNo, setPageNo] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
-  const fetchArticles = async () => {
-    try {
+  const {
+    data,
+    isLoading,
+    refetch: fetchArticles,
+  } = useQuery(
+    ["articles"],
+    async () => {
       const payload = {
         statusFilter: "published",
         searchFilter: "",
         page_number: pageNo,
       };
-      const response = await articlesApi.list(payload);
-      setArticles(response?.data.articles);
-      setTotalCount(response?.data?.published_articles_count);
-    } catch (err) {
-      logger.error(err);
+      const { data } = await articlesApi.list(payload);
+
+      return data;
+    },
+    {
+      onSuccess: data => {
+        setTotalCount(data?.published_articles_count);
+      },
+      onError: error => {
+        logger.error(error);
+      },
     }
-  };
+  );
 
   useEffect(() => {
     fetchArticles();
   }, [pageNo]);
+
+  if (isLoading) {
+    return <PageLoader />;
+  }
 
   return (
     <div>
@@ -37,7 +52,7 @@ const Analytics = () => {
       <div className="mx-auto mt-10 w-7/12">
         <Table
           columnData={analyticsColumnData}
-          rowData={articles}
+          rowData={data?.articles}
           expandable={{
             expandedRowRender: record => (
               <div className="border-gray-500 bg-gray-200 p-2">

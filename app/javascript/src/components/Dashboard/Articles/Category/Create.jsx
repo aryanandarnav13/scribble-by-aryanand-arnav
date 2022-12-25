@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import { useMutation } from "@tanstack/react-query";
 import { Formik, Form } from "formik";
 import { Check } from "neetoicons";
 import { Button } from "neetoui";
@@ -14,18 +15,24 @@ import {
 const Create = ({ fetchCategoriesList }) => {
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = async values => {
-    try {
+  const { mutate: createCategory } = useMutation(
+    async values => {
       values = {
         ...values,
       };
-      await categoriesApi.create(values);
-    } catch (err) {
-      logger.error(err);
+
+      return await categoriesApi.create(values);
+    },
+    {
+      onSuccess: () => {
+        fetchCategoriesList();
+        setSubmitted(true);
+      },
+      onError: error => {
+        logger.error(error);
+      },
     }
-    fetchCategoriesList();
-    setSubmitted(true);
-  };
+  );
 
   return (
     <Formik
@@ -33,7 +40,7 @@ const Create = ({ fetchCategoriesList }) => {
       validateOnBlur={submitted}
       validateOnChange={submitted}
       validationSchema={CATEGORY_VALIDATION_SCHEMA}
-      onSubmit={handleSubmit}
+      onSubmit={createCategory}
     >
       <Form>
         <Input

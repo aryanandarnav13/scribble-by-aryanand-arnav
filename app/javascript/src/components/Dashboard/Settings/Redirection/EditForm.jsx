@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+
+import { useQuery } from "@tanstack/react-query";
 
 import redirectionApi from "apis/redirections";
 
@@ -11,16 +13,19 @@ const EditForm = ({
   fetchRedirectionsDetails,
   setAddRedirection,
 }) => {
-  const [redirection, setRedirection] = useState({ from: "", to: "" });
-
-  const fetchRedirection = async () => {
-    try {
+  const { data: redirection, refetch: fetchRedirection } = useQuery(
+    ["redirection", id],
+    async () => {
       const response = await redirectionApi.show(id);
-      setRedirection(response.data.redirection);
-    } catch (error) {
-      logger.error(error);
+
+      return response.data.redirection;
+    },
+    {
+      onError: error => {
+        logger.error(error);
+      },
     }
-  };
+  );
 
   useEffect(() => {
     fetchRedirection();

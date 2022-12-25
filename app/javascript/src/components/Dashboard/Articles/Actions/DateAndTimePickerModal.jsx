@@ -1,5 +1,6 @@
 import React from "react";
 
+import { useMutation } from "@tanstack/react-query";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
 import { Formik, Form as FormikForm, ErrorMessage } from "formik";
@@ -15,27 +16,32 @@ const DateAndTimePickerModal = ({
   articleScheduledStatus,
 }) => {
   const DATE_AND_TIME_INITIAL_VALUES = { dateAndTime: dayjs().startOf("day") };
-  const handleScheduleUpdate = async values => {
-    try {
-      setRefetch(prevFetch => !prevFetch);
-      await articleSchedulesApi.create({
-        id,
-        payload: {
-          status: articleScheduledStatus,
-          schedule_at: dayjs(values.dateAndTime).format(),
-        },
-      });
-      setIsScheduleModalOpen(false);
-    } catch (err) {
-      logger.error(err);
+
+  const { mutate: scheduleArticle } = useMutation(
+    async values => {
+      const payload = {
+        status: articleScheduledStatus,
+        schedule_at: dayjs(values.dateAndTime).format(),
+      };
+
+      return await articleSchedulesApi.create({ id, payload });
+    },
+    {
+      onSuccess: () => {
+        setRefetch(prevFetch => !prevFetch);
+        setIsScheduleModalOpen(false);
+      },
+      onError: error => {
+        logger.error(error);
+      },
     }
-  };
+  );
 
   return (
     <Formik
       enableReinitialize
       initialValues={DATE_AND_TIME_INITIAL_VALUES}
-      onSubmit={handleScheduleUpdate}
+      onSubmit={scheduleArticle}
     >
       {({ values, setFieldValue }) => (
         <Modal

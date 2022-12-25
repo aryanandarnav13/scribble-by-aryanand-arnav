@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import { useMutation } from "@tanstack/react-query";
 import { Edit, Delete } from "neetoicons";
 import { Button } from "neetoui";
 
@@ -10,14 +11,17 @@ import EditForm from "../EditForm";
 const Row = ({ redirection, fetchRedirectionsDetails, setAddRedirection }) => {
   const [isEdit, setIsEdit] = useState(false);
 
-  const handleDelete = async id => {
-    try {
-      await redirectionApi.destroy(id);
-      fetchRedirectionsDetails();
-    } catch (error) {
-      logger.error(error);
+  const { mutate: deleteRedirection } = useMutation(
+    async () => await redirectionApi.destroy(redirection.id),
+    {
+      onSuccess: () => {
+        fetchRedirectionsDetails();
+      },
+      onError: error => {
+        logger.error(error);
+      },
     }
-  };
+  );
 
   if (isEdit) {
     return (
@@ -51,7 +55,7 @@ const Row = ({ redirection, fetchRedirectionsDetails, setAddRedirection }) => {
         <Button
           icon={Delete}
           style="text"
-          onClick={() => handleDelete(redirection.id)}
+          onClick={() => deleteRedirection()}
         />
         <Button icon={Edit} style="text" onClick={() => setIsEdit(true)} />
       </div>
