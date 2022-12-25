@@ -9,6 +9,7 @@ import { assoc } from "ramda";
 
 import articlesApi from "apis/articles";
 import categoriesApi from "apis/categories";
+import useCategoryStore from "store";
 
 import Create from "./Category/Create";
 
@@ -23,7 +24,9 @@ const SideMenu = ({
   const [isSearchCollapsed, setIsSearchCollapsed] = useState(true);
   const [isAddCategoryCollapsed, setIsAddCategoryCollapsed] = useState(true);
   const [searchCategory, setSearchCategory] = useState("");
-  const [categories, setCategories] = useState([]);
+
+  const categories = useCategoryStore(state => state.categories);
+  const setCategories = useCategoryStore(state => state.setCategories);
 
   const { mutate: fetchCategories, isLoading } = useMutation(
     async () => {
