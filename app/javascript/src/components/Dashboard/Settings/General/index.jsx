@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Formik, Form } from "formik";
 import { Button, Typography, PageLoader } from "neetoui";
 import { Input, Checkbox } from "neetoui/formik";
+import { assoc } from "ramda";
 
 import siteApi from "apis/sites";
 
@@ -38,11 +39,7 @@ const General = () => {
   const { mutate: handleSubmit, isLoading } = useMutation(
     async values => {
       const pass = values.password_enabled ? values.password : null;
-      const payload = {
-        name: values.name,
-        password: pass,
-        password_enabled: values.password_enabled,
-      };
+      const payload = assoc("password", pass, values);
 
       return await siteApi.update({ payload });
     },

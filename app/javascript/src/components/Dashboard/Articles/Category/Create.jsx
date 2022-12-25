@@ -16,13 +16,7 @@ const Create = ({ fetchCategoriesList }) => {
   const [submitted, setSubmitted] = useState(false);
 
   const { mutate: createCategory } = useMutation(
-    async values => {
-      values = {
-        ...values,
-      };
-
-      return await categoriesApi.create(values);
-    },
+    async values => await categoriesApi.create(values),
     {
       onSuccess: () => {
         fetchCategoriesList();

@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Clock } from "neetoicons";
 import { Typography, Tag, Tooltip, Checkbox, Avatar } from "neetoui";
 import { Scrollable } from "neetoui/layouts";
+import { assoc } from "ramda";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import articlesApi from "apis/articles";
@@ -40,15 +41,17 @@ const ArticlesList = ({
 
   const handleArticles = article => {
     if (checkedArticle.article.includes(article)) {
-      setCheckedArticle({
-        ...checkedArticle,
-        article: checkedArticle.article.filter(item => item !== article),
-      });
+      setCheckedArticle(
+        assoc(
+          "article",
+          checkedArticle.article.filter(item => item !== article),
+          checkedArticle
+        )
+      );
     } else {
-      setCheckedArticle({
-        ...checkedArticle,
-        article: [...checkedArticle.article, article],
-      });
+      setCheckedArticle(
+        assoc("article", [...checkedArticle.article, article], checkedArticle)
+      );
     }
   };
 

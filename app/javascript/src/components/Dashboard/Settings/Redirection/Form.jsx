@@ -5,6 +5,7 @@ import { Formik, Form as FormikForm } from "formik";
 import { Check, Close } from "neetoicons";
 import { Button, Typography } from "neetoui";
 import { Input } from "neetoui/formik";
+import { pick } from "ramda";
 
 import redirectionApi from "apis/redirections";
 
@@ -28,10 +29,7 @@ export const Form = ({
 
   const { mutate: handleEdit } = useMutation(
     async values => {
-      const payload = {
-        from: values.from,
-        to: values.to,
-      };
+      const payload = pick(["from", "to"], values);
 
       return await redirectionApi.update({ id, payload });
     },
@@ -48,10 +46,7 @@ export const Form = ({
 
   const { mutate: handleCreate } = useMutation(
     async values => {
-      const payload = {
-        from: values.from,
-        to: values.to,
-      };
+      const payload = pick(["from", "to"], values);
 
       return await redirectionApi.create(payload);
     },

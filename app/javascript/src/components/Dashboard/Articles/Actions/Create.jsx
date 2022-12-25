@@ -4,6 +4,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { Formik, Form as FormikForm } from "formik";
 import { ActionDropdown, Button } from "neetoui";
 import { Input, Textarea, Select } from "neetoui/formik";
+import { assoc, pick, pipe } from "ramda";
 import { useHistory } from "react-router-dom";
 
 import articlesApi from "apis/articles";
@@ -36,14 +37,13 @@ const Create = () => {
 
   const { mutate: createArticle } = useMutation(
     async values => {
-      values = {
-        title: values.title,
-        body: values.body,
-        category_id: values.category.value,
-        status: articleStatus,
-      };
+      const payload = pipe(
+        assoc("status", articleStatus),
+        assoc("category_id", values.category.value),
+        pick(["title", "body", "category_id", "status"])
+      )(values);
 
-      return await articlesApi.create(values);
+      return await articlesApi.create(payload);
     },
     {
       onSuccess: () => {
