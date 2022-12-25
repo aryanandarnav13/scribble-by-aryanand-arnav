@@ -1,27 +1,34 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
-import { Typography } from "neetoui";
+import { useQuery } from "@tanstack/react-query";
+import { PageLoader, Typography } from "neetoui";
 
 import redirectionApi from "apis/redirections";
 
 import { Table } from "./Table";
 
 const Redirection = () => {
-  const [redirectionDetails, setRedirectionDetails] = useState([]);
+  const {
+    data: redirectionDetails,
+    refetch: fetchRedirectionsDetails,
+    isLoading,
+  } = useQuery(
+    ["redirections"],
+    async () => {
+      const { data } = await redirectionApi.list();
 
-  const fetchRedirectionsDetails = async () => {
-    try {
-      const {
-        data: { redirections },
-      } = await redirectionApi.list();
-      setRedirectionDetails(redirections);
-    } catch (error) {
-      logger.error(error);
+      return data.redirections;
+    },
+    {
+      onError: error => {
+        logger.error(error);
+      },
     }
-  };
-  useEffect(() => {
-    fetchRedirectionsDetails();
-  }, []);
+  );
+
+  if (isLoading) {
+    return <PageLoader />;
+  }
 
   return (
     <div className="mx-auto mt-8 w-3/6">

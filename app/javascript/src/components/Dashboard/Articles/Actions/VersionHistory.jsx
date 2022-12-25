@@ -17,7 +17,7 @@ const VersionHistory = ({
   currentArticleDetails,
 }) => {
   const fetchCategoryTitle = () => {
-    const category = categories.find(
+    const category = categories?.find(
       category => category.id === articleVersionDetails.category_id
     );
     if (category) {

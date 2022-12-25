@@ -1,5 +1,6 @@
 import React from "react";
 
+import { useMutation } from "@tanstack/react-query";
 import { Formik, Form as FormikForm } from "formik";
 import { Check, Close } from "neetoicons";
 import { Button, Typography } from "neetoui";
@@ -18,28 +19,52 @@ export const Form = ({
   setIsEdit,
 }) => {
   const handleSubmit = async values => {
-    try {
-      if (isEdit) {
-        await redirectionApi.update({
-          id,
-          payload: {
-            from: values.from,
-            to: values.to,
-          },
-        }),
-          setIsEdit(false);
-      } else {
-        await redirectionApi.create({
-          from: values.from,
-          to: values.to,
-        });
-        setAddRedirection(false);
-      }
-      fetchRedirectionsDetails();
-    } catch (error) {
-      logger.error(error);
+    if (isEdit) {
+      handleEdit(values);
+    } else {
+      handleCreate(values);
     }
   };
+
+  const { mutate: handleEdit } = useMutation(
+    async values => {
+      const payload = {
+        from: values.from,
+        to: values.to,
+      };
+
+      return await redirectionApi.update({ id, payload });
+    },
+    {
+      onSuccess: () => {
+        fetchRedirectionsDetails();
+        setIsEdit(false);
+      },
+      onError: error => {
+        logger.error(error);
+      },
+    }
+  );
+
+  const { mutate: handleCreate } = useMutation(
+    async values => {
+      const payload = {
+        from: values.from,
+        to: values.to,
+      };
+
+      return await redirectionApi.create(payload);
+    },
+    {
+      onSuccess: () => {
+        fetchRedirectionsDetails();
+        setAddRedirection(false);
+      },
+      onError: error => {
+        logger.error(error);
+      },
+    }
+  );
 
   return (
     <Formik

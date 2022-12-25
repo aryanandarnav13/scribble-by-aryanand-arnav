@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PageLoader } from "neetoui";
 import { either, isEmpty, isNil } from "ramda";
 import { Route, Switch, BrowserRouter as Router } from "react-router-dom";
@@ -27,6 +28,7 @@ const App = () => {
 
   const authToken = getFromLocalStorage("authToken");
   const isLoggedIn = !either(isNil, isEmpty)(authToken);
+  const queryClient = new QueryClient();
 
   const fetchSiteDetails = async () => {
     try {
@@ -53,27 +55,29 @@ const App = () => {
   }
 
   return (
-    <Router>
-      <ToastContainer />
-      <Switch>
-        <Route exact component={Dashboard} path="/" />
-        <Route exact component={Actions} path="/articles/create" />
-        <Route exact component={EditArticle} path="/articles/:id/edit" />
-        <Route exact component={Settings} path="/settings" />
-        <Route exact component={Analytics} path="/analytics" />
-        <Route
-          exact
-          component={() => <Login siteName={siteName} />}
-          path="/preview/login"
-        />
-        <PrivateRoute
-          Component={() => <Eui siteName={siteName} />}
-          condition={isLoggedIn || !hasPassword}
-          path="/preview"
-          redirectRoute="/preview/login"
-        />
-      </Switch>
-    </Router>
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <ToastContainer />
+        <Switch>
+          <Route exact component={Dashboard} path="/" />
+          <Route exact component={Actions} path="/articles/create" />
+          <Route exact component={EditArticle} path="/articles/:id/edit" />
+          <Route exact component={Settings} path="/settings" />
+          <Route exact component={Analytics} path="/analytics" />
+          <Route
+            exact
+            component={() => <Login siteName={siteName} />}
+            path="/preview/login"
+          />
+          <PrivateRoute
+            Component={() => <Eui siteName={siteName} />}
+            condition={isLoggedIn || !hasPassword}
+            path="/preview"
+            redirectRoute="/preview/login"
+          />
+        </Switch>
+      </Router>
+    </QueryClientProvider>
   );
 };
 

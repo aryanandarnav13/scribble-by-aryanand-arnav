@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import { PageLoader } from "@bigbinary/neetoui";
+import { useQuery } from "@tanstack/react-query";
 import { Input, Dropdown } from "neetoui";
 
 import articlesApi from "apis/articles";
@@ -12,8 +14,6 @@ import CategoriesMenu from "./CategoriesMenu";
 const ManageCategories = () => {
   const [categoryToDisplay, setCategoryToDisplay] = useState({});
   const { Menu, MenuItem } = Dropdown;
-  const [categories, setCategories] = useState([]);
-  const [articles, setArticles] = useState([]);
   const [info, setInfo] = useState(true);
   const [checkedArticle, setCheckedArticle] = useState({
     article: [],
@@ -29,37 +29,51 @@ const ManageCategories = () => {
     }
   };
 
-  const fetchArticles = async () => {
-    try {
-      const payload = {
-        statusFilter: "All",
-        searchFilter: "",
-      };
-      const response = await articlesApi.list(payload);
-      setArticles(response?.data.articles);
-    } catch (err) {
-      logger.error(err);
+  const {
+    data: articles,
+    refetch: fetchArticles,
+    isLoading: articlesLoading,
+  } = useQuery(["articles"], async () => {
+    const payload = {
+      statusFilter: "All",
+      searchFilter: "",
+    };
+    const { data } = await articlesApi.list(payload);
+
+    return data.articles;
+  });
+
+  const {
+    data: categories,
+    refetch: fetchCategories,
+    isLoading: categoriesLoading,
+  } = useQuery(
+    ["categories"],
+    async () => {
+      const { data } = await categoriesApi.list();
+
+      return data.categories;
+    },
+    {
+      onSuccess: data => {
+        if (!categoryToDisplay.id === undefined) {
+          setCategoryToDisplay(data?.categories[0]);
+        }
+      },
+      onError: error => {
+        logger.error(error);
+      },
     }
-  };
-  const fetchCategories = async () => {
-    try {
-      const {
-        data: { categories },
-      } = await categoriesApi.list();
-      setCategories(categories);
-      if (categoryToDisplay.id === undefined) {
-        setCategoryToDisplay(categories[0]);
-      }
-    } catch (error) {
-      logger.error(error);
-    }
-  };
+  );
 
   useEffect(() => {
-    fetchArticles();
     fetchCategories();
     handleInfo();
   }, []);
+
+  if (articlesLoading || categoriesLoading) {
+    return <PageLoader />;
+  }
 
   return (
     <div>

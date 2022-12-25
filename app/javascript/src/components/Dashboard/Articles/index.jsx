@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import { PageLoader } from "@bigbinary/neetoui";
+import { useMutation } from "@tanstack/react-query";
 import { ActionDropdown, Button, Checkbox } from "neetoui";
 import { Container, Header } from "neetoui/layouts";
 
@@ -34,26 +36,38 @@ const Articles = () => {
     }
   };
 
-  const fetchArticles = async () => {
-    try {
+  const { mutate: fetchArticles, isLoading } = useMutation(
+    async () => {
       const payload = {
         statusFilter: articleFilterConstraint.status,
         categoriesFilter: articleFilterConstraint.category,
         searchFilter: searchArticle,
         page_number: pageNo,
       };
-      const response = await articlesApi.list(payload);
-      setFilteredDraftCount(response.data.drafted);
-      setFilteredPublishCount(response.data.published);
-      setArticles(response.data.articles);
-    } catch (err) {
-      logger.error(err);
+
+      const { data } = await articlesApi.list(payload);
+
+      return data;
+    },
+    {
+      onSuccess: data => {
+        setArticles(data.articles);
+        setFilteredDraftCount(data.drafted);
+        setFilteredPublishCount(data.published);
+      },
+      onError: error => {
+        logger.error(error);
+      },
     }
-  };
+  );
 
   useEffect(() => {
     fetchArticles();
   }, [searchArticle, articleFilterConstraint, pageNo]);
+
+  if (isLoading) {
+    return <PageLoader />;
+  }
 
   return (
     <div>

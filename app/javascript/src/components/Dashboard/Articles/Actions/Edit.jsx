@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Formik, Form as FormikForm } from "formik";
 import { ActionDropdown, Button } from "neetoui";
 import { Input, Textarea, Select } from "neetoui/formik";
@@ -19,7 +20,6 @@ import VersionHistory from "./VersionHistory";
 
 const EditArticle = () => {
   const [submitted, setSubmitted] = useState(false);
-  const [categories, setCategories] = useState([]);
   const { Menu, MenuItem } = ActionDropdown;
   const [articleStatus, setArticleStatus] = useState("drafted");
   const [currentArticleDetails, setCurrentArticleDetails] = useState([]);
@@ -41,37 +41,60 @@ const EditArticle = () => {
   const { id } = useParams();
   const history = useHistory();
 
-  const fetchCategories = async () => {
-    try {
-      const {
-        data: { categories },
-      } = await categoriesApi.list();
-      setCategories(categories);
-    } catch (error) {
-      logger.error(error);
-    }
-  };
+  const { data: categories } = useQuery(
+    ["fetchCategories"],
+    async () => {
+      const response = await categoriesApi.list();
 
-  const fetchArticleDetails = async () => {
-    try {
+      return response.data.categories;
+    },
+    {
+      onError: error => logger.error(error),
+    }
+  );
+
+  const { mutate: fetchArticleDetails } = useMutation(
+    async () => {
       const response = await articlesApi.show(id);
-      setArticleStatus(response.data.status);
-      setLabel(response.data.status === "drafted" ? "Draft" : "Publish");
-      setCurrentArticleDetails(response.data);
-      setArticleVersions(response.data.versions.reverse());
-    } catch (error) {
-      logger.error(error);
-    }
-  };
 
-  const fetchUpdateSchedules = async () => {
-    try {
-      const res = await articleSchedulesApi.list(id);
-      setScheduledUpdates(res.data.schedules);
-    } catch (err) {
-      logger.error(err);
+      return response.data;
+    },
+    {
+      onSuccess: data => {
+        setArticleStatus(data.status);
+        setLabel(data.status === "drafted" ? "Draft" : "Publish");
+        setCurrentArticleDetails(data);
+        setArticleVersions(data.versions.reverse());
+      },
+    },
+    {
+      onError: error => logger.error(error),
     }
-  };
+  );
+
+  const { mutate: fetchUpdateSchedules } = useMutation(
+    async () => {
+      const res = await articleSchedulesApi.list(id);
+
+      return res.data.schedules;
+    },
+    {
+      onSuccess: data => setScheduledUpdates(data),
+    },
+    {
+      onError: error => logger.error(error),
+    }
+  );
+
+  const { mutate: updateArticle } = useMutation(
+    async payload => await articlesApi.update(id, payload),
+    {
+      onSuccess: () => history.push("/"),
+    },
+    {
+      onError: error => logger.error(error),
+    }
+  );
 
   const handleEdit = async values => {
     const { title, body } = values;
@@ -85,37 +108,38 @@ const EditArticle = () => {
     };
     setSubmitted(true);
     if (!checkForcedScheduleDeletion()) {
-      try {
-        await articlesApi.update(id, payload);
-        history.push("/");
-      } catch (error) {
-        logger.error(error);
-      }
+      updateArticle(payload);
     } else {
       setIsScheduleDeletionAlertOpen(true);
       setFormValues(values);
     }
   };
 
-  const handleForcedEdit = async () => {
-    const { title, body } = formValues;
-    const category_id = formValues.category.value;
-    const payload = {
-      title,
-      body,
-      category_id,
-      status: articleStatus,
-      restored_at: null,
-    };
-    setSubmitted(true);
-    setIsScheduleDeletionAlertOpen(false);
-    setRefetch(prevFetch => !prevFetch);
-    try {
-      await articlesApi.update(id, payload);
-    } catch (error) {
-      logger.error(error);
+  const { mutate: handleForcedEdit } = useMutation(
+    async () => {
+      const { title, body } = formValues;
+      const category_id = formValues.category.value;
+      const payload = {
+        title,
+        body,
+        category_id,
+        status: articleStatus,
+        restored_at: null,
+      };
+
+      return await articlesApi.update(id, payload);
+    },
+    {
+      onSuccess: () => {
+        setSubmitted(true);
+        setIsScheduleDeletionAlertOpen(false);
+        setRefetch(prevFetch => !prevFetch);
+      },
+    },
+    {
+      onError: error => logger.error(error),
     }
-  };
+  );
 
   const checkForcedScheduleDeletion = () => {
     const deletionCondition =
@@ -140,10 +164,6 @@ const EditArticle = () => {
     (articleStatus === "drafted" &&
       scheduledUpdates.filter(update => update.status === "published").length >
         0);
-
-  useEffect(() => {
-    fetchCategories();
-  }, []);
 
   useEffect(() => {
     fetchArticleDetails();
@@ -192,7 +212,7 @@ const EditArticle = () => {
                     label="Category"
                     name="category"
                     placeholder="Select a Category"
-                    options={categories.map(category => ({
+                    options={categories?.map(category => ({
                       label: category.name,
                       value: category.id,
                     }))}

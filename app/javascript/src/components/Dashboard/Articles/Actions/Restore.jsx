@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 
+import { useMutation } from "@tanstack/react-query";
 import { Warning, Info } from "neetoicons";
 import { Typography, Modal, Button, Textarea, Input, Callout } from "neetoui";
 
@@ -20,28 +21,42 @@ const RestoreArticle = ({
 }) => {
   const [scheduledUpdates, setScheduledUpdates] = useState([]);
 
-  const restoreVersionHandle = async () => {
-    try {
-      await articleVersionsApi.update({
+  const { mutate: restoreVersionHandle } = useMutation(
+    async () => {
+      const payload = {
         id,
         versionAt: articleToBeRestored.created_at,
         restoredAt: articleToBeRestored.object.updated_at,
-      });
-      setRefetch(prevFetch => !prevFetch);
-      setShowModal(false);
-    } catch (error) {
-      logger.error(error);
-    }
-  };
+      };
 
-  const fetchUpdateSchedules = async () => {
-    try {
-      const res = await articleSchedulesApi.list(id);
-      setScheduledUpdates([...res.data.schedules]);
-    } catch (err) {
-      logger.error(err);
+      return await articleVersionsApi.update(payload);
+    },
+    {
+      onSuccess: () => {
+        setRefetch(prevFetch => !prevFetch);
+        setShowModal(false);
+      },
+      onError: error => {
+        logger.error(error);
+      },
     }
-  };
+  );
+
+  const { mutate: fetchUpdateSchedules } = useMutation(
+    async () => {
+      const res = await articleSchedulesApi.list(id);
+
+      return res.data.schedules;
+    },
+    {
+      onSuccess: data => {
+        setScheduledUpdates([...data]);
+      },
+      onError: error => {
+        logger.error(error);
+      },
+    }
+  );
 
   useEffect(() => {
     fetchUpdateSchedules();

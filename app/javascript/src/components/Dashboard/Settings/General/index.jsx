@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
+import { useMutation } from "@tanstack/react-query";
 import { Formik, Form } from "formik";
 import { Button, Typography, PageLoader } from "neetoui";
 import { Input, Checkbox } from "neetoui/formik";
@@ -12,43 +13,53 @@ const General = () => {
   const [isPasswordInputDisabled, setIsPasswordInputDisabled] = useState(true);
   const [passwordEnabled, setPasswordEnabled] = useState(false);
   const [siteName, setSiteName] = useState("");
-  const [loading, setLoading] = useState(true);
   const [passwordEnableCheck, setPasswordEnableCheck] = useState(false);
 
   const passwordFocus = useRef(null);
 
-  const fetchSiteDetails = async () => {
-    try {
-      setLoading(true);
+  const { mutate: fetchSiteDetails } = useMutation(
+    async () => {
       const response = await siteApi.list();
-      setSiteName(response.data.name);
-      setPasswordEnabled(response.data.password_enabled);
-      setPasswordEnableCheck(response.data.password_enabled);
-      setLoading(false);
-    } catch (error) {
-      logger.error(error);
-    }
-  };
 
-  const handleSubmit = async values => {
-    try {
+      return response.data;
+    },
+    {
+      onSuccess: data => {
+        setSiteName(data.name);
+        setPasswordEnabled(data.password_enabled);
+        setPasswordEnableCheck(data.password_enabled);
+      },
+      onError: error => {
+        logger.error(error);
+      },
+    }
+  );
+
+  const { mutate: handleSubmit, isLoading } = useMutation(
+    async values => {
       const pass = values.password_enabled ? values.password : null;
-      await siteApi.update({
-        payload: {
-          name: values.name,
-          password: pass,
-          password_enabled: values.password_enabled,
-        },
-      });
+      const payload = {
+        name: values.name,
+        password: pass,
+        password_enabled: values.password_enabled,
+      };
 
-      localStorage.setItem("authToken", JSON.stringify(null));
-      fetchSiteDetails();
-    } catch (error) {
-      logger.error(error);
-    } finally {
-      setIsPasswordInputDisabled(true);
+      return await siteApi.update({ payload });
+    },
+    {
+      onSuccess: () => {
+        localStorage.setItem("authToken", JSON.stringify(null));
+        fetchSiteDetails();
+      },
+      onError: error => {
+        logger.error(error);
+      },
+
+      onSettled: () => {
+        setIsPasswordInputDisabled(true);
+      },
     }
-  };
+  );
 
   const handlePasswordProtectionChange = formik => {
     if (passwordEnabled === false) {
@@ -72,7 +83,7 @@ const General = () => {
     }
   }, [isPasswordInputDisabled]);
 
-  if (loading) {
+  if (isLoading) {
     return <PageLoader />;
   }
 

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Formik, Form as FormikForm } from "formik";
 import { ActionDropdown, Button } from "neetoui";
 import { Input, Textarea, Select } from "neetoui/formik";
@@ -15,40 +16,44 @@ import NavBar from "components/NavBar";
 
 const Create = () => {
   const [submitted, setSubmitted] = useState(false);
-  const [categories, setCategories] = useState([]);
   const { Menu, MenuItem } = ActionDropdown;
   const [articleStatus, setArticleStatus] = useState("drafted");
   const history = useHistory();
 
-  const fetchCategories = async () => {
-    try {
-      const {
-        data: { categories },
-      } = await categoriesApi.list();
-      setCategories(categories);
-    } catch (error) {
-      logger.error(error);
-    }
-  };
+  const { data: categories } = useQuery(
+    ["fetchCategories"],
+    async () => {
+      const { data } = await categoriesApi.list();
 
-  const handleSubmit = async values => {
-    try {
+      return data.categories;
+    },
+    {
+      onError: error => {
+        logger.error(error);
+      },
+    }
+  );
+
+  const { mutate: createArticle } = useMutation(
+    async values => {
       values = {
         title: values.title,
         body: values.body,
         category_id: values.category.value,
         status: articleStatus,
       };
-      await articlesApi.create(values);
-      history.push("/");
-    } catch (err) {
-      logger.error(err);
-    }
-  };
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+      return await articlesApi.create(values);
+    },
+    {
+      onSuccess: () => {
+        history.push("/");
+      },
+      onError: error => {
+        logger.error(error);
+      },
+    }
+  );
 
   return (
     <div>
@@ -57,7 +62,7 @@ const Create = () => {
         <Formik
           initialValues={ARTICLE_INITIAL_VALUES}
           validationSchema={ARTICLE_VALIDATION_SCHEMA}
-          onSubmit={handleSubmit}
+          onSubmit={createArticle}
         >
           {formik => (
             <FormikForm className="w-full">
@@ -77,7 +82,7 @@ const Create = () => {
                   label="Category"
                   name="category"
                   placeholder="Select a Category"
-                  options={categories.map(category => ({
+                  options={categories?.map(category => ({
                     label: category.name,
                     value: category.id,
                   }))}

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import { PageLoader } from "@bigbinary/neetoui";
+import { useMutation } from "@tanstack/react-query";
 import { Search, Plus, Close } from "neetoicons";
 import { Typography } from "neetoui";
 import { MenuBar } from "neetoui/layouts";
@@ -22,33 +24,46 @@ const SideMenu = ({
   const [searchCategory, setSearchCategory] = useState("");
   const [categories, setCategories] = useState([]);
 
-  const fetchCategories = async () => {
-    try {
-      const {
-        data: { categories },
-      } = await categoriesApi.list();
-      setCategories(categories);
-      setIsAddCategoryCollapsed(
-        isAddCategoryCollapsed => !isAddCategoryCollapsed
-      );
-    } catch (error) {
-      logger.error(error);
-    }
-  };
+  const { mutate: fetchCategories, isLoading } = useMutation(
+    async () => {
+      const response = await categoriesApi.list();
 
-  const fetchArticles = async () => {
-    try {
+      return response.data.categories;
+    },
+    {
+      onSuccess: data => {
+        setCategories(data);
+        setIsAddCategoryCollapsed(
+          isAddCategoryCollapsed => !isAddCategoryCollapsed
+        );
+      },
+      onError: error => {
+        logger.error(error);
+      },
+    }
+  );
+
+  const { mutate: fetchArticles } = useMutation(
+    async () => {
       const payload = {
         statusFilter: "All",
         searchFilter: "",
       };
-      const response = await articlesApi.list(payload);
-      setTotalDraftCount(response.data.drafted);
-      setTotalPublishCount(response.data.published);
-    } catch (err) {
-      logger.error(err);
+
+      const { data } = await articlesApi.list(payload);
+
+      return data;
+    },
+    {
+      onSuccess: data => {
+        setTotalDraftCount(data.drafted);
+        setTotalPublishCount(data.published);
+      },
+      onError: error => {
+        logger.error(error);
+      },
     }
-  };
+  );
 
   const handleStatus = status => {
     setArticleFilterConstraint({
@@ -76,9 +91,13 @@ const SideMenu = ({
   };
 
   useEffect(() => {
-    fetchCategories();
     fetchArticles();
+    fetchCategories();
   }, []);
+
+  if (isLoading) {
+    return <PageLoader />;
+  }
 
   return (
     <MenuBar showMenu title="Articles">
