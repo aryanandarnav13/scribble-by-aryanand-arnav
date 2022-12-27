@@ -52,3 +52,4 @@ en:
     two_schedules: "Maximum only two future schedules are allowed for an article"
     drafted_unpublished: "Drafted article cannot be unpublished"
     published_published: "Published article cannot be published"
+  in_progress: "%{action} is in progress"

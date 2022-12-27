@@ -76,3 +76,9 @@ gem "kaminari"
 gem "sidekiq", "<7"
 
 gem "sidekiq-cron"
+
+gem "wicked_pdf"
+
+gem "wkhtmltopdf-binary"
+
+gem "google-cloud-storage"

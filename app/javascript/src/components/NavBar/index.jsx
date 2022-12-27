@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ExternalLink } from "neetoicons";
+import { ExternalLink, FileDownload } from "neetoicons";
 import { Button, Typography } from "neetoui";
 import { Header } from "neetoui/layouts";
 import { NavLink } from "react-router-dom";
@@ -26,6 +26,13 @@ const NavBar = ({ articleStatus }) => (
                 Published
               </Typography>
             ))}
+          <Button
+            className="mr-2"
+            icon={FileDownload}
+            label="Download Report"
+            style="primary"
+            to="/articles/report"
+          />
           <Button
             icon={ExternalLink}
             label="Preview"

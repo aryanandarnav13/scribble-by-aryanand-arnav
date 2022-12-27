@@ -12,7 +12,6 @@ const TableActions = ({ id, fetchArticles }) => {
     {
       onSuccess: () => {
         fetchArticles();
-        window.location.reload();
       },
       onError: error => {
         logger.error(error);

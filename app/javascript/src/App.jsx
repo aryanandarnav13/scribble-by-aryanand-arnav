@@ -13,6 +13,7 @@ import { initializeLogger } from "common/logger";
 import Dashboard from "components/Dashboard";
 import Actions from "components/Dashboard/Articles/Actions/Create";
 import EditArticle from "components/Dashboard/Articles/Actions/Edit";
+import DownloadReport from "components/Dashboard/Articles/DownloadReport";
 import Eui from "components/Dashboard/EUI";
 import Settings from "components/Dashboard/Settings";
 import "lib/dayjs";
@@ -69,6 +70,7 @@ const App = () => {
             component={() => <Login siteName={siteName} />}
             path="/preview/login"
           />
+          <Route exact component={DownloadReport} path="/articles/report" />
           <PrivateRoute
             Component={() => <Eui siteName={siteName} />}
             condition={isLoggedIn || !hasPassword}
