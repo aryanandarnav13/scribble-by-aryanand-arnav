@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Article < ApplicationRecord
+  scope :accessible_to, ->(user_id) { where("user_id = ? AND status = ?", user_id, "published") }
+
   MAX_PAGE_SIZE = 10
   TITLE_REGEX = /\A[a-zA-Z0-9\s]+\z/
 

@@ -21,6 +21,11 @@ const destroy = id => axios.delete(`/api/articles/${id}`);
 
 const transfer = payload => axios.patch(`/api/articles/transfer`, payload);
 
+const generatePdf = () => axios.post("/api/articles/report", {});
+
+const download = () =>
+  axios.get("/api/articles/report/download", { responseType: "blob" });
+
 const articlesApi = {
   create,
   list,
@@ -29,6 +34,8 @@ const articlesApi = {
   update,
   reorder,
   destroy,
+  generatePdf,
+  download,
 };
 
 export default articlesApi;

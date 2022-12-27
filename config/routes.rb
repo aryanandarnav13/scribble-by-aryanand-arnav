@@ -6,6 +6,11 @@ Rails.application.routes.draw do
       resources :articles, except: %i[new edit] do
         patch :reorder, on: :member
         patch :transfer, on: :collection
+        collection do
+          resource :report, only: %i[create], module: :articles do
+            get :download, on: :collection
+          end
+        end
       end
       resources :article_schedules, only: %i[index create destroy]
       resources :article_versions, only: %i[update]
