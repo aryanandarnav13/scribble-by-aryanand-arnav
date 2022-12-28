@@ -53,3 +53,8 @@ en:
     drafted_unpublished: "Drafted article cannot be unpublished"
     published_published: "Published article cannot be published"
   in_progress: "%{action} is in progress"
+  report:
+    render: "Rendering the report"
+    generate: "Generating the PDF report"
+    upload: "Uploading to server"
+    attach: "Attaching the report to the user"
