@@ -18,6 +18,7 @@ import Eui from "components/Dashboard/EUI";
 import Settings from "components/Dashboard/Settings";
 import "lib/dayjs";
 
+import userApi from "./apis/users";
 import PrivateRoute from "./components/Common/PrivateRoute";
 import Analytics from "./components/Dashboard/Analytics";
 import { Login } from "./components/Dashboard/EUI/Login";
@@ -44,9 +45,19 @@ const App = () => {
     }
   };
 
+  const fetchCurrentUser = async () => {
+    try {
+      const response = await userApi.list();
+      localStorage.setItem("currentUser", JSON.stringify(response.data.email));
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
   useEffect(() => {
     setAuthHeaders(setLoading);
     registerIntercepts();
+    fetchCurrentUser();
     initializeLogger();
     fetchSiteDetails();
   }, []);

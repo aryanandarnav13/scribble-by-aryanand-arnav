@@ -9,6 +9,7 @@ module.exports = {
       utils: "src/utils",
       lib: "src/lib",
       store: "src/store",
+      channels: "src/channels",
     },
   },
 };

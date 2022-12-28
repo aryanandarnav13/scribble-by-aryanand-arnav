@@ -3,6 +3,7 @@
 class User < ApplicationRecord
   VALID_EMAIL = /\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
 
+  has_one_attached :report
   belongs_to :site
   has_many :articles
   has_many :categories
