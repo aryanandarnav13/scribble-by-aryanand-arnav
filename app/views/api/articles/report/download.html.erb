@@ -1,9 +1,32 @@
-<div class="mb-4 font-bold">Article Analytics:</div>
+<div class="mb-4" id="heading">Article Analytics</div>
 <div class="p-4 mt-8 bg-white neeto-ui-shadow-s rounded">
+<table style="width:100%">
+  <tr>
+    <th>Title</th>
+    <th>Visits</th>
+  </tr>
   <% @articles.each do |article| %>
-  <div class="flexrow w-full mb-4 mt-4">
-    <div class="text-gray-500"><%= article.title %></div>
-    <div class="text-gray-500"><%= article.article_visits.count %></div>
-  </div>
+  <tr>
+    <td class="align-text"><%= article.title %></td>
+    <td>
+      <table style="width:100%" >
+        <tr>
+          <th class="align-text">Date</th>
+          <th class="align-text">Visits</th>
+        </tr>
+        <% article.article_visits.group_by_day(:created_at).count.each do |date, count| %>
+        <tr>
+          <td class="align-text"><%= date.strftime("%B %d, %Y") %></td>
+          <td class="align-text"><%= count %></td>
+        </tr>
+        <% end %>
+        <tr class="total-visits">
+          <td class="align-text">Total Visits</td>
+          <td class="align-text"><%= article.article_visits.count %></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
   <% end %>
+</table>
 </div>

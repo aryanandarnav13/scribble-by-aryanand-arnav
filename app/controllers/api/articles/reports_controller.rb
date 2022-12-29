@@ -2,7 +2,7 @@
 
 class Api::Articles::ReportsController < ApplicationController
   def create
-    ReportsWorker.perform_async(current_user.id, current_user.email, report_path)
+    ReportsWorker.perform_async(current_user.id)
     respond_with_success(t("in_progress", action: "Report generation"))
   end
 
@@ -15,10 +15,6 @@ class Api::Articles::ReportsController < ApplicationController
   end
 
   private
-
-    def report_path
-      @_report_path ||= Rails.root.join("tmp/#{pdf_file_name}")
-    end
 
     def pdf_file_name
       "scribble_article_report.pdf"
