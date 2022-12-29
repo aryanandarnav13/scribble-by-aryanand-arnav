@@ -9,7 +9,7 @@ import { getFromLocalStorage } from "src/utils/storage";
 
 import { setAuthHeaders, registerIntercepts } from "apis/axios";
 import siteApi from "apis/sites";
-import userApi from "apis/users";
+import usersApi from "apis/users";
 import { initializeLogger } from "common/logger";
 import Dashboard from "components/Dashboard";
 import Actions from "components/Dashboard/Articles/Actions/Create";
@@ -47,7 +47,7 @@ const App = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const response = await userApi.list();
+      const response = await usersApi.list();
       localStorage.setItem("currentUser", JSON.stringify(response.data.email));
     } catch (error) {
       logger.error(error);
