@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+import { useMutation } from "@tanstack/react-query";
 import FileSaver from "file-saver";
 import { Button } from "neetoui";
 import { Container } from "neetoui/layouts";
@@ -16,25 +17,32 @@ const DownloadReport = () => {
 
   const consumer = createConsumer();
 
-  const generatePdf = async () => {
-    try {
+  const { mutate: generatePdf } = useMutation(
+    async () => {
       await articlesApi.generatePdf();
-    } catch (error) {
-      logger.error(error);
+    },
+    {
+      onError: error => {
+        logger.error(error);
+      },
     }
-  };
+  );
 
-  const downloadPdf = async () => {
-    setIsLoading(true);
-    try {
+  const { mutate: downloadPdf } = useMutation(
+    async () => {
       const { data } = await articlesApi.download();
-      FileSaver.saveAs(data, "scribble_article_report.pdf");
-    } catch (error) {
-      logger.error(error);
-    } finally {
-      setIsLoading(false);
+
+      return data;
+    },
+    {
+      onSuccess: data => {
+        FileSaver.saveAs(data, "scribble_article_report.pdf");
+      },
+      onError: error => {
+        logger.error(error);
+      },
     }
-  };
+  );
 
   useEffect(() => {
     subscribeToReportDownloadChannel({

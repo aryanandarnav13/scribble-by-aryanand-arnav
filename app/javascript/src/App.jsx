@@ -9,6 +9,7 @@ import { getFromLocalStorage } from "src/utils/storage";
 
 import { setAuthHeaders, registerIntercepts } from "apis/axios";
 import siteApi from "apis/sites";
+import userApi from "apis/users";
 import { initializeLogger } from "common/logger";
 import Dashboard from "components/Dashboard";
 import Actions from "components/Dashboard/Articles/Actions/Create";
@@ -18,7 +19,6 @@ import Eui from "components/Dashboard/EUI";
 import Settings from "components/Dashboard/Settings";
 import "lib/dayjs";
 
-import userApi from "./apis/users";
 import PrivateRoute from "./components/Common/PrivateRoute";
 import Analytics from "./components/Dashboard/Analytics";
 import { Login } from "./components/Dashboard/EUI/Login";
